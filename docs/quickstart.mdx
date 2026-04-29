@@ -1,0 +1,84 @@
+---
+title: "Quickstart"
+description: "Get started with AronaApi in minutes"
+---
+
+# Quickstart
+
+This guide will help you get started with AronaApi in just a few minutes.
+
+## Prerequisites
+
+- An AronaApi account
+- An API key from the [console](https://api.lingshichat.top)
+
+## Using cURL
+
+### Chat Completions
+
+```bash
+curl https://api.lingshichat.top/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [
+      {"role": "user", "content": "Hello, how are you?"}
+    ]
+  }'
+```
+
+### List Available Models
+
+```bash
+curl https://api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## Using OpenAI SDK
+
+### Python
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.lingshichat.top/v1",
+    api_key="YOUR_API_KEY"
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "user", "content": "Hello, how are you?"}
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+### Node.js
+
+```javascript
+import OpenAI from 'openai';
+
+const client = new OpenAI({
+  baseURL: 'https://api.lingshichat.top/v1',
+  apiKey: 'YOUR_API_KEY'
+});
+
+const response = await client.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    { role: 'user', content: 'Hello, how are you?' }
+  ]
+});
+
+console.log(response.choices[0].message.content);
+```
+
+## Next Steps
+
+- Learn about [Authentication](/authentication)
+- Explore the [API Reference](/api/overview)
+- Set up [MCP integration](/guides/mcp)

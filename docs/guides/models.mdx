@@ -1,0 +1,42 @@
+---
+title: "Model Support"
+description: "Supported AI models and providers"
+---
+
+# Model Support
+
+AronaApi supports 40+ AI models from various providers.
+
+## Available Providers
+
+<CardGroup cols={2}>
+  <Card title="OpenAI" icon="openai">
+    GPT-4o, GPT-4o-mini, GPT-4, GPT-3.5-Turbo, DALL-E
+  </Card>
+  <Card title="Anthropic" icon="bot">
+    Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku
+  </Card>
+  <Card title="Google" icon="google">
+    Gemini 1.5 Pro, Gemini 1.5 Flash
+  </Card>
+  <Card title="Azure" icon="microsoft">
+    GPT-4, GPT-3.5-Turbo via Azure OpenAI
+  </Card>
+</CardGroup>
+
+## Model Routing
+
+Models are automatically routed to the correct provider based on the model ID. Simply use the model name in your API request:
+
+```bash
+curl https://api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_KEY" \
+  -d '{
+    "model": "claude-3-5-sonnet-20240620",
+    "messages": [{"role": "user", "content": "Hello"}]
+  }'
+```
+
+## Custom Models
+
+Administrators can configure custom model mappings in the console to redirect model requests to specific channels.

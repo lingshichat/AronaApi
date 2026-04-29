@@ -1,0 +1,58 @@
+---
+title: "Embeddings"
+description: "Create text embeddings"
+---
+
+# Embeddings
+
+Create vector embeddings from text using various embedding models.
+
+## Endpoint
+
+```bash
+POST /v1/embeddings
+```
+
+## Request
+
+```json
+{
+  "model": "text-embedding-3-small",
+  "input": "The quick brown fox jumps over the lazy dog"
+}
+```
+
+## Response
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "object": "embedding",
+      "embedding": [0.0023064255, -0.009327292, ...],
+      "index": 0
+    }
+  ],
+  "model": "text-embedding-3-small",
+  "usage": {
+    "prompt_tokens": 9,
+    "total_tokens": 9
+  }
+}
+```
+
+## Batch Input
+
+You can send multiple inputs in a single request:
+
+```json
+{
+  "model": "text-embedding-3-small",
+  "input": [
+    "First text to embed",
+    "Second text to embed",
+    "Third text to embed"
+  ]
+}
+```

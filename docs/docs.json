@@ -1,0 +1,83 @@
+{
+  "name": "AronaApi",
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#8b5cf6",
+    "light": "#a78bfa",
+    "dark": "#7c3aed",
+    "anchors": {
+      "from": "#8b5cf6",
+      "to": "#60a5fa"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/QuantumNous/new-api"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Console",
+    "url": "https://api.lingshichat.top"
+  },
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "index",
+        "quickstart",
+        "authentication"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api/overview",
+        "api/chat-completions",
+        "api/models",
+        "api/embeddings",
+        "api/images"
+      ]
+    },
+    {
+      "group": "Features",
+      "pages": [
+        "guides/models",
+        "guides/pricing",
+        "guides/channels"
+      ]
+    },
+    {
+      "group": "Integrations",
+      "pages": [
+        "guides/mcp"
+      ]
+    }
+  ],
+  "anchors": [
+    {
+      "name": "API Status",
+      "icon": "signal",
+      "url": "https://api.lingshichat.top"
+    },
+    {
+      "name": "Community",
+      "icon": "users",
+      "url": "https://docs.newapi.pro/support/community-interaction/"
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/QuantumNous/new-api"
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true
+  },
+  "search": {
+    "prompt": "Search documentation..."
+  }
+}

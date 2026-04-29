@@ -1,0 +1,57 @@
+---
+title: "Authentication"
+description: "How to authenticate with AronaApi"
+---
+
+# Authentication
+
+AronaApi uses API keys for authentication. All API requests must include a valid API key.
+
+## API Key Format
+
+API keys are passed in the `Authorization` header using the Bearer scheme:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Getting an API Key
+
+1. Log in to the [console](https://api.lingshichat.top)
+2. Navigate to **API Keys** in the sidebar
+3. Click **Create Key** to generate a new key
+4. Copy the key and store it securely
+
+<Warning>
+  Keep your API keys secure and never expose them in client-side code or public repositories.
+</Warning>
+
+## Usage Example
+
+```bash
+curl https://api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer sk-xxxxxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [{"role": "user", "content": "Hello"}]
+  }'
+```
+
+## Rate Limiting
+
+API requests are subject to rate limiting based on your account tier:
+
+| Tier | Requests per Minute |
+|------|-------------------|
+| Free | 60 |
+| Standard | 600 |
+| Premium | 6,000 |
+
+Rate limit headers are included in all responses:
+
+```
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 45
+X-RateLimit-Reset: 1699999999
+```
