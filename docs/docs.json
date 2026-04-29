@@ -103,14 +103,14 @@
     "global": {
       "anchors": [
         {
-          "name": "API Status",
+          "anchor": "API Status",
           "icon": "signal",
-          "url": "https://api.lingshichat.top"
+          "href": "https://api.lingshichat.top"
         },
         {
-          "name": "Community",
+          "anchor": "Community",
           "icon": "users",
-          "url": "https://docs.newapi.pro/support/community-interaction/"
+          "href": "https://docs.newapi.pro/support/community-interaction/"
         }
       ]
     }
