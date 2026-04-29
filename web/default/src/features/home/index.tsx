@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth-store'
 import { Markdown } from '@/components/ui/markdown'
 import { PublicLayout } from '@/components/layout'
 import { Footer } from '@/components/layout/components/footer'
-import { CTA, Features, Hero, HowItWorks, Stats } from './components'
+import { Hero } from './components'
 import { useHomePageContent } from './hooks'
 
 export function Home() {
@@ -43,13 +43,9 @@ export function Home() {
   }
 
   return (
-    <PublicLayout showMainContainer={false}>
+    <div className='dark min-h-svh bg-[#030305] text-white'>
       <Hero isAuthenticated={isAuthenticated} />
-      <Stats />
-      <Features />
-      <HowItWorks />
-      <CTA isAuthenticated={isAuthenticated} />
-      <Footer />
-    </PublicLayout>
+      <Footer className='border-white/10 bg-[#030305]' />
+    </div>
   )
 }

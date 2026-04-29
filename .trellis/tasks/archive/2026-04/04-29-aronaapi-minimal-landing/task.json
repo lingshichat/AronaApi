@@ -1,0 +1,45 @@
+{
+  "id": "aronaapi-minimal-landing",
+  "name": "aronaapi-minimal-landing",
+  "title": "Replicate AronaApi minimal landing",
+  "description": "Minimal dark landing page inspired by LatteCode, with Base URL copy box under the slogan.",
+  "status": "completed",
+  "dev_type": "frontend",
+  "scope": "web/default home landing",
+  "package": "web/default",
+  "priority": "P2",
+  "creator": "lingshi",
+  "assignee": "lingshi",
+  "createdAt": "2026-04-29",
+  "completedAt": "2026-04-29",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "current_phase": 3,
+  "next_action": [
+    {
+      "phase": 4,
+      "action": "check"
+    },
+    {
+      "phase": 5,
+      "action": "update-spec"
+    },
+    {
+      "phase": 6,
+      "action": "record-session"
+    }
+  ],
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "web/default/src/features/home/index.tsx",
+    "web/default/src/features/home/components/sections/hero.tsx",
+    ".trellis/spec/frontend/landing-page-design.md"
+  ],
+  "notes": "Use systemName for branding so protected New API defaults are preserved.",
+  "meta": {}
+}
