@@ -1,0 +1,54 @@
+---
+title: "Images"
+description: "Generate and edit images"
+---
+
+# Images
+
+Generate and edit images using AI models.
+
+## Generate Image
+
+```bash
+POST /v1/images/generations
+```
+
+### Request
+
+```json
+{
+  "model": "dall-e-3",
+  "prompt": "A serene mountain landscape at sunset",
+  "size": "1024x1024",
+  "quality": "standard",
+  "n": 1
+}
+```
+
+### Response
+
+```json
+{
+  "created": 1677721600,
+  "data": [
+    {
+      "url": "https://.../generated-image.png",
+      "revised_prompt": "A serene mountain landscape at sunset with golden light"
+    }
+  ]
+}
+```
+
+## Available Sizes
+
+| Size | Description |
+|------|-------------|
+| `1024x1024` | Square |
+| `1792x1024` | Landscape |
+| `1024x1792` | Portrait |
+
+## Supported Models
+
+- `dall-e-3`
+- `dall-e-2`
+- Various Midjourney models (via Midjourney Proxy)

@@ -1,0 +1,74 @@
+---
+title: "API Overview"
+description: "Overview of AronaApi API endpoints"
+---
+
+# API Overview
+
+AronaApi provides a fully OpenAI-compatible API, allowing you to use existing OpenAI SDKs and tools with minimal changes.
+
+## Base URL
+
+```
+https://api.lingshichat.top/v1
+```
+
+## Supported Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `POST /v1/chat/completions` | Chat completions |
+| `POST /v1/completions` | Text completions |
+| `GET /v1/models` | List available models |
+| `POST /v1/embeddings` | Create embeddings |
+| `POST /v1/images/generations` | Generate images |
+| `POST /v1/images/edits` | Edit images |
+| `POST /v1/audio/transcriptions` | Transcribe audio |
+| `POST /v1/audio/translations` | Translate audio |
+| `GET /v1/files` | List files |
+| `POST /v1/files` | Upload files |
+
+## Response Format
+
+All responses follow the standard OpenAI API format:
+
+```json
+{
+  "id": "chatcmpl-123",
+  "object": "chat.completion",
+  "created": 1677652288,
+  "model": "gpt-4o",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! How can I help you today?"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 9,
+    "completion_tokens": 12,
+    "total_tokens": 21
+  }
+}
+```
+
+## Streaming
+
+Streaming is supported for chat completions using Server-Sent Events (SSE):
+
+```bash
+curl https://api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "stream": true
+  }'
+```
+
+Set `stream: true` in your request to receive tokens as they are generated.

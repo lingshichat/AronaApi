@@ -23,53 +23,98 @@
     "url": "https://api.lingshichat.top"
   },
   "navigation": {
-    "groups": [
+    "languages": [
       {
-        "group": "Get Started",
-        "pages": [
-          "index",
-          "quickstart",
-          "authentication"
+        "language": "cn",
+        "default": true,
+        "groups": [
+          {
+            "group": "快速开始",
+            "pages": [
+              "cn/index",
+              "cn/quickstart",
+              "cn/authentication"
+            ]
+          },
+          {
+            "group": "API 文档",
+            "pages": [
+              "cn/api/overview",
+              "cn/api/chat-completions",
+              "cn/api/models",
+              "cn/api/embeddings",
+              "cn/api/images"
+            ]
+          },
+          {
+            "group": "功能",
+            "pages": [
+              "cn/guides/models",
+              "cn/guides/pricing",
+              "cn/guides/channels"
+            ]
+          },
+          {
+            "group": "集成",
+            "pages": [
+              "cn/guides/mcp"
+            ]
+          }
         ]
       },
       {
-        "group": "API Reference",
-        "pages": [
-          "api/overview",
-          "api/chat-completions",
-          "api/models",
-          "api/embeddings",
-          "api/images"
-        ]
-      },
-      {
-        "group": "Features",
-        "pages": [
-          "guides/models",
-          "guides/pricing",
-          "guides/channels"
-        ]
-      },
-      {
-        "group": "Integrations",
-        "pages": [
-          "guides/mcp"
+        "language": "en",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "en/index",
+              "en/quickstart",
+              "en/authentication"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "en/api/overview",
+              "en/api/chat-completions",
+              "en/api/models",
+              "en/api/embeddings",
+              "en/api/images"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "en/guides/models",
+              "en/guides/pricing",
+              "en/guides/channels"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "en/guides/mcp"
+            ]
+          }
         ]
       }
-    ]
-  },
-  "anchors": [
-    {
-      "name": "API Status",
-      "icon": "signal",
-      "url": "https://api.lingshichat.top"
-    },
-    {
-      "name": "Community",
-      "icon": "users",
-      "url": "https://docs.newapi.pro/support/community-interaction/"
+    ],
+    "global": {
+      "anchors": [
+        {
+          "name": "API Status",
+          "icon": "signal",
+          "url": "https://api.lingshichat.top"
+        },
+        {
+          "name": "Community",
+          "icon": "users",
+          "url": "https://docs.newapi.pro/support/community-interaction/"
+        }
+      ]
     }
-  ],
+  },
   "footerSocials": {
     "github": "https://github.com/QuantumNous/new-api"
   },

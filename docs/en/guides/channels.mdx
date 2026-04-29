@@ -1,0 +1,36 @@
+---
+title: "Channels"
+description: "Manage API channels and providers"
+---
+
+# Channels
+
+Channels represent connections to upstream AI providers.
+
+## What are Channels?
+
+A channel is a configured connection to an upstream AI provider (OpenAI, Azure, Anthropic, etc.). Administrators can set up multiple channels for redundancy and load balancing.
+
+## Channel Types
+
+| Type | Description |
+|------|-------------|
+| OpenAI | Direct OpenAI API |
+| Azure | Azure OpenAI Service |
+| Anthropic | Claude API |
+| Google | Gemini API |
+| AWS Bedrock | Amazon Bedrock |
+| Custom | Custom OpenAI-compatible endpoints |
+
+## Channel Configuration
+
+Each channel can be configured with:
+- **Base URL**: Provider endpoint
+- **API Key**: Authentication key
+- **Models**: Supported models
+- **Group**: User group assignment
+- **Priority**: Load balancing priority
+
+## Load Balancing
+
+When multiple channels support the same model, AronaApi automatically distributes requests based on channel priority and availability.
