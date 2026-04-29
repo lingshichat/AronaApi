@@ -12,15 +12,22 @@
     "dark": "/logo/dark.svg",
     "href": "https://api.lingshichat.top"
   },
-  "topbarLinks": [
-    {
-      "name": "GitHub",
-      "url": "https://github.com/QuantumNous/new-api"
+  "navbar": {
+    "links": [
+      {
+        "type": "github",
+        "href": "https://github.com/QuantumNous/new-api"
+      },
+      {
+        "label": "API Status",
+        "href": "https://api.lingshichat.top"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Console",
+      "href": "https://api.lingshichat.top"
     }
-  ],
-  "topbarCtaButton": {
-    "name": "Console",
-    "url": "https://api.lingshichat.top"
   },
   "navigation": {
     "languages": [
