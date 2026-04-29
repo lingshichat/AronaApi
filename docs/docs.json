@@ -7,6 +7,11 @@
     "light": "#a78bfa",
     "dark": "#7c3aed"
   },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://api.lingshichat.top"
+  },
   "topbarLinks": [
     {
       "name": "GitHub",

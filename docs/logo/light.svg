@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 28" fill="none">
+  <text x="0" y="21" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="18" font-weight="600" letter-spacing="-0.5">
+    <tspan fill="#1a1a2e">Arona</tspan>
+    <tspan fill="url(#gradient-light)" font-weight="700">Api</tspan>
+  </text>
+  <defs>
+    <linearGradient id="gradient-light" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+</svg>
