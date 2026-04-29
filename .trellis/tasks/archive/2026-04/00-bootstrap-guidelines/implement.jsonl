@@ -1,0 +1,8 @@
+{"file": ".trellis/workflow.md", "reason": "Project workflow and conventions"}
+{"file": ".trellis/spec/backend/index.md", "reason": "Backend guideline index"}
+{"file": ".trellis/spec/backend/directory-structure.md", "reason": "Directory structure guideline target"}
+{"file": ".trellis/spec/backend/database-guidelines.md", "reason": "Database guideline target"}
+{"file": ".trellis/spec/backend/error-handling.md", "reason": "Error handling guideline target"}
+{"file": ".trellis/spec/backend/logging-guidelines.md", "reason": "Logging guideline target"}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "Quality guideline target"}
+{"file": ".trellis/spec/guides/index.md", "reason": "Shared thinking guides index"}
