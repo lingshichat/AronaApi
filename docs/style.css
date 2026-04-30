@@ -1,5 +1,5 @@
-/* Hide flag icons in language selector */
-#localization-select-trigger svg,
-#localization-select-item svg {
+/* Hide flag icons in language selector dropdown items */
+#localization-select-item svg,
+#localization-select-item img {
   display: none !important;
 }
