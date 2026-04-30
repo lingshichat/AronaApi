@@ -12,101 +12,48 @@
     "dark": "/logo/dark.svg",
     "href": "https://api.lingshichat.top"
   },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "控制台",
+      "href": "https://api.lingshichat.top"
+    }
+  },
   "navigation": {
-    "languages": [
+    "groups": [
       {
-        "language": "cn",
-        "default": true,
-        "navbar": {
-          "primary": {
-            "type": "button",
-            "label": "控制台",
-            "href": "https://api.lingshichat.top"
-          }
-        },
-        "groups": [
-          {
-            "group": "快速开始",
-            "pages": [
-              "cn/index",
-              "cn/quickstart",
-              "cn/authentication"
-            ]
-          },
-          {
-            "group": "API 文档",
-            "pages": [
-              "cn/api/overview",
-              "cn/api/chat-completions",
-              "cn/api/models",
-              "cn/api/embeddings",
-              "cn/api/images"
-            ]
-          },
-          {
-            "group": "功能",
-            "pages": [
-              "cn/guides/models",
-              "cn/guides/pricing",
-              "cn/guides/channels"
-            ]
-          },
-          {
-            "group": "集成",
-            "pages": [
-              "cn/guides/mcp"
-            ]
-          }
+        "group": "快速开始",
+        "pages": [
+          "cn/index",
+          "cn/quickstart",
+          "cn/authentication"
         ]
       },
       {
-        "language": "en",
-        "navbar": {
-          "primary": {
-            "type": "button",
-            "label": "Console",
-            "href": "https://api.lingshichat.top"
-          }
-        },
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "en/index",
-              "en/quickstart",
-              "en/authentication"
-            ]
-          },
-          {
-            "group": "API Reference",
-            "pages": [
-              "en/api/overview",
-              "en/api/chat-completions",
-              "en/api/models",
-              "en/api/embeddings",
-              "en/api/images"
-            ]
-          },
-          {
-            "group": "Features",
-            "pages": [
-              "en/guides/models",
-              "en/guides/pricing",
-              "en/guides/channels"
-            ]
-          },
-          {
-            "group": "Integrations",
-            "pages": [
-              "en/guides/mcp"
-            ]
-          }
+        "group": "API 文档",
+        "pages": [
+          "cn/api/overview",
+          "cn/api/chat-completions",
+          "cn/api/models",
+          "cn/api/embeddings",
+          "cn/api/images"
+        ]
+      },
+      {
+        "group": "功能",
+        "pages": [
+          "cn/guides/models",
+          "cn/guides/pricing",
+          "cn/guides/channels"
+        ]
+      },
+      {
+        "group": "集成",
+        "pages": [
+          "cn/guides/mcp"
         ]
       }
-    ],
-    "global": {
-      "anchors": []
-    }
+    ]
   },
   "feedback": {
     "thumbsRating": true,
