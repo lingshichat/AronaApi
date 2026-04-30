@@ -11,6 +11,7 @@ import i18next from 'i18next'
 import { toast } from 'sonner'
 import { useAuthStore } from '@/stores/auth-store'
 import { getStatus } from '@/lib/api'
+import { DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import '@/lib/dayjs'
 import { applyFaviconToDom } from '@/lib/dom-utils'
 import { handleServerError } from '@/lib/handle-server-error'
@@ -102,6 +103,7 @@ const rootElement = document.getElementById('root')!
       ) as HTMLMetaElement | null
       if (metaTitle) metaTitle.setAttribute('content', name)
     }
+    apply(DEFAULT_SYSTEM_NAME)
     // Cache-first
     try {
       const saved = localStorage.getItem('status')

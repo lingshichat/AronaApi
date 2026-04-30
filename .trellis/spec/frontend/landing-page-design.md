@@ -14,7 +14,8 @@ AI SaaS landing pages.
 - Center subtitle: short slogan.
 - Under subtitle: compact copyable Base URL field in the original New API split
   style: base domain on the left, endpoint suffix on the right.
-- Footer remains after the hero to preserve project attribution.
+- Footer uses `AronaApi` as the primary copyright display while preserving
+  `New API` / `QuantumNous` as secondary attribution.
 
 ## Visual language
 
@@ -30,7 +31,7 @@ AI SaaS landing pages.
 ## Runtime rules
 
 - Brand text must come from `useSystemConfig().systemName`.
-- The default fallback remains `New API`.
+- The default fallback is `AronaApi`.
 - Base URL must come from `/api/status` `server_address` when present.
 - If `server_address` is missing, fall back to `window.location.origin`.
 - The copy action must copy only the base domain/address, not the endpoint

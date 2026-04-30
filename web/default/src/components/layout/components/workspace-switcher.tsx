@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from '@tanstack/react-router'
 import { ChevronsUpDown } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/auth-store'
+import { DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { ROLE } from '@/lib/roles'
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
@@ -37,7 +38,7 @@ type WorkspaceSwitcherProps = {
  */
 export function WorkspaceSwitcher({
   workspaces,
-  defaultName = 'New API',
+  defaultName = DEFAULT_SYSTEM_NAME,
   defaultVersion,
 }: WorkspaceSwitcherProps) {
   const { t } = useTranslation()
@@ -196,7 +197,7 @@ export function WorkspaceSwitcher({
           <SidebarMenuButton
             asChild
             size='lg'
-            className='cursor-default hover:bg-transparent hover:text-sidebar-foreground active:bg-transparent active:text-sidebar-foreground'
+            className='hover:text-sidebar-foreground active:text-sidebar-foreground cursor-default hover:bg-transparent active:bg-transparent'
           >
             <div>{workspaceButtonContent}</div>
           </SidebarMenuButton>

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { useSystemConfig } from '@/hooks/use-system-config'
 
@@ -60,7 +61,7 @@ export function Footer(props: FooterProps) {
   } = useSystemConfig()
 
   const displayLogo = systemLogo || props.logo || '/logo.png'
-  const displayName = systemName || props.name || 'New API'
+  const displayName = systemName || props.name || DEFAULT_SYSTEM_NAME
   const isDemoSiteMode = Boolean(demoSiteEnabled)
   const currentYear = new Date().getFullYear()
 
@@ -151,7 +152,7 @@ export function Footer(props: FooterProps) {
               </span>
             </Link>
             <p className='text-muted-foreground/60 mt-3 max-w-[200px] text-xs leading-relaxed'>
-              {t('Powerful API Management Platform')}
+              {t('Convenient model access for everyone')}
             </p>
           </div>
 
@@ -184,7 +185,7 @@ export function Footer(props: FooterProps) {
           </p>
           <div className='flex items-center gap-2'>
             <span className='text-muted-foreground/40 text-xs'>
-              {t('Designed and Developed by')}{' '}
+              {t('Powered by')}{' '}
             </span>
             <a
               href='https://github.com/QuantumNous/new-api'
@@ -193,6 +194,15 @@ export function Footer(props: FooterProps) {
               className='text-primary text-xs font-medium hover:underline'
             >
               {t('New API')}
+            </a>
+            <span className='text-muted-foreground/30 text-xs'>/</span>
+            <a
+              href='https://github.com/QuantumNous'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-primary text-xs font-medium hover:underline'
+            >
+              {t('QuantumNous')}
             </a>
           </div>
         </div>
