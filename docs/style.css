@@ -1,0 +1,5 @@
+/* Hide flag icons in language selector */
+#localization-select-trigger svg,
+#localization-select-item svg {
+  display: none !important;
+}
