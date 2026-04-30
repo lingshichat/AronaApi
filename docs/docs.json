@@ -12,24 +12,24 @@
     "dark": "/logo/dark.svg",
     "href": "https://api.lingshichat.top"
   },
-  "navbar": {
-    "links": [
-      {
-        "type": "github",
-        "href": "https://github.com/QuantumNous/new-api"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Console",
-      "href": "https://api.lingshichat.top"
-    }
-  },
   "navigation": {
     "languages": [
       {
         "language": "cn",
         "default": true,
+        "navbar": {
+          "links": [
+            {
+              "type": "github",
+              "href": "https://github.com/QuantumNous/new-api"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "控制台",
+            "href": "https://api.lingshichat.top"
+          }
+        },
         "groups": [
           {
             "group": "快速开始",
@@ -67,6 +67,19 @@
       },
       {
         "language": "en",
+        "navbar": {
+          "links": [
+            {
+              "type": "github",
+              "href": "https://github.com/QuantumNous/new-api"
+            }
+          ],
+          "primary": {
+            "type": "button",
+            "label": "Console",
+            "href": "https://api.lingshichat.top"
+          }
+        },
         "groups": [
           {
             "group": "Get Started",
@@ -106,9 +119,6 @@
     "global": {
       "anchors": []
     }
-  },
-  "footerSocials": {
-    "github": "https://github.com/QuantumNous/new-api"
   },
   "feedback": {
     "thumbsRating": true,
