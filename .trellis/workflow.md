@@ -96,6 +96,17 @@ cat .trellis/spec/<package>/<layer>/conventions.md
 4. **Record Promptly** - Update tracking files immediately after completion
 5. **Document Limits** - [!] **Max 2000 lines per journal document**
 
+### Branch Ownership
+
+- `main` is the development branch. Use it for backend, frontend, tests,
+  fixes, and feature work.
+- `docs` is the documentation maintenance branch. Use it only for docs-site
+  and documentation-only maintenance.
+- Before starting work, verify the current branch with `git status --short --branch`.
+- If code work is requested while on `docs`, switch to `main` before editing.
+- If documentation-only work is requested while on `main`, switch to `docs`
+  before editing.
+
 ### File System
 
 ```
@@ -342,6 +353,8 @@ python3 ./.trellis/scripts/task.py list-archive    # List archived tasks
 1. **Before session start**:
    - Run `python3 ./.trellis/scripts/get_context.py` for full context
    - [!] **MUST read** relevant `.trellis/spec/` docs
+   - Confirm branch ownership: `main` for development, `docs` for
+     documentation-only maintenance
 
 2. **During development**:
    - [!] **Follow** `.trellis/spec/` guidelines
@@ -375,6 +388,13 @@ python3 ./.trellis/scripts/task.py list-archive    # List archived tasks
 | Frontend work | `frontend/index.md` → relevant docs |
 | Backend work | `backend/index.md` → relevant docs |
 | Cross-Layer Feature | `guides/cross-layer-thinking-guide.md` |
+
+### Branch Quick Reference
+
+| Work Type | Branch |
+|-----------|--------|
+| Development, fixes, tests | `main` |
+| Documentation-only maintenance | `docs` |
 
 ### Commit Convention
 

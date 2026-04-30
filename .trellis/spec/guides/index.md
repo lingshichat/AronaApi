@@ -28,6 +28,13 @@ These guides help you **ask the right questions before coding**.
 
 ## Quick Reference: Thinking Triggers
 
+### Branch Ownership
+
+- [ ] Use `main` for development work: backend, frontend, tests, fixes, and
+  features.
+- [ ] Use `docs` only for docs-site and documentation-only maintenance.
+- [ ] Check the branch before editing: `git status --short --branch`.
+
 ### When to Think About Cross-Layer Issues
 
 - [ ] Feature touches 3+ layers (API, Service, Component, Database)
