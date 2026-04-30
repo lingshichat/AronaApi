@@ -1,31 +1,31 @@
 ---
-title: "Images"
-description: "Generate and edit images"
+title: "图片"
+description: "生成和编辑图片"
 ---
 
-# Images
+# 图片
 
-Generate and edit images using AI models.
+使用 AI 模型生成和编辑图片。
 
-## Generate Image
+## 生成图片
 
 ```bash
 POST /v1/images/generations
 ```
 
-### Request
+### 请求
 
 ```json
 {
   "model": "dall-e-3",
-  "prompt": "A serene mountain landscape at sunset",
+  "prompt": "日落时分的宁静山景",
   "size": "1024x1024",
   "quality": "standard",
   "n": 1
 }
 ```
 
-### Response
+### 响应
 
 ```json
 {
@@ -33,22 +33,22 @@ POST /v1/images/generations
   "data": [
     {
       "url": "https://.../generated-image.png",
-      "revised_prompt": "A serene mountain landscape at sunset with golden light"
+      "revised_prompt": "日落时分的宁静山景，金色光芒"
     }
   ]
 }
 ```
 
-## Available Sizes
+## 可用尺寸
 
-| Size | Description |
-|------|-------------|
-| `1024x1024` | Square |
-| `1792x1024` | Landscape |
-| `1024x1792` | Portrait |
+| 尺寸 | 说明 |
+|------|------|
+| `1024x1024` | 正方形 |
+| `1792x1024` | 横屏 |
+| `1024x1792` | 竖屏 |
 
-## Supported Models
+## 支持的模型
 
 - `dall-e-3`
 - `dall-e-2`
-- Various Midjourney models (via Midjourney Proxy)
+- 各种 Midjourney 模型（通过 Midjourney Proxy）

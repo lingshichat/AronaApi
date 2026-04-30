@@ -1,13 +1,13 @@
 ---
-title: "Model Support"
-description: "Supported AI models and providers"
+title: "模型支持"
+description: "支持的 AI 模型和提供商"
 ---
 
-# Model Support
+# 模型支持
 
-AronaApi supports 40+ AI models from various providers.
+AronaApi 支持来自多个提供商的 40+ AI 模型。
 
-## Available Providers
+## 可用提供商
 
 <CardGroup cols={2}>
   <Card title="OpenAI" icon="openai">
@@ -20,23 +20,23 @@ AronaApi supports 40+ AI models from various providers.
     Gemini 1.5 Pro, Gemini 1.5 Flash
   </Card>
   <Card title="Azure" icon="microsoft">
-    GPT-4, GPT-3.5-Turbo via Azure OpenAI
+    通过 Azure OpenAI 使用 GPT-4, GPT-3.5-Turbo
   </Card>
 </CardGroup>
 
-## Model Routing
+## 模型路由
 
-Models are automatically routed to the correct provider based on the model ID. Simply use the model name in your API request:
+模型根据模型 ID 自动路由到正确的提供商。只需在 API 请求中使用模型名称：
 
 ```bash
 curl https://api.lingshichat.top/v1/chat/completions \
   -H "Authorization: Bearer YOUR_KEY" \
   -d '{
     "model": "claude-3-5-sonnet-20240620",
-    "messages": [{"role": "user", "content": "Hello"}]
+    "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
 
-## Custom Models
+## 自定义模型
 
-Administrators can configure custom model mappings in the console to redirect model requests to specific channels.
+管理员可以在控制台中配置自定义模型映射，将模型请求重定向到特定渠道。

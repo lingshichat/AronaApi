@@ -1,36 +1,36 @@
 ---
-title: "Channels"
-description: "Manage API channels and providers"
+title: "渠道"
+description: "管理 API 渠道和提供商"
 ---
 
-# Channels
+# 渠道
 
-Channels represent connections to upstream AI providers.
+渠道代表与上游 AI 提供商的连接。
 
-## What are Channels?
+## 什么是渠道？
 
-A channel is a configured connection to an upstream AI provider (OpenAI, Azure, Anthropic, etc.). Administrators can set up multiple channels for redundancy and load balancing.
+渠道是配置好的与上游 AI 提供商（OpenAI、Azure、Anthropic 等）的连接。管理员可以设置多个渠道以实现冗余和负载均衡。
 
-## Channel Types
+## 渠道类型
 
-| Type | Description |
-|------|-------------|
-| OpenAI | Direct OpenAI API |
-| Azure | Azure OpenAI Service |
+| 类型 | 说明 |
+|------|------|
+| OpenAI | 直连 OpenAI API |
+| Azure | Azure OpenAI 服务 |
 | Anthropic | Claude API |
 | Google | Gemini API |
 | AWS Bedrock | Amazon Bedrock |
-| Custom | Custom OpenAI-compatible endpoints |
+| 自定义 | 自定义兼容 OpenAI 的端点 |
 
-## Channel Configuration
+## 渠道配置
 
-Each channel can be configured with:
-- **Base URL**: Provider endpoint
-- **API Key**: Authentication key
-- **Models**: Supported models
-- **Group**: User group assignment
-- **Priority**: Load balancing priority
+每个渠道可以配置：
+- **Base URL**：提供商端点
+- **API Key**：认证密钥
+- **模型**：支持的模型
+- **分组**：用户分组分配
+- **优先级**：负载均衡优先级
 
-## Load Balancing
+## 负载均衡
 
-When multiple channels support the same model, AronaApi automatically distributes requests based on channel priority and availability.
+当多个渠道支持同一模型时，AronaApi 根据渠道优先级和可用性自动分配请求。

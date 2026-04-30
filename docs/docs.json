@@ -17,10 +17,6 @@
       {
         "type": "github",
         "href": "https://github.com/QuantumNous/new-api"
-      },
-      {
-        "label": "API Status",
-        "href": "https://api.lingshichat.top"
       }
     ],
     "primary": {
@@ -108,18 +104,7 @@
       }
     ],
     "global": {
-      "anchors": [
-        {
-          "anchor": "API Status",
-          "icon": "signal",
-          "href": "https://api.lingshichat.top"
-        },
-        {
-          "anchor": "Community",
-          "icon": "users",
-          "href": "https://docs.newapi.pro/support/community-interaction/"
-        }
-      ]
+      "anchors": []
     }
   },
   "footerSocials": {
@@ -130,6 +115,6 @@
     "suggestEdit": true
   },
   "search": {
-    "prompt": "Search documentation..."
+    "prompt": "搜索文档..."
   }
 }

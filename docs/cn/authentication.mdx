@@ -1,32 +1,32 @@
 ---
-title: "Authentication"
-description: "How to authenticate with AronaApi"
+title: "身份验证"
+description: "如何对 AronaApi 进行身份验证"
 ---
 
-# Authentication
+# 身份验证
 
-AronaApi uses API keys for authentication. All API requests must include a valid API key.
+AronaApi 使用 API Key 进行身份验证。所有 API 请求都必须包含有效的 API Key。
 
-## API Key Format
+## API Key 格式
 
-API keys are passed in the `Authorization` header using the Bearer scheme:
+API Key 通过 `Authorization` 头部以 Bearer 方式传递：
 
 ```bash
 Authorization: Bearer YOUR_API_KEY
 ```
 
-## Getting an API Key
+## 获取 API Key
 
-1. Log in to the [console](https://api.lingshichat.top)
-2. Navigate to **API Keys** in the sidebar
-3. Click **Create Key** to generate a new key
-4. Copy the key and store it securely
+1. 登录 [控制台](https://api.lingshichat.top)
+2. 在侧边栏中导航到 **API Key**
+3. 点击 **创建 Key** 生成新 Key
+4. 复制 Key 并妥善保存
 
 <Warning>
-  Keep your API keys secure and never expose them in client-side code or public repositories.
+  请妥善保管你的 API Key，切勿在客户端代码或公开仓库中暴露。
 </Warning>
 
-## Usage Example
+## 使用示例
 
 ```bash
 curl https://api.lingshichat.top/v1/chat/completions \
@@ -34,21 +34,21 @@ curl https://api.lingshichat.top/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "gpt-4o",
-    "messages": [{"role": "user", "content": "Hello"}]
+    "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
 
-## Rate Limiting
+## 速率限制
 
-API requests are subject to rate limiting based on your account tier:
+API 请求根据账号等级受到速率限制：
 
-| Tier | Requests per Minute |
-|------|-------------------|
-| Free | 60 |
-| Standard | 600 |
-| Premium | 6,000 |
+| 等级 | 每分钟请求数 |
+|------|-------------|
+| 免费 | 60 |
+| 标准 | 600 |
+| 高级 | 6,000 |
 
-Rate limit headers are included in all responses:
+所有响应都包含速率限制头部：
 
 ```
 X-RateLimit-Limit: 60

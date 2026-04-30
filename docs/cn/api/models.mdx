@@ -1,19 +1,19 @@
 ---
-title: "Models"
-description: "List and use available AI models"
+title: "模型"
+description: "列出和使用可用 AI 模型"
 ---
 
-# Models
+# 模型
 
-AronaApi provides access to 40+ AI models from various providers through a unified interface.
+AronaApi 通过统一接口提供来自多个提供商的 40+ AI 模型。
 
-## List Models
+## 列出模型
 
 ```bash
 GET /v1/models
 ```
 
-### Response
+### 响应
 
 ```json
 {
@@ -41,9 +41,9 @@ GET /v1/models
 }
 ```
 
-## Supported Providers
+## 支持的提供商
 
-| Provider | Models |
+| 提供商 | 模型 |
 |----------|--------|
 | OpenAI | GPT-4o, GPT-4o-mini, GPT-4, GPT-3.5-Turbo |
 | Anthropic | Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku |
@@ -51,12 +51,12 @@ GET /v1/models
 | Azure | GPT-4, GPT-3.5-Turbo |
 | AWS Bedrock | Claude, Llama, Titan |
 | DeepSeek | DeepSeek-V3, DeepSeek-R1 |
-| and more... | See console for full list |
+| 更多... | 在控制台查看完整列表 |
 
-## Model Routing
+## 模型路由
 
-AronaApi automatically routes requests to the appropriate provider based on the model ID. No additional configuration is needed.
+AronaApi 根据模型 ID 自动将请求路由到对应的提供商，无需额外配置。
 
 <Tip>
-  Use the [console](https://api.lingshichat.top) to see the full list of available models and their pricing.
+  在 [控制台](https://api.lingshichat.top) 查看完整的可用模型列表和定价。
 </Tip>

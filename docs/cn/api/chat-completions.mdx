@@ -1,26 +1,26 @@
 ---
-title: "Chat Completions"
-description: "Chat completions API reference"
+title: "对话补全"
+description: "对话补全 API 文档"
 ---
 
-# Chat Completions
+# 对话补全
 
-Create a chat completion using various AI models.
+使用各种 AI 模型创建对话补全。
 
-## Endpoint
+## 端点
 
 ```bash
 POST /v1/chat/completions
 ```
 
-## Request Body
+## 请求体
 
 ```json
 {
   "model": "gpt-4o",
   "messages": [
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Hello!"}
+    {"role": "system", "content": "你是一个有用的助手。"},
+    {"role": "user", "content": "你好！"}
   ],
   "temperature": 0.7,
   "max_tokens": 150,
@@ -28,20 +28,20 @@ POST /v1/chat/completions
 }
 ```
 
-### Parameters
+### 参数
 
-| Parameter | Type | Required | Description |
+| 参数 | 类型 | 必填 | 说明 |
 |-----------|------|----------|-------------|
-| `model` | string | Yes | Model ID to use |
-| `messages` | array | Yes | List of messages |
-| `temperature` | number | No | Sampling temperature (0-2) |
-| `max_tokens` | integer | No | Maximum tokens to generate |
-| `stream` | boolean | No | Enable streaming |
-| `top_p` | number | No | Nucleus sampling parameter |
-| `frequency_penalty` | number | No | Frequency penalty (-2 to 2) |
-| `presence_penalty` | number | No | Presence penalty (-2 to 2) |
+| `model` | string | 是 | 要使用的模型 ID |
+| `messages` | array | 是 | 消息列表 |
+| `temperature` | number | 否 | 采样温度 (0-2) |
+| `max_tokens` | integer | 否 | 最大生成 Token 数 |
+| `stream` | boolean | 否 | 启用流式输出 |
+| `top_p` | number | 否 | 核采样参数 |
+| `frequency_penalty` | number | 否 | 频率惩罚 (-2 到 2) |
+| `presence_penalty` | number | 否 | 存在惩罚 (-2 到 2) |
 
-## Response
+## 响应
 
 ```json
 {
@@ -54,7 +54,7 @@ POST /v1/chat/completions
       "index": 0,
       "message": {
         "role": "assistant",
-        "content": "Hello! How can I assist you today?"
+        "content": "你好！有什么可以帮你的吗？"
       },
       "finish_reason": "stop"
     }
@@ -67,16 +67,16 @@ POST /v1/chat/completions
 }
 ```
 
-## Streaming Response
+## 流式响应
 
-When `stream: true`, the response uses Server-Sent Events:
+当 `stream: true` 时，响应使用 Server-Sent Events：
 
 ```
 data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4o","choices":[{"index":0,"delta":{"role":"assistant"},"finish_reason":null}]}
 
-data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":"Hello"},"finish_reason":null}]}
+data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":"你"},"finish_reason":null}]}
 
-data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":"!"},"finish_reason":null}]}
+data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":"好"},"finish_reason":null}]}
 
 data: [DONE]
 ```

@@ -1,20 +1,20 @@
 ---
-title: "Quickstart"
-description: "Get started with AronaApi in minutes"
+title: "快速开始"
+description: "几分钟内开始使用 AronaApi"
 ---
 
-# Quickstart
+# 快速开始
 
-This guide will help you get started with AronaApi in just a few minutes.
+本指南将帮助你在几分钟内开始使用 AronaApi。
 
-## Prerequisites
+## 前置条件
 
-- An AronaApi account
-- An API key from the [console](https://api.lingshichat.top)
+- 一个 AronaApi 账号
+- 从 [控制台](https://api.lingshichat.top) 获取的 API Key
 
-## Using cURL
+## 使用 cURL
 
-### Chat Completions
+### 对话补全
 
 ```bash
 curl https://api.lingshichat.top/v1/chat/completions \
@@ -23,19 +23,19 @@ curl https://api.lingshichat.top/v1/chat/completions \
   -d '{
     "model": "gpt-4o",
     "messages": [
-      {"role": "user", "content": "Hello, how are you?"}
+      {"role": "user", "content": "你好"}
     ]
   }'
 ```
 
-### List Available Models
+### 列出可用模型
 
 ```bash
 curl https://api.lingshichat.top/v1/models \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
-## Using OpenAI SDK
+## 使用 OpenAI SDK
 
 ### Python
 
@@ -50,7 +50,7 @@ client = OpenAI(
 response = client.chat.completions.create(
     model="gpt-4o",
     messages=[
-        {"role": "user", "content": "Hello, how are you?"}
+        {"role": "user", "content": "你好"}
     ]
 )
 
@@ -70,15 +70,15 @@ const client = new OpenAI({
 const response = await client.chat.completions.create({
   model: 'gpt-4o',
   messages: [
-    { role: 'user', content: 'Hello, how are you?' }
+    { role: 'user', content: '你好' }
   ]
 });
 
 console.log(response.choices[0].message.content);
 ```
 
-## Next Steps
+## 下一步
 
-- Learn about [Authentication](/authentication)
-- Explore the [API Reference](/api/overview)
-- Set up [MCP integration](/guides/mcp)
+- 了解[身份验证](/cn/authentication)
+- 浏览 [API 文档](/cn/api/overview)
+- 配置 [MCP 集成](/cn/guides/mcp)
