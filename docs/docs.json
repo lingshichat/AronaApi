@@ -18,12 +18,6 @@
         "language": "cn",
         "default": true,
         "navbar": {
-          "links": [
-            {
-              "type": "github",
-              "href": "https://github.com/QuantumNous/new-api"
-            }
-          ],
           "primary": {
             "type": "button",
             "label": "控制台",
@@ -68,12 +62,6 @@
       {
         "language": "en",
         "navbar": {
-          "links": [
-            {
-              "type": "github",
-              "href": "https://github.com/QuantumNous/new-api"
-            }
-          ],
           "primary": {
             "type": "button",
             "label": "Console",
