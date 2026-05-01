@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, type ReactNode } from 'react'
+import { useState, useCallback, type ReactNode } from 'react'
 import { useNavigate, getRouteApi } from '@tanstack/react-router'
 import { useQueryClient, useIsFetching } from '@tanstack/react-query'
 import { ChevronDown, Eye, EyeOff, Loader2, RotateCcw, Search } from 'lucide-react'
@@ -30,6 +30,34 @@ function isLogTypeValue(value: string): value is LogTypeValue {
   return (logTypeValues as readonly string[]).includes(value)
 }
 
+function getFiltersFromSearchParams(
+  searchParams: ReturnType<typeof route.useSearch>
+): CommonLogFilters {
+  const { start, end } = getDefaultTimeRange()
+
+  return {
+    startTime: searchParams.startTime
+      ? new Date(searchParams.startTime)
+      : start,
+    endTime: searchParams.endTime ? new Date(searchParams.endTime) : end,
+    channel: searchParams.channel ? String(searchParams.channel) : undefined,
+    model: searchParams.model,
+    token: searchParams.token,
+    group: searchParams.group,
+    username: searchParams.username,
+    requestId: searchParams.requestId,
+  }
+}
+
+function getLogTypeFromSearchParams(
+  searchParams: ReturnType<typeof route.useSearch>
+): LogTypeValue | '' {
+  const typeArr = searchParams.type
+  const value = Array.isArray(typeArr) && typeArr.length === 1 ? typeArr[0] : ''
+
+  return value && isLogTypeValue(value) ? value : ''
+}
+
 interface CommonLogsFilterBarProps {
   stats?: ReactNode
   viewOptions?: ReactNode
@@ -47,34 +75,16 @@ export function CommonLogsFilterBar({
   const { sensitiveVisible, setSensitiveVisible } = useUsageLogsContext()
   const fetchingLogs = useIsFetching({ queryKey: ['logs'] })
 
+  const filtersFromSearchParams = getFiltersFromSearchParams(searchParams)
+  const logTypeFromSearchParams = getLogTypeFromSearchParams(searchParams)
   const [expanded, setExpanded] = useState(false)
-  const [filters, setFilters] = useState<CommonLogFilters>(() => {
-    const { start, end } = getDefaultTimeRange()
-    return { startTime: start, endTime: end }
-  })
-  const [logType, setLogType] = useState<LogTypeValue | ''>('')
-
-  useEffect(() => {
-    const next: Partial<CommonLogFilters> = {}
-    if (searchParams.startTime)
-      next.startTime = new Date(searchParams.startTime)
-    if (searchParams.endTime) next.endTime = new Date(searchParams.endTime)
-    if (searchParams.channel) next.channel = String(searchParams.channel)
-    if (searchParams.model) next.model = searchParams.model
-    if (searchParams.token) next.token = searchParams.token
-    if (searchParams.group) next.group = searchParams.group
-    if (searchParams.username) next.username = searchParams.username
-    if (searchParams.requestId) next.requestId = searchParams.requestId
-
-    if (Object.keys(next).length > 0) {
-      setFilters((prev) => ({ ...prev, ...next }))
-    }
-
-    const typeArr = searchParams.type
-    if (Array.isArray(typeArr) && typeArr.length === 1) {
-      setLogType(typeArr[0])
-    }
-  }, [
+  const [filters, setFilters] = useState<CommonLogFilters>(
+    filtersFromSearchParams
+  )
+  const [logType, setLogType] = useState<LogTypeValue | ''>(
+    logTypeFromSearchParams
+  )
+  const filtersKey = JSON.stringify([
     searchParams.startTime,
     searchParams.endTime,
     searchParams.channel,
@@ -85,6 +95,13 @@ export function CommonLogsFilterBar({
     searchParams.requestId,
     searchParams.type,
   ])
+  const [lastFiltersKey, setLastFiltersKey] = useState(filtersKey)
+
+  if (lastFiltersKey !== filtersKey) {
+    setLastFiltersKey(filtersKey)
+    setFilters(filtersFromSearchParams)
+    setLogType(logTypeFromSearchParams)
+  }
 
   const handleChange = useCallback(
     (field: keyof CommonLogFilters, value: Date | string | undefined) => {

@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { BrandIconImage } from '@/components/brand-wordmark'
 
 interface HeaderLogoProps {
   src: string
@@ -9,25 +10,22 @@ interface HeaderLogoProps {
 }
 
 /**
- * Logo component for header with loading state
- * Shows image only when fully loaded for smooth UX
+ * Logo component for header with loading state.
+ * Shows unified AronaApi-style brand symbol by default.
  */
 export function HeaderLogo({
-  src,
+  src: _src,
   alt = 'logo',
   loading,
   logoLoaded,
   className,
 }: HeaderLogoProps) {
+  const ready = !loading && logoLoaded
+
   return (
-    <img
-      src={src}
+    <BrandIconImage
       alt={alt}
-      className={cn(
-        'h-6 w-6 rounded-full transition-opacity duration-200',
-        !loading && logoLoaded ? 'opacity-100' : 'opacity-0',
-        className
-      )}
+      className={cn(!ready && 'opacity-0', className)}
     />
   )
 }

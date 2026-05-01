@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { getBrandDisplayName } from '@/lib/brand'
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
 import { useTopNavLinks, type TopNavLink } from '@/hooks/use-top-nav-links'
+import { BrandWordmark } from '@/components/brand-wordmark'
 import { CopyButton } from '@/components/copy-button'
 import type { SystemStatus } from '@/features/auth/types'
 
@@ -48,27 +49,13 @@ function formatCopyableBaseUrl(address: string): string {
   return normalized
 }
 
-function splitApiSuffix(name: string): { prefix: string; suffix: string } {
-  const match = name.match(/^(.*?)(api)$/i)
-
-  if (!match) {
-    return { prefix: name, suffix: '' }
-  }
-
-  return {
-    prefix: match[1],
-    suffix: match[2],
-  }
-}
-
 export function Hero(props: HeroProps) {
   const { t } = useTranslation()
   const { systemName } = useSystemConfig()
   const { status } = useStatus()
   const topNavLinks = useTopNavLinks()
-  const displayName = systemName?.trim() || DEFAULT_SYSTEM_NAME
+  const displayName = getBrandDisplayName(systemName)
   const brandLabel = displayName.replace(/\s+/g, '').toUpperCase()
-  const titleParts = splitApiSuffix(displayName)
   const docsNavLink = topNavLinks.find((link) => link.title === t('Docs'))
   const copyableBaseUrl = useMemo(
     () => formatCopyableBaseUrl(getServerAddress(status)),
@@ -136,13 +123,10 @@ export function Hero(props: HeroProps) {
       <div className='relative z-10 flex flex-1 items-center justify-center pb-20'>
         <div className='landing-animate-fade-up flex w-full max-w-5xl flex-col items-center text-center'>
           <h1
-            className='text-[clamp(4.5rem,13vw,11rem)] leading-none font-light tracking-[-0.075em] text-white'
+            className='text-white'
             style={{ textShadow: '0 0 32px rgba(139, 92, 246, 0.18)' }}
           >
-            <span>{titleParts.prefix}</span>
-            <span className='landing-title-accent bg-gradient-to-r from-[#8cb2ff] via-[#9d85ff] to-[#b88cff] bg-clip-text text-transparent'>
-              {titleParts.suffix}
-            </span>
+            <BrandWordmark name={displayName} size='hero' animated />
           </h1>
           <p className='mt-10 text-sm tracking-[0.42em] text-white/32 md:text-base'>
             {t('Convenient model access for everyone')}

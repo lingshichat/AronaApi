@@ -1,6 +1,6 @@
-import { Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
+import { BrandIconImage } from '@/components/brand-wordmark'
 
 interface LoadingStateProps {
   className?: string
@@ -22,7 +22,7 @@ export function LoadingState(props: LoadingStateProps) {
   if (props.inline) {
     return (
       <span className={cn('inline-flex items-center gap-2', props.className)}>
-        <Loader2 className={cn(iconSize, 'animate-spin')} />
+        <BrandIconImage className={cn(iconSize, 'animate-pulse')} />
         {props.message != null && (
           <span className='text-muted-foreground text-sm'>{props.message}</span>
         )}
@@ -37,8 +37,8 @@ export function LoadingState(props: LoadingStateProps) {
         props.className
       )}
     >
-      <div className='animate-spin'>
-        <Loader2 className={iconSize} />
+      <div className='animate-pulse'>
+        <BrandIconImage className={iconSize} />
       </div>
       <p className='text-muted-foreground text-sm'>
         {props.message ?? t('Loading...')}

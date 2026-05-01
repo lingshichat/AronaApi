@@ -7,6 +7,7 @@ import { DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { ROLE } from '@/lib/roles'
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
+import { BrandIconImage } from '@/components/brand-wordmark'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,7 +47,7 @@ export function WorkspaceSwitcher({
   const { pathname } = useLocation()
   const { isMobile } = useSidebar()
   const { status } = useStatus()
-  const { logo } = useSystemConfig()
+  const { systemName } = useSystemConfig()
   const isSuperAdmin = useAuthStore(
     (state) => state.auth.user?.role === ROLE.SUPER_ADMIN
   )
@@ -124,19 +125,7 @@ export function WorkspaceSwitcher({
   const canSwitchWorkspace = availableWorkspaces.length > 1
   const workspaceButtonContent = (
     <>
-      {activeWorkspace.id === WORKSPACE_IDS.SYSTEM_SETTINGS ? (
-        <div className='bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg'>
-          <activeWorkspace.logo className='size-4' />
-        </div>
-      ) : (
-        <div className='flex aspect-square size-8 items-center justify-center overflow-hidden rounded-lg'>
-          <img
-            src={logo}
-            alt={t('Logo')}
-            className='size-full rounded-lg object-cover'
-          />
-        </div>
-      )}
+      <BrandIconImage name={systemName} size='md' />
       <div className='grid flex-1 text-start text-sm leading-tight group-data-[collapsible=icon]:hidden'>
         <span className='truncate font-semibold'>{activeWorkspace.name}</span>
         <span className='truncate text-xs'>{activeWorkspace.plan}</span>
@@ -169,25 +158,13 @@ export function WorkspaceSwitcher({
               <DropdownMenuLabel className='text-muted-foreground text-xs'>
                 {t('Workspaces')}
               </DropdownMenuLabel>
-              {availableWorkspaces.map((workspace, index) => (
+              {availableWorkspaces.map((workspace) => (
                 <DropdownMenuItem
                   key={workspace.id}
                   onClick={() => handleWorkspaceChange(workspace)}
                   className='gap-2 p-2'
                 >
-                  {index === 0 ? (
-                    <div className='flex size-6 items-center justify-center overflow-hidden rounded-sm border'>
-                      <img
-                        src={logo}
-                        alt='Logo'
-                        className='size-full object-cover'
-                      />
-                    </div>
-                  ) : (
-                    <div className='flex size-6 items-center justify-center rounded-sm border'>
-                      <workspace.logo className='size-4 shrink-0' />
-                    </div>
-                  )}
+                  <BrandIconImage name={systemName} size='sm' />
                   {workspace.name}
                 </DropdownMenuItem>
               ))}

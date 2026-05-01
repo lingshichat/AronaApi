@@ -1,6 +1,10 @@
 export function applyFaviconToDom(url: string) {
   if (typeof document === 'undefined' || !url) return
   try {
+    if (url === '/logo.png' || url === '/arona-mark.svg') {
+      return
+    }
+
     const next = new URL(url, window.location.href).href
     const existing =
       document.querySelectorAll<HTMLLinkElement>('link[rel~="icon"]')

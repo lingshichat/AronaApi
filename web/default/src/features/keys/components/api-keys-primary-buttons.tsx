@@ -5,10 +5,10 @@ import { useApiKeys } from './api-keys-provider'
 
 export function ApiKeysPrimaryButtons() {
   const { t } = useTranslation()
-  const { setOpen } = useApiKeys()
+  const { openCreateDialog } = useApiKeys()
   return (
     <div className='flex gap-2'>
-      <Button size='sm' onClick={() => setOpen('create')}>
+      <Button size='sm' onClick={openCreateDialog}>
         <Plus className='h-4 w-4' />
         {t('Create API Key')}
       </Button>

@@ -122,6 +122,54 @@ Examples:
 Routes should call controller functions or small inline adapters that only choose
 relay format or channel type.
 
+#### Dashboard/API route contracts
+
+When adding or reconnecting dashboard routes used by `web/default`, the URL
+shape must match frontend API wrappers exactly.
+
+**Signatures**
+
+```go
+// router/api-router.go
+apiRouter := router.Group("/api")
+channelRoute := apiRouter.Group("/channel")
+
+// Static routes must be registered before dynamic `/:id` routes.
+channelRoute.GET("/test", ...)
+channelRoute.GET("/models", ...)
+channelRoute.GET("/tag/models", ...)
+channelRoute.GET("/:id", ...)
+channelRoute.POST("/:id/key", ...)
+
+// If frontend code calls no-trailing-slash forms, register the same shape.
+apiRouter.GET("/group", ...)
+apiRouter.GET("/prefill_group", ...)
+```
+
+**Contracts**
+
+- `web/default/src/features/*/api.ts` paths should prefer the canonical route
+  shape registered in `router/api-router.go`.
+- Do not rely on 301/307 slash redirects for API calls from the new frontend.
+- Keep middleware auth semantics unchanged. A newly connected route returning
+  `401`/`403` is valid when unauthenticated; `404` or route shadowing is not.
+
+**Validation matrix**
+
+| Case | Expected |
+|------|----------|
+| `GET /api/status` | `200` |
+| Protected route without session | `401` or `403`, not `404` |
+| Static channel route | Hits static handler before `/:id` |
+| Frontend no-slash compatibility route | No redirect-only dependency |
+
+**Tests required**
+
+- Add focused router tests under `router/*_test.go`.
+- Assert static channel routes are not captured by `/:id`.
+- Assert no-slash compatibility routes are registered.
+- Assert static asset web routes are not blocked by global web rate limiting.
+
 ### `controller/`
 
 Owns Gin request handling:

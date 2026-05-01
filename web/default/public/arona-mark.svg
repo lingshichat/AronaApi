@@ -1,0 +1,33 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="arona-mark-right" x1="155" y1="42" x2="198" y2="213" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8CB2FF"/>
+      <stop offset="0.54" stop-color="#8F8CFF"/>
+      <stop offset="1" stop-color="#B88CFF"/>
+    </linearGradient>
+    <linearGradient id="arona-mark-left" x1="105" y1="47" x2="74" y2="211" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F4F4F7"/>
+    </linearGradient>
+    <filter id="arona-mark-glow" x="113" y="18" width="123" height="220" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="blur"/>
+      <feOffset dx="4" dy="5"/>
+      <feComposite in2="SourceAlpha" operator="out" result="shadow"/>
+      <feColorMatrix in="shadow" type="matrix" values="0 0 0 0 0.46 0 0 0 0 0.38 0 0 0 0 1 0 0 0 0.58 0"/>
+      <feBlend in2="BackgroundImageFix" mode="screen" result="glow"/>
+      <feBlend in="SourceGraphic" in2="glow" mode="normal" result="shape"/>
+    </filter>
+  </defs>
+
+  <path
+    d="M128 32C118.5 86 93 129 65 174C52.7 193.7 46.2 209.2 43 224H91C76.6 213.9 88.9 188.7 105.8 158C122.1 128.4 137.8 88.8 128 32Z"
+    fill="url(#arona-mark-left)"
+  />
+  <g filter="url(#arona-mark-glow)">
+    <path
+      d="M128 32C136.8 72.3 154.3 112.6 175.7 150.2C192.9 180.4 206.2 207.6 213 224H165C177.7 216.1 168.1 192.1 152 160.8C135.5 128.6 123.9 83.1 128 32Z"
+      fill="url(#arona-mark-right)"
+    />
+  </g>
+</svg>

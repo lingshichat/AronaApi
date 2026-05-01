@@ -1,0 +1,7 @@
+{"file": ".trellis/workflow.md", "reason": "Project workflow and conventions"}
+{"file": ".trellis/spec/backend/index.md", "reason": "Backend development guide"}
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend development guide"}
+{"file": ".trellis/spec/backend/directory-structure.md", "reason": "router owns URL shape and middleware order"}
+{"file": ".trellis/spec/backend/error-handling.md", "reason": "keep existing dashboard API response shape"}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "narrow backend route changes"}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "frontend API wrappers must match backend routes"}

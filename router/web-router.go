@@ -3,6 +3,7 @@ package router
 import (
 	"embed"
 	"net/http"
+	"path"
 	"strings"
 
 	"github.com/QuantumNous/new-api/common"
@@ -27,7 +28,7 @@ func SetWebRouter(router *gin.Engine, assets ThemeAssets) {
 	themeFS := common.NewThemeAwareFS(defaultFS, classicFS)
 
 	router.Use(gzip.Gzip(gzip.DefaultCompression))
-	router.Use(middleware.GlobalWebRateLimit())
+	router.Use(globalWebRateLimitExceptStaticAssets())
 	router.Use(middleware.Cache())
 	router.Use(static.Serve("/", themeFS))
 	router.NoRoute(func(c *gin.Context) {
@@ -43,4 +44,32 @@ func SetWebRouter(router *gin.Engine, assets ThemeAssets) {
 			c.Data(http.StatusOK, "text/html; charset=utf-8", assets.DefaultIndexPage)
 		}
 	})
+}
+
+func globalWebRateLimitExceptStaticAssets() gin.HandlerFunc {
+	webRateLimit := middleware.GlobalWebRateLimit()
+
+	return func(c *gin.Context) {
+		if isCacheableStaticAssetPath(c.Request.URL.Path) {
+			c.Next()
+			return
+		}
+		webRateLimit(c)
+	}
+}
+
+func isCacheableStaticAssetPath(requestPath string) bool {
+	if requestPath == "" || requestPath == "/" {
+		return false
+	}
+	if strings.HasPrefix(requestPath, "/static/") || strings.HasPrefix(requestPath, "/assets/") {
+		return true
+	}
+
+	switch strings.ToLower(path.Ext(requestPath)) {
+	case ".js", ".css", ".map", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".woff", ".woff2", ".ttf", ".otf":
+		return true
+	default:
+		return false
+	}
 }

@@ -1,0 +1,6 @@
+{"file": ".opencode/commands/trellis/finish-work.md", "reason": "Finish work checklist"}
+{"file": ".opencode/commands/trellis/check.md", "reason": "Code quality check spec"}
+{"phase":"finish","status":"passed","checks":["go test ./router ./controller","bun run typecheck","bun run lint"],"notes":"Updated frontend/backend specs and task metadata; record-session deferred until human commit."}
+{"phase":"record","status":"deferred","reason":"record-session requires human-tested committed code; get_context --mode record was run and task metadata was updated"}
+{"phase":"finish","status":"passed","checks":["go test ./router ./controller","bun run typecheck","bun run lint","git diff --check"],"notes":"Finish flow re-run passed; specs already updated for backend route contracts and frontend brand system.","at":"2026-05-01T10:40:43"}
+{"phase":"record","status":"deferred","reason":"record-session requires human-tested committed code; get_context --mode record completed but working tree still has uncommitted changes.","at":"2026-05-01T10:40:43"}

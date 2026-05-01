@@ -67,6 +67,7 @@ export function DataTableRowActions<TData>({
   const {
     setOpen,
     setCurrentRow,
+    openUpdateDialog,
     triggerRefresh,
     setResolvedKey,
     resolveRealKey,
@@ -180,8 +181,7 @@ export function DataTableRowActions<TData>({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            setCurrentRow(apiKey)
-            setOpen('update')
+            openUpdateDialog(apiKey)
           }}
         >
           {t('Edit')}

@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/auth-store'
 import { Markdown } from '@/components/ui/markdown'
 import { PublicLayout } from '@/components/layout'
-import { Footer } from '@/components/layout/components/footer'
 import { Hero } from './components'
 import { useHomePageContent } from './hooks'
 
@@ -45,7 +44,6 @@ export function Home() {
   return (
     <div className='dark min-h-svh bg-[#030305] text-white'>
       <Hero isAuthenticated={isAuthenticated} />
-      <Footer className='border-white/10 bg-[#030305]' />
     </div>
   )
 }

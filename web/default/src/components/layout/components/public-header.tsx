@@ -8,6 +8,7 @@ import { useSystemConfig } from '@/hooks/use-system-config'
 import { useTopNavLinks } from '@/hooks/use-top-nav-links'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { BrandWordmark } from '@/components/brand-wordmark'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { NotificationButton } from '@/components/notification-button'
 import { NotificationDialog } from '@/components/notification-dialog'
@@ -116,8 +117,12 @@ export function PublicHeader(props: PublicHeaderProps) {
                   />
                 )}
               </div>
-              <span className='text-sm font-semibold tracking-tight'>
-                {loading ? <Skeleton className='h-4 w-16' /> : displaySiteName}
+              <span className='text-foreground text-sm'>
+                {loading ? (
+                  <Skeleton className='h-4 w-16' />
+                ) : (
+                  <BrandWordmark name={displaySiteName} size='xs' />
+                )}
               </span>
             </Link>
 

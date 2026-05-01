@@ -21,6 +21,9 @@ type ApiKeysContextType = {
   loadingKeys: Record<number, boolean>
   copiedKeyId: number | null
   markKeyCopied: (id: number) => void
+  mutateSide: 'left' | 'right'
+  openCreateDialog: () => void
+  openUpdateDialog: (apiKey: ApiKey) => void
 }
 
 const ApiKeysContext = React.createContext<ApiKeysContextType | null>(null)
@@ -31,6 +34,7 @@ export function ApiKeysProvider({ children }: { children: React.ReactNode }) {
   const [currentRow, setCurrentRow] = useState<ApiKey | null>(null)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [resolvedKey, setResolvedKey] = useState('')
+  const [mutateSide, setMutateSide] = useState<'left' | 'right'>('right')
 
   const [resolvedKeys, setResolvedKeys] = useState<Record<number, string>>({})
   const [loadingKeys, setLoadingKeys] = useState<Record<number, boolean>>({})
@@ -52,6 +56,20 @@ export function ApiKeysProvider({ children }: { children: React.ReactNode }) {
   const triggerRefresh = useCallback(() => {
     setRefreshTrigger((prev) => prev + 1)
   }, [])
+
+  const openCreateDialog = useCallback(() => {
+    setMutateSide('left')
+    setOpen('create')
+  }, [setOpen])
+
+  const openUpdateDialog = useCallback(
+    (apiKey: ApiKey) => {
+      setMutateSide('right')
+      setCurrentRow(apiKey)
+      setOpen('update')
+    },
+    [setOpen]
+  )
 
   const resolveRealKey = useCallback(
     async (id: number): Promise<string | null> => {
@@ -151,6 +169,9 @@ export function ApiKeysProvider({ children }: { children: React.ReactNode }) {
         loadingKeys,
         copiedKeyId,
         markKeyCopied,
+        mutateSide,
+        openCreateDialog,
+        openUpdateDialog,
       }}
     >
       {children}
