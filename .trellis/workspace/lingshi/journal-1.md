@@ -58,3 +58,36 @@ Included in `feat(home): add minimal AronaApi landing page` (this commit).
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: Connect new frontend pages
+
+**Date**: 2026-05-01
+**Task**: Connect new frontend pages
+**Branch**: `main`
+
+### Summary
+
+Connected missing backend routes for the new default frontend, normalized frontend API paths, unified AronaApi branding across homepage/auth/dashboard/loading/favicon, added focused router tests, updated backend/frontend code-specs, and validated with Go tests plus frontend typecheck/lint.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `3a128a14` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
