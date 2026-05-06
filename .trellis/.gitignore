@@ -17,6 +17,8 @@
 
 # Task directory runtime files
 .plan-log
+workspace/*/landing-preview.*
+tasks/archive/**/*.png
 
 # Atomic update temp files
 *.tmp
