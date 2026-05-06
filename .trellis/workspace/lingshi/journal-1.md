@@ -91,3 +91,36 @@ Connected missing backend routes for the new default frontend, normalized fronte
 ### Next Steps
 
 - None - task complete
+
+
+## Session 3: Migrate Trellis workflow tooling
+
+**Date**: 2026-05-06
+**Task**: Migrate Trellis workflow tooling
+**Branch**: `main`
+
+### Summary
+
+Migrated Trellis project tooling to the current 0.5.x runtime, updated platform skills/agents/hooks, validated context files, and archived the migration task.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `e3d62d42` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
