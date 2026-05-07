@@ -5,12 +5,14 @@ import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/auth-store'
 import { DEFAULT_SYSTEM_NAME } from '@/lib/constants'
 import { ROLE } from '@/lib/roles'
+import { cn } from '@/lib/utils'
 import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
 import { BrandIconImage } from '@/components/brand-wordmark'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
@@ -29,6 +31,12 @@ type WorkspaceSwitcherProps = {
   workspaces: Workspace[]
   defaultName?: string
   defaultVersion?: string
+  /**
+   * Visual layout:
+   * - 'sidebar': stacked card style (used inside the sidebar header).
+   * - 'inline': compact horizontal pill (used inside the top app bar).
+   */
+  variant?: 'sidebar' | 'inline'
 }
 
 /**
@@ -41,6 +49,7 @@ export function WorkspaceSwitcher({
   workspaces,
   defaultName = DEFAULT_SYSTEM_NAME,
   defaultVersion,
+  variant = 'sidebar',
 }: WorkspaceSwitcherProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -112,7 +121,7 @@ export function WorkspaceSwitcher({
     // Only navigate, let useEffect synchronize workspace state based on new pathname
     // This avoids race conditions and context loss issues
     if (workspace.id === WORKSPACE_IDS.SYSTEM_SETTINGS) {
-      navigate({ to: '/system-settings/general' })
+      navigate({ to: '/system-settings/site' })
     } else {
       navigate({ to: '/dashboard' })
     }
@@ -123,6 +132,76 @@ export function WorkspaceSwitcher({
   }
 
   const canSwitchWorkspace = availableWorkspaces.length > 1
+
+  const renderWorkspaceList = () => (
+    <DropdownMenuGroup>
+      <DropdownMenuLabel className='text-muted-foreground text-xs'>
+        {t('Workspaces')}
+      </DropdownMenuLabel>
+      {availableWorkspaces.map((workspace) => (
+        <DropdownMenuItem
+          key={workspace.id}
+          onClick={() => handleWorkspaceChange(workspace)}
+          className='gap-2 p-2'
+        >
+          {workspace.id === WORKSPACE_IDS.DEFAULT ? (
+            <BrandIconImage name={systemName} size='sm' />
+          ) : (
+            <workspace.logo className='size-4 shrink-0' />
+          )}
+          {workspace.name}
+        </DropdownMenuItem>
+      ))}
+    </DropdownMenuGroup>
+  )
+
+  if (variant === 'inline') {
+    const inlineLogo =
+      activeWorkspace.id === WORKSPACE_IDS.DEFAULT ? (
+        <BrandIconImage name={systemName} size='xs' />
+      ) : (
+        <activeWorkspace.logo className='size-4 shrink-0' />
+      )
+
+    const inlineButtonClass = cn(
+      'inline-flex h-7 items-center gap-1.5 rounded-md px-1.5 text-sm font-medium text-foreground outline-none select-none transition-colors',
+      'hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring/40',
+      'data-popup-open:bg-accent'
+    )
+
+    if (!canSwitchWorkspace) {
+      return (
+        <div
+          className={cn(
+            inlineButtonClass,
+            'cursor-default hover:bg-transparent'
+          )}
+        >
+          {inlineLogo}
+          <span className='max-w-[12rem] truncate'>{activeWorkspace.name}</span>
+        </div>
+      )
+    }
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger className={inlineButtonClass}>
+          {inlineLogo}
+          <span className='max-w-[12rem] truncate'>{activeWorkspace.name}</span>
+          <ChevronsUpDown className='text-muted-foreground size-3.5' />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className='min-w-56 rounded-lg'
+          align='start'
+          side='bottom'
+          sideOffset={6}
+        >
+          {renderWorkspaceList()}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
+
   const workspaceButtonContent = (
     <>
       <BrandIconImage name={systemName} size='md' />
@@ -141,42 +220,32 @@ export function WorkspaceSwitcher({
       <SidebarMenuItem>
         {canSwitchWorkspace ? (
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <SidebarMenuButton
-                size='lg'
-                className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
-              >
-                {workspaceButtonContent}
-              </SidebarMenuButton>
+            <DropdownMenuTrigger
+              render={
+                <SidebarMenuButton
+                  size='lg'
+                  className='data-popup-open:bg-sidebar-accent data-popup-open:text-sidebar-accent-foreground'
+                />
+              }
+            >
+              {workspaceButtonContent}
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className='w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg'
+              className='w-(--anchor-width) min-w-56 rounded-lg'
               align='start'
               side={isMobile ? 'bottom' : 'right'}
               sideOffset={4}
             >
-              <DropdownMenuLabel className='text-muted-foreground text-xs'>
-                {t('Workspaces')}
-              </DropdownMenuLabel>
-              {availableWorkspaces.map((workspace) => (
-                <DropdownMenuItem
-                  key={workspace.id}
-                  onClick={() => handleWorkspaceChange(workspace)}
-                  className='gap-2 p-2'
-                >
-                  <BrandIconImage name={systemName} size='sm' />
-                  {workspace.name}
-                </DropdownMenuItem>
-              ))}
+              {renderWorkspaceList()}
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
           <SidebarMenuButton
-            asChild
             size='lg'
             className='hover:text-sidebar-foreground active:text-sidebar-foreground cursor-default hover:bg-transparent active:bg-transparent'
+            render={<div />}
           >
-            <div>{workspaceButtonContent}</div>
+            {workspaceButtonContent}
           </SidebarMenuButton>
         )}
       </SidebarMenuItem>
