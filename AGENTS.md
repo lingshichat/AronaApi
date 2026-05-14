@@ -13,6 +13,45 @@ This is an AI API gateway/proxy built with Go. It aggregates 40+ upstream AI pro
 - **Auth**: JWT, WebAuthn/Passkeys, OAuth (GitHub, Discord, OIDC, etc.)
 - **Frontend package manager**: Bun (preferred over npm/yarn/pnpm)
 
+## Local Development Environment
+
+Use the project-local toolchain and caches already stored under `.tools/`.
+
+- **Go executable**: `.tools/go/bin/go.exe`
+- **Go module cache**: `.tools/gopath/pkg/mod`
+- **Go build cache**: `.tools/gocache`
+- **Bun executable**: `.tools/bun-windows-x64/bun.exe`
+- **Bun cache**: `.tools/bun-cache`
+
+Do not create temporary Go caches such as `.gomodcache-temp` or
+`.gocache-temp` for normal preview, build, lint, or test work. If a temporary
+cache is created accidentally, delete it after use.
+
+Backend preview:
+
+```powershell
+$env:GOMODCACHE=(Resolve-Path .tools\gopath\pkg\mod).Path
+$env:GOCACHE=(Resolve-Path .tools\gocache).Path
+$env:PORT="3000"
+.\.tools\go\bin\go.exe run . -port 3000
+```
+
+Set `PORT` exactly to `3000`. Do not leave trailing spaces in `PORT`; Go will
+parse `3000 ` as an invalid port.
+
+Frontend preview:
+
+```powershell
+cd web/default
+$env:VITE_REACT_APP_SERVER_URL="http://127.0.0.1:3000"
+.\node_modules\.bin\rsbuild.cmd dev --port 5173
+```
+
+Preview URLs:
+
+- Backend: `http://127.0.0.1:3000`
+- Frontend: `http://127.0.0.1:5173/`
+
 ## Architecture
 
 Layered architecture: Router -> Controller -> Service -> Model

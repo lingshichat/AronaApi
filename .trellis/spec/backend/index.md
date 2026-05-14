@@ -29,6 +29,7 @@ All backend changes must preserve:
 | [Error Handling](./error-handling.md) | Error types, handling strategies | Filled |
 | [Quality Guidelines](./quality-guidelines.md) | Code standards, forbidden patterns | Filled |
 | [Logging Guidelines](./logging-guidelines.md) | Structured logging, log levels | Filled |
+| [Local Development Environment](./local-development-environment.md) | Local toolchain, cache, preview contracts | Filled |
 
 ---
 
@@ -46,9 +47,11 @@ Before backend implementation:
    touching request/background jobs.
 5. Read [Quality Guidelines](./quality-guidelines.md) before changing DTOs,
    relay providers, billing, or tests.
-6. For tiered/dynamic billing, also read `pkg/billingexpr/expr.md`.
-7. For cross-layer changes, read `../guides/cross-layer-thinking-guide.md`.
-8. When adding helpers, constants, or config, read
+6. Read [Local Development Environment](./local-development-environment.md)
+   before starting backend preview, checks, or tests.
+7. For tiered/dynamic billing, also read `pkg/billingexpr/expr.md`.
+8. For cross-layer changes, read `../guides/cross-layer-thinking-guide.md`.
+9. When adding helpers, constants, or config, read
    `../guides/code-reuse-thinking-guide.md` and search for existing patterns.
 
 ---
@@ -64,6 +67,7 @@ Before backend implementation:
 - Use `types.NewAPIError` and provider-compatible shapes for relay APIs.
 - Use `logger.Log*` for request-aware logs and `common.SysLog` for system logs.
 - Mask secrets in logs and returned relay errors.
+- Use project-local Go caches under `.tools/` for local preview and checks.
 - Register relay providers through `relay/relay_adaptor.go`.
 - Update `streamSupportedChannels` when a provider supports `StreamOptions`.
 - Add focused tests near the changed package.
