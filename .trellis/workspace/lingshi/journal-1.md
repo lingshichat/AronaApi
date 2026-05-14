@@ -124,3 +124,36 @@ Migrated Trellis project tooling to the current 0.5.x runtime, updated platform 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 4: Landing New API integration guide
+
+**Date**: 2026-05-14
+**Task**: Landing New API integration guide
+**Branch**: `main`
+
+### Summary
+
+Added a compact New API-compatible onboarding block to the public landing hero, including SDK Base URL, auth header, common endpoints, API key CTA, i18n coverage, and updated the landing page spec. Verification passed for scoped hero lint, typecheck, build:check, prettier, and i18n; full lint remains blocked by unrelated existing files.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5bbc2779` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

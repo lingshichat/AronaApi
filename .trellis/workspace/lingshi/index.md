@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 3
-- **Last Active**: 2026-05-06
+- **Total Sessions**: 4
+- **Last Active**: 2026-05-14
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~126 | Active |
+| `journal-1.md` | ~159 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 4 | 2026-05-14 | Landing New API integration guide | `5bbc2779` | `main` |
 | 3 | 2026-05-06 | Migrate Trellis workflow tooling | `e3d62d42` | `main` |
 | 2 | 2026-05-01 | Connect new frontend pages | `3a128a14` | `main` |
 | 1 | 2026-04-29 | AronaApi minimal landing page | this commit | `main` |
