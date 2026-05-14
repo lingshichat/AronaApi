@@ -14,6 +14,9 @@ AI SaaS landing pages.
 - Center subtitle: short slogan.
 - Under subtitle: compact copyable Base URL field in the original New API split
   style: base domain on the left, endpoint suffix on the right.
+- Optional under the Base URL: a compact, hero-internal New API-compatible
+  integration block. Keep it subdued and short: SDK Base URL (`<base>/v1`),
+  auth header, common endpoint chips, and one API-key CTA.
 - Footer uses `AronaApi` as the primary copyright display while preserving
   `New API` / `QuantumNous` as secondary attribution.
 
@@ -27,6 +30,8 @@ AI SaaS landing pages.
   muted text, and no bright SaaS card treatment.
 - UI chrome: no dashboard panels, model cards, charts, code waterfalls, or
   network-node decoration in the hero.
+- Integration guidance must stay compact and material-light; do not turn the
+  hero into a documentation wall or a dense dashboard-style card stack.
 
 ## Runtime rules
 
@@ -48,6 +53,10 @@ AI SaaS landing pages.
 - The endpoint suffix is displayed separately and may rotate between common
   OpenAI-compatible paths such as `/v1/responses` and
   `/v1/chat/completions`.
+- SDK Base URL guidance may append `/v1` to the copyable base domain, but that
+  must be a separate displayed/copied value from the original Base URL capsule.
+- API key CTAs should route authenticated users to key management and guests to
+  sign-in/sign-up.
 - Use the shared `CopyButton` for clipboard behavior.
 
 ## Brand system contract

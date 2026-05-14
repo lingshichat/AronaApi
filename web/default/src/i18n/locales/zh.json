@@ -1,5 +1,13 @@
 {
   "translation": {
+    "Auth header": "鉴权 Header",
+    "Common endpoints": "常用端点",
+    "Copy SDK Base URL": "复制 SDK Base URL",
+    "Get API key": "获取 API Key",
+    "Manage API keys": "管理 API Keys",
+    "New API compatible": "兼容 New API",
+    "SDK Base URL": "SDK Base URL",
+    "Use the OpenAI SDK with this endpoint and your API key.": "用 OpenAI SDK、此端点和你的 API Key 即可接入。",
     "Powered by": "技术支持",
     "Welcome to AronaApi...": "欢迎使用 AronaApi...",
     "360": "360",

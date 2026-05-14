@@ -1,5 +1,13 @@
 {
   "translation": {
+    "Auth header": "Auth header",
+    "Common endpoints": "Common endpoints",
+    "Copy SDK Base URL": "Copy SDK Base URL",
+    "Get API key": "Get API key",
+    "Manage API keys": "Manage API keys",
+    "New API compatible": "New API compatible",
+    "SDK Base URL": "SDK Base URL",
+    "Use the OpenAI SDK with this endpoint and your API key.": "Use the OpenAI SDK with this endpoint and your API key.",
     "Powered by": "Powered by",
     "Welcome to AronaApi...": "Welcome to AronaApi...",
     "360": "360",
