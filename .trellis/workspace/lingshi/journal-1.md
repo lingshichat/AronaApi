@@ -157,3 +157,37 @@ Added a compact New API-compatible onboarding block to the public landing hero, 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 5: Merge upstream updates
+
+**Date**: 2026-05-14
+**Task**: Merge upstream updates
+**Branch**: `main`
+
+### Summary
+
+Fetched remotes, confirmed upstream/main is merged into main, preserved no-push requirement, and committed Trellis workflow/tooling plus local development environment documentation updates. Temporary preview logs were cleaned and the merge-upstream task was archived.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `634288c4` | (see git log) |
+| `ec11c8d2` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
