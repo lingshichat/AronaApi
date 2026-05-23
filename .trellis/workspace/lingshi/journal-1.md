@@ -191,3 +191,36 @@ Fetched remotes, confirmed upstream/main is merged into main, preserved no-push 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 6: Remove landing integration guide
+
+**Date**: 2026-05-23
+**Task**: Remove landing integration guide
+**Branch**: `main`
+
+### Summary
+
+Removed the landing hero integration guide, preserved the copyable Base URL row, updated frontend specs and i18n, rebuilt frontend assets, and verified both dev and backend-served landing pages.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `0463d142` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

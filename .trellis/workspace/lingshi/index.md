@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 5
-- **Last Active**: 2026-05-14
+- **Total Sessions**: 6
+- **Last Active**: 2026-05-23
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~193 | Active |
+| `journal-1.md` | ~226 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 6 | 2026-05-23 | Remove landing integration guide | `0463d142` | `main` |
 | 5 | 2026-05-14 | Merge upstream updates | `634288c4`, `ec11c8d2` | `main` |
 | 4 | 2026-05-14 | Landing New API integration guide | `5bbc2779` | `main` |
 | 3 | 2026-05-06 | Migrate Trellis workflow tooling | `e3d62d42` | `main` |
