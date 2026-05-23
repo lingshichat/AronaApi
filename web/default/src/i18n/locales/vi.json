@@ -1,13 +1,5 @@
 {
   "translation": {
-    "Auth header": "Header xác thực",
-    "Common endpoints": "Endpoint thường dùng",
-    "Copy SDK Base URL": "Sao chép SDK Base URL",
-    "Get API key": "Lấy API key",
-    "Manage API keys": "Quản lý API keys",
-    "New API compatible": "Tương thích New API",
-    "SDK Base URL": "SDK Base URL",
-    "Use the OpenAI SDK with this endpoint and your API key.": "Dùng SDK OpenAI với endpoint này và API key của bạn.",
     "Powered by": "Được hỗ trợ bởi",
     "Welcome to AronaApi...": "Chào mừng đến với AronaApi...",
     "360": "360",

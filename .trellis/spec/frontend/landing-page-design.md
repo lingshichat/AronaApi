@@ -14,9 +14,8 @@ AI SaaS landing pages.
 - Center subtitle: short slogan.
 - Under subtitle: compact copyable Base URL field in the original New API split
   style: base domain on the left, endpoint suffix on the right.
-- Optional under the Base URL: a compact, hero-internal New API-compatible
-  integration block. Keep it subdued and short: SDK Base URL (`<base>/v1`),
-  auth header, common endpoint chips, and one API-key CTA.
+- Do not render an integration-guide block under the Base URL. The public
+  hero should stay limited to the wordmark, slogan, and compact Base URL row.
 - Footer uses `AronaApi` as the primary copyright display while preserving
   `New API` / `QuantumNous` as secondary attribution.
 
@@ -53,10 +52,6 @@ AI SaaS landing pages.
 - The endpoint suffix is displayed separately and may rotate between common
   OpenAI-compatible paths such as `/v1/responses` and
   `/v1/chat/completions`.
-- SDK Base URL guidance may append `/v1` to the copyable base domain, but that
-  must be a separate displayed/copied value from the original Base URL capsule.
-- API key CTAs should route authenticated users to key management and guests to
-  sign-in/sign-up.
 - Use the shared `CopyButton` for clipboard behavior.
 
 ## Brand system contract

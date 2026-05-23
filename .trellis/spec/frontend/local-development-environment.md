@@ -51,7 +51,8 @@ $env:VITE_REACT_APP_SERVER_URL="http://127.0.0.1:3000"
 - Browser smoke: `http://127.0.0.1:5173/` returns the frontend HTML.
 - API smoke: `http://127.0.0.1:3000/api/status` returns HTTP 200 before checking
   UI behavior.
-- Landing smoke: homepage renders the New API-compatible integration guide.
+- Landing smoke: homepage renders the compact copyable Base URL row and does
+  not render the New API-compatible integration guide.
 
 ### 7. Wrong vs Correct
 

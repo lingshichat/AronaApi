@@ -1,13 +1,5 @@
 {
   "translation": {
-    "Auth header": "認証ヘッダー",
-    "Common endpoints": "よく使うエンドポイント",
-    "Copy SDK Base URL": "SDK ベース URL をコピー",
-    "Get API key": "API キーを取得",
-    "Manage API keys": "API キーを管理",
-    "New API compatible": "New API 互換",
-    "SDK Base URL": "SDK ベース URL",
-    "Use the OpenAI SDK with this endpoint and your API key.": "このエンドポイントと API キーで OpenAI SDK を利用できます。",
     "Powered by": "Powered by",
     "Welcome to AronaApi...": "AronaApiへようこそ...",
     "360": "360",

@@ -1,13 +1,5 @@
 {
   "translation": {
-    "Auth header": "Заголовок авторизации",
-    "Common endpoints": "Частые endpoints",
-    "Copy SDK Base URL": "Скопировать базовый URL SDK",
-    "Get API key": "Получить API-ключ",
-    "Manage API keys": "Управлять API-ключами",
-    "New API compatible": "Совместимо с New API",
-    "SDK Base URL": "Базовый URL SDK",
-    "Use the OpenAI SDK with this endpoint and your API key.": "Используйте SDK OpenAI с этим endpoint и вашим API-ключом.",
     "Powered by": "Работает на",
     "Welcome to AronaApi...": "Добро пожаловать в AronaApi...",
     "360": "360",
