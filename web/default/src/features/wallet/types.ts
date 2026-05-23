@@ -15,7 +15,14 @@ export interface ApiResponse<T = unknown> {
  * Standard API response types
  */
 export type TopupInfoResponse = ApiResponse<TopupInfo>
-export type RedemptionResponse = ApiResponse<number>
+export type RedemptionResponse = ApiResponse<RedemptionResult>
+export interface RedemptionResult {
+  type: 'quota' | 'subscription'
+  quota?: number
+  plan_id?: number
+  plan_title?: string
+  subscription_id?: number
+}
 export type AmountResponse = ApiResponse<string>
 export type PaymentResponse = ApiResponse<Record<string, unknown>> & {
   url?: string
@@ -113,6 +120,12 @@ export interface TopupInfo {
   discount: Record<number, number>
   /** Optional topup link for purchasing codes */
   topup_link?: string
+  /** Whether embedded purchase page is enabled */
+  embedded_purchase_enabled?: boolean
+  /** Embedded purchase iframe URL */
+  embedded_purchase_url?: string
+  /** Embedded purchase fallback instructions */
+  embedded_purchase_instructions?: string
   /** Whether Creem topup is enabled */
   enable_creem_topup?: boolean
   /** Available Creem products */

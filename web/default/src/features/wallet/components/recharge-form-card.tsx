@@ -117,6 +117,9 @@ export function RechargeFormCard({
   const hasWaffoPaymentMethods =
     Array.isArray(waffoPayMethods) && waffoPayMethods.length > 0
   const minTopup = getMinTopupAmount(topupInfo)
+  const purchaseLink = topupInfo?.embedded_purchase_enabled
+    ? '/wallet/purchase'
+    : topupLink
 
   if (loading) {
     return (
@@ -455,13 +458,19 @@ export function RechargeFormCard({
             {t('Redeem')}
           </Button>
         </div>
-        {topupLink && (
+        {purchaseLink && (
           <p className='text-muted-foreground text-xs'>
             {t('Need a code?')}{' '}
             <a
-              href={topupLink}
-              target='_blank'
-              rel='noopener noreferrer'
+              href={purchaseLink}
+              target={
+                topupInfo?.embedded_purchase_enabled ? undefined : '_blank'
+              }
+              rel={
+                topupInfo?.embedded_purchase_enabled
+                  ? undefined
+                  : 'noopener noreferrer'
+              }
               className='inline-flex items-center gap-1 underline-offset-4 hover:underline'
             >
               {t('Purchase here')}

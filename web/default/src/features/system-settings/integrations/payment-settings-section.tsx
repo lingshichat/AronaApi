@@ -103,6 +103,13 @@ const paymentSchema = z.object({
       })
     }
   }),
+  EmbeddedPurchaseEnabled: z.boolean(),
+  EmbeddedPurchaseUrl: z.string().refine((value) => {
+    const trimmed = value.trim()
+    if (!trimmed) return true
+    return /^https?:\/\//.test(trimmed)
+  }, 'Provide a valid URL starting with http:// or https://'),
+  EmbeddedPurchaseInstructions: z.string(),
 })
 
 type PaymentFormValues = z.infer<typeof paymentSchema>
@@ -392,6 +399,56 @@ export function PaymentSettingsSection({
       return
     }
 
+    for (const update of updates) {
+      await updateOption.mutateAsync(update)
+    }
+  }
+
+  const saveEmbeddedPurchaseSettings = async () => {
+    const valid = await form.trigger([
+      'EmbeddedPurchaseEnabled',
+      'EmbeddedPurchaseUrl',
+      'EmbeddedPurchaseInstructions',
+    ])
+    if (!valid) {
+      return
+    }
+    const values = form.getValues()
+    const sanitized = {
+      EmbeddedPurchaseEnabled: values.EmbeddedPurchaseEnabled as boolean,
+      EmbeddedPurchaseUrl: removeTrailingSlash(values.EmbeddedPurchaseUrl),
+      EmbeddedPurchaseInstructions: values.EmbeddedPurchaseInstructions.trim(),
+    }
+    const initial = {
+      EmbeddedPurchaseEnabled: initialRef.current.EmbeddedPurchaseEnabled,
+      EmbeddedPurchaseUrl: removeTrailingSlash(
+        initialRef.current.EmbeddedPurchaseUrl
+      ),
+      EmbeddedPurchaseInstructions:
+        initialRef.current.EmbeddedPurchaseInstructions.trim(),
+    }
+    const updates: Array<{ key: string; value: string | boolean }> = []
+    if (sanitized.EmbeddedPurchaseEnabled !== initial.EmbeddedPurchaseEnabled) {
+      updates.push({
+        key: 'EmbeddedPurchaseEnabled',
+        value: sanitized.EmbeddedPurchaseEnabled,
+      })
+    }
+    if (sanitized.EmbeddedPurchaseUrl !== initial.EmbeddedPurchaseUrl) {
+      updates.push({
+        key: 'EmbeddedPurchaseUrl',
+        value: sanitized.EmbeddedPurchaseUrl,
+      })
+    }
+    if (
+      sanitized.EmbeddedPurchaseInstructions !==
+      initial.EmbeddedPurchaseInstructions
+    ) {
+      updates.push({
+        key: 'EmbeddedPurchaseInstructions',
+        value: sanitized.EmbeddedPurchaseInstructions,
+      })
+    }
     for (const update of updates) {
       await updateOption.mutateAsync(update)
     }
@@ -791,6 +848,105 @@ export function PaymentSettingsSection({
               {updateOption.isPending
                 ? t('Saving...')
                 : t('Save general settings')}
+            </Button>
+          </div>
+
+          <Separator />
+
+          <div className='space-y-4'>
+            <div>
+              <h3 className='text-lg font-medium'>
+                {t('Embedded Purchase Page')}
+              </h3>
+              <p className='text-muted-foreground text-sm'>
+                {t(
+                  'Route wallet and subscription purchase actions to an authenticated embedded page'
+                )}
+              </p>
+            </div>
+
+            <FormField
+              control={form.control}
+              name='EmbeddedPurchaseEnabled'
+              render={({ field }) => (
+                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                  <div className='space-y-0.5'>
+                    <FormLabel className='text-base'>
+                      {t('Enable embedded purchase')}
+                    </FormLabel>
+                    <FormDescription>
+                      {t(
+                        'Users open an internal purchase page instead of built-in gateways'
+                      )}
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='EmbeddedPurchaseUrl'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('Purchase page URL')}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder='https://shop.example.com'
+                      {...field}
+                      onChange={(event) => field.onChange(event.target.value)}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    {t('Shown inside an iframe with an external-open fallback')}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='EmbeddedPurchaseInstructions'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('Fallback instructions')}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      rows={4}
+                      placeholder={t(
+                        'After purchase, copy the redemption code and redeem it in your wallet.'
+                      )}
+                      {...field}
+                      onChange={(event) => field.onChange(event.target.value)}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    {t('Displayed when iframe loading is blocked or unclear')}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type='button'
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                saveEmbeddedPurchaseSettings()
+              }}
+              disabled={updateOption.isPending}
+            >
+              {updateOption.isPending
+                ? t('Saving...')
+                : t('Save embedded purchase settings')}
             </Button>
           </div>
 

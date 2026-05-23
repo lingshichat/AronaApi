@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import { Crown, RefreshCw, Sparkles, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -75,6 +76,7 @@ export function SubscriptionPlansCard({
   onAvailabilityChange,
 }: SubscriptionPlansCardProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const [plans, setPlans] = useState<PlanRecord[]>([])
   const [activeSubscriptions, setActiveSubscriptions] = useState<
@@ -581,6 +583,10 @@ export function SubscriptionPlansCard({
                         variant='outline'
                         className='w-full'
                         onClick={() => {
+                          if (topupInfo?.embedded_purchase_enabled) {
+                            navigate({ to: '/wallet/purchase' })
+                            return
+                          }
                           setSelectedPlan(p)
                           setPurchaseOpen(true)
                         }}

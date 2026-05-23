@@ -415,6 +415,99 @@ generated behavior when full database integration is not practical.
 
 ---
 
+## Scenario: Single-use redemption codes with typed rewards
+
+### 1. Scope / Trigger
+
+- Trigger: redemption code changes that add reward types, subscription binding,
+  or any other multi-step grant flow.
+- This is cross-layer and database-sensitive: API payloads, model schema,
+  transactional state changes, user quota/subscription records, and frontend
+  success messages must agree.
+
+### 2. Signatures
+
+- DB model fields:
+  - `redemptions.type`: `quota` by default; other supported values must be
+    explicit constants.
+  - `redemptions.plan_id`: optional subscription plan id, only meaningful for
+    subscription reward codes.
+- User redeem API should return structured reward data rather than a bare
+  success string when the frontend must distinguish quota from subscription.
+- Subscription reward redemption should reuse the existing subscription plan
+  binding path instead of creating a parallel subscription system.
+
+### 3. Contracts
+
+- Missing or empty `type` on existing rows means quota redemption for backward
+  compatibility.
+- Quota code contract:
+  - requires positive quota;
+  - mutates `users.quota` with `gorm.Expr("quota + ?", quota)`.
+- Subscription code contract:
+  - requires a non-zero `plan_id`;
+  - validates the referenced plan exists and is enabled at redemption time;
+  - creates or updates the user subscription through shared subscription model
+    logic inside the same transaction.
+
+### 4. Validation & Error Matrix
+
+- code not found / disabled / already used -> reject without granting reward.
+- expired code -> reject without granting reward.
+- quota code with non-positive quota -> reject.
+- subscription code with missing, deleted, or disabled plan -> reject.
+- second concurrent redemption attempt -> reject because the atomic claim
+  affects zero rows.
+
+### 5. Good/Base/Bad Cases
+
+- Good: unused subscription code with enabled plan is claimed, subscription is
+  granted, and the transaction commits.
+- Base: legacy row without `type` redeems as a quota code.
+- Bad: read redemption, grant reward, then mark used. This can double-grant
+  under concurrency.
+
+### 6. Tests Required
+
+- Quota compatibility: legacy or quota code still increases `users.quota`.
+- Subscription success: enabled plan grants a user subscription.
+- Subscription failure: missing/disabled plan does not mark the code used and
+  does not create a subscription.
+- Single-use regression: the same code cannot be redeemed twice, including the
+  second sequential attempt that exercises the atomic-claim branch.
+
+### 7. Wrong vs Correct
+
+#### Wrong
+
+```go
+// Race-prone: reward can be granted before another request observes status.
+tx.First(&redemption, "key = ?", key)
+grantReward(tx, redemption)
+redemption.Status = common.RedemptionCodeStatusUsed
+tx.Save(&redemption)
+```
+
+#### Correct
+
+```go
+// Claim first with status/expiry predicates; rollback releases the claim if a
+// later validation or grant fails.
+result := tx.Model(&Redemption{}).
+    Where("id = ? AND status = ?", redemption.Id, common.RedemptionCodeStatusEnabled).
+    Where("expired_time = ? OR expired_time > ?", -1, now).
+    Updates(map[string]any{
+        "status":      common.RedemptionCodeStatusUsed,
+        "used_user_id": userId,
+        "used_time":   now,
+    })
+if result.RowsAffected != 1 {
+    return errors.New("redemption code is unavailable")
+}
+```
+
+---
+
 ## Common Mistakes
 
 - Using raw SQL without branching for PostgreSQL quoting or SQLite limitations.
@@ -424,3 +517,4 @@ generated behavior when full database integration is not practical.
 - Changing quota counters with read-modify-write instead of `gorm.Expr`.
 - Updating DB rows but forgetting Redis cache invalidation or refresh.
 - Adding migrations that pass on MySQL but fail on SQLite.
+- Granting a redemption reward before atomically claiming the code as used.

@@ -11,6 +11,8 @@ export const redemptionSchema = z.object({
   key: z.string(),
   status: z.number(), // 1: enabled, 2: disabled, 3: used
   quota: z.number(),
+  type: z.enum(['quota', 'subscription']).optional(),
+  plan_id: z.number().optional(),
   created_time: z.number(),
   redeemed_time: z.number(),
   expired_time: z.number(), // 0 for never expires
@@ -55,6 +57,8 @@ export interface RedemptionFormData {
   id?: number
   name: string
   quota: number
+  type: 'quota' | 'subscription'
+  plan_id: number
   expired_time: number
   count?: number // Only for create
   status?: number // Only for status update

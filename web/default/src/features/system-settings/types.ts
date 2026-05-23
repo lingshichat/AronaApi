@@ -207,6 +207,9 @@ export type BillingSettings = {
   CreemWebhookSecret: string
   CreemTestMode: boolean
   CreemProducts: string
+  EmbeddedPurchaseEnabled: boolean
+  EmbeddedPurchaseUrl: string
+  EmbeddedPurchaseInstructions: string
   WaffoEnabled: boolean
   WaffoApiKey: string
   WaffoPrivateKey: string

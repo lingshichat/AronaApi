@@ -81,6 +81,10 @@ func AddRedemption(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"success": false, "message": msg})
 		return
 	}
+	if valid, msg := validateRedemptionPayload(c, &redemption); !valid {
+		c.JSON(http.StatusOK, gin.H{"success": false, "message": msg})
+		return
+	}
 	var keys []string
 	for i := 0; i < redemption.Count; i++ {
 		key := common.GetUUID()
@@ -90,6 +94,8 @@ func AddRedemption(c *gin.Context) {
 			Key:         key,
 			CreatedTime: common.GetTimestamp(),
 			Quota:       redemption.Quota,
+			Type:        normalizeRedemptionType(redemption.Type),
+			PlanId:      redemption.PlanId,
 			ExpiredTime: redemption.ExpiredTime,
 		}
 		err = cleanRedemption.Insert()
@@ -140,13 +146,23 @@ func UpdateRedemption(c *gin.Context) {
 		return
 	}
 	if statusOnly == "" {
+		if utf8.RuneCountInString(redemption.Name) == 0 || utf8.RuneCountInString(redemption.Name) > 20 {
+			common.ApiErrorI18n(c, i18n.MsgRedemptionNameLength)
+			return
+		}
 		if valid, msg := validateExpiredTime(c, redemption.ExpiredTime); !valid {
+			c.JSON(http.StatusOK, gin.H{"success": false, "message": msg})
+			return
+		}
+		if valid, msg := validateRedemptionPayload(c, &redemption); !valid {
 			c.JSON(http.StatusOK, gin.H{"success": false, "message": msg})
 			return
 		}
 		// If you add more fields, please also update redemption.Update()
 		cleanRedemption.Name = redemption.Name
 		cleanRedemption.Quota = redemption.Quota
+		cleanRedemption.Type = normalizeRedemptionType(redemption.Type)
+		cleanRedemption.PlanId = redemption.PlanId
 		cleanRedemption.ExpiredTime = redemption.ExpiredTime
 	}
 	if statusOnly != "" {
@@ -182,6 +198,35 @@ func DeleteInvalidRedemption(c *gin.Context) {
 func validateExpiredTime(c *gin.Context, expired int64) (bool, string) {
 	if expired != 0 && expired < common.GetTimestamp() {
 		return false, i18n.T(c, i18n.MsgRedemptionExpireTimeInvalid)
+	}
+	return true, ""
+}
+
+func normalizeRedemptionType(redemptionType string) string {
+	if redemptionType == "" {
+		return common.RedemptionTypeQuota
+	}
+	return redemptionType
+}
+
+func validateRedemptionPayload(c *gin.Context, redemption *model.Redemption) (bool, string) {
+	switch normalizeRedemptionType(redemption.Type) {
+	case common.RedemptionTypeQuota:
+		if redemption.Quota <= 0 {
+			return false, i18n.T(c, i18n.MsgRedemptionQuotaPositive)
+		}
+		redemption.PlanId = 0
+	case common.RedemptionTypeSubscription:
+		if redemption.PlanId <= 0 {
+			return false, i18n.T(c, i18n.MsgInvalidParams)
+		}
+		plan, err := model.GetSubscriptionPlanById(redemption.PlanId)
+		if err != nil || plan == nil || !plan.Enabled {
+			return false, i18n.T(c, i18n.MsgInvalidParams)
+		}
+		redemption.Quota = 0
+	default:
+		return false, i18n.T(c, i18n.MsgInvalidParams)
 	}
 	return true, ""
 }

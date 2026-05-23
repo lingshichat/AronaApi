@@ -17,6 +17,9 @@ var SystemName = "AronaApi"
 var Footer = ""
 var Logo = ""
 var TopUpLink = ""
+var EmbeddedPurchaseEnabled = false
+var EmbeddedPurchaseUrl = ""
+var EmbeddedPurchaseInstructions = ""
 
 var themeValue atomic.Value // stores string; safe for concurrent read/write
 
@@ -218,6 +221,11 @@ const (
 	TokenStatusDisabled  = 2 // also don't use 0
 	TokenStatusExpired   = 3
 	TokenStatusExhausted = 4
+)
+
+const (
+	RedemptionTypeQuota        = "quota"
+	RedemptionTypeSubscription = "subscription"
 )
 
 const (

@@ -355,21 +355,24 @@ func getSubscriptionPlanByIdTx(tx *gorm.DB, id int) (*SubscriptionPlan, error) {
 	if id <= 0 {
 		return nil, errors.New("invalid plan id")
 	}
-	key := subscriptionPlanCacheKey(id)
-	if key != "" {
-		if cached, found, err := getSubscriptionPlanCache().Get(key); err == nil && found {
-			return &cached, nil
-		}
-	}
 	var plan SubscriptionPlan
 	query := DB
 	if tx != nil {
 		query = tx
+	} else {
+		key := subscriptionPlanCacheKey(id)
+		if key != "" {
+			if cached, found, err := getSubscriptionPlanCache().Get(key); err == nil && found {
+				return &cached, nil
+			}
+		}
 	}
 	if err := query.Where("id = ?", id).First(&plan).Error; err != nil {
 		return nil, err
 	}
-	_ = getSubscriptionPlanCache().SetWithTTL(key, plan, subscriptionPlanCacheTTL())
+	if tx == nil {
+		_ = getSubscriptionPlanCache().SetWithTTL(subscriptionPlanCacheKey(id), plan, subscriptionPlanCacheTTL())
+	}
 	return &plan, nil
 }
 
