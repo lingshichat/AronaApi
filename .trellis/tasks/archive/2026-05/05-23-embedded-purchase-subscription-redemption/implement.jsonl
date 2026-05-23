@@ -1,0 +1,8 @@
+{"reason":"Backend conventions for models, controllers, services, and relay-adjacent changes","file":".trellis/spec/backend/index.md"}
+{"reason":"Cross-database migration and GORM compatibility for redemption/subscription schema changes","file":".trellis/spec/backend/database-guidelines.md"}
+{"reason":"Consistent API and model error handling for redemption failures","file":".trellis/spec/backend/error-handling.md"}
+{"reason":"Backend test, validation, and quality expectations","file":".trellis/spec/backend/quality-guidelines.md"}
+{"reason":"Backend validation commands using project-local Go toolchain","file":".trellis/spec/backend/local-development-environment.md"}
+{"reason":"Frontend conventions for wallet, settings, routes, and admin UI changes","file":".trellis/spec/frontend/index.md"}
+{"reason":"Frontend validation and preview commands","file":".trellis/spec/frontend/local-development-environment.md"}
+{"reason":"Task spans backend API, persistence, settings, and frontend flows","file":".trellis/spec/guides/cross-layer-thinking-guide.md"}

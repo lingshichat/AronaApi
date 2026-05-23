@@ -1,0 +1,8 @@
+{"reason":"Backend convention checks for redemption/subscription/settings changes","file":".trellis/spec/backend/index.md"}
+{"reason":"Verify migrations and queries remain SQLite/MySQL/PostgreSQL compatible","file":".trellis/spec/backend/database-guidelines.md"}
+{"reason":"Verify redemption and settings errors are surfaced consistently","file":".trellis/spec/backend/error-handling.md"}
+{"reason":"Backend test and quality gate expectations","file":".trellis/spec/backend/quality-guidelines.md"}
+{"reason":"Backend validation commands","file":".trellis/spec/backend/local-development-environment.md"}
+{"reason":"Frontend convention checks for wallet/settings/admin purchase changes","file":".trellis/spec/frontend/index.md"}
+{"reason":"Frontend build and browser smoke validation","file":".trellis/spec/frontend/local-development-environment.md"}
+{"reason":"Verify end-to-end consistency across settings, APIs, UI, and redemption behavior","file":".trellis/spec/guides/cross-layer-thinking-guide.md"}
