@@ -224,3 +224,36 @@ Removed the landing hero integration guide, preserved the copyable Base URL row,
 ### Next Steps
 
 - None - task complete
+
+
+## Session 7: Embedded purchase and subscription redemption
+
+**Date**: 2026-05-24
+**Task**: Embedded purchase and subscription redemption
+**Branch**: `main`
+
+### Summary
+
+Implemented authenticated embedded purchase flow and typed redemption codes for quota or subscription rewards; verified focused backend tests, frontend typecheck, build, i18n sync, and archived the task.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `7b39b5b4` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
