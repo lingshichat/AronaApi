@@ -1,0 +1,3 @@
+{"type":"spec","path":".trellis/spec/backend/index.md","reason":"Backend merge conflicts touch model/router/controller behavior."}
+{"type":"spec","path":".trellis/spec/frontend/index.md","reason":"Frontend merge conflicts touch React routes/components/i18n."}
+{"type":"spec","path":"AGENTS.md","reason":"Repository conventions and local identity must be preserved during merge."}
