@@ -257,3 +257,36 @@ Implemented authenticated embedded purchase flow and typed redemption codes for 
 ### Next Steps
 
 - None - task complete
+
+
+## Session 8: Track upstream updates
+
+**Date**: 2026-07-01
+**Task**: Track upstream updates
+**Branch**: `codex/track-upstream-updates`
+
+### Summary
+
+Merged upstream/main into codex/track-upstream-updates, resolved conflicts, preserved AronaApi landing/branding and redemption behavior where compatible, updated backend tests, and validated targeted Go packages plus frontend typecheck/build.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `d7392a59e` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
