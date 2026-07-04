@@ -1,0 +1,5 @@
+{"file":".trellis/tasks/07-01-separate-subscription-redemption-from-balance-billing/research/sub2api-flow.md","reason":"Reference flow for typed redemption codes, external create-and-redeem integration, and separate subscription entitlement semantics."}
+{"file":".trellis/tasks/07-01-separate-subscription-redemption-from-balance-billing/design.md","reason":"Technical design for disabling subscription purchases with balance while retaining redemption-code acquisition."}
+{"file":".trellis/spec/backend/database-guidelines.md","reason":"Backend changes touch subscription/redemption models and must preserve SQLite/MySQL/PostgreSQL compatibility."}
+{"file":".trellis/spec/backend/error-handling.md","reason":"Backend API rejection should follow project error-handling conventions."}
+{"file":".trellis/spec/frontend/index.md","reason":"Frontend subscription and wallet UI changes should follow project frontend conventions."}

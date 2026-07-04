@@ -1,0 +1,5 @@
+{"file":".trellis/tasks/07-01-separate-subscription-redemption-from-balance-billing/prd.md","reason":"Acceptance criteria for strict separation between subscription redemption and wallet balance billing."}
+{"file":".trellis/tasks/07-01-separate-subscription-redemption-from-balance-billing/design.md","reason":"Check backend and frontend behavior against the intended architecture and rollback constraints."}
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"Validation expectations for backend tests and focused checks."}
+{"file":".trellis/spec/frontend/local-development-environment.md","reason":"Validation commands for the default frontend using project-local Bun."}
+{"file":".trellis/spec/guides/cross-layer-thinking-guide.md","reason":"Cross-layer verification from API guard to UI removal and redemption flow preservation."}
