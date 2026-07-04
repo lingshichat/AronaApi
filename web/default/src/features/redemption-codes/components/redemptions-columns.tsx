@@ -81,7 +81,6 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
             <StatusBadge
               label={t('Expired')}
               variant='warning'
-              showDot={true}
               copyable={false}
             />
           )
@@ -97,7 +96,6 @@ export function useRedemptionsColumns(): ColumnDef<Redemption>[] {
           <StatusBadge
             label={t(statusConfig.labelKey)}
             variant={statusConfig.variant}
-            showDot={statusConfig.showDot}
             copyable={false}
           />
         )

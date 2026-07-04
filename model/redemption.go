@@ -142,7 +142,7 @@ func Redeem(key string, userId int) (result *RedemptionResult, err error) {
 	var redeemedSubscription *UserSubscription
 
 	keyCol := "`key`"
-	if common.UsingPostgreSQL {
+	if common.UsingMainDatabase(common.DatabaseTypePostgreSQL) {
 		keyCol = `"key"`
 	}
 	common.RandomSleep()

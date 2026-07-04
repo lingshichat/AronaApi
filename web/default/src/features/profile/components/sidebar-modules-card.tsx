@@ -1,9 +1,26 @@
-import { useCallback, useEffect, useState } from 'react'
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+For commercial licensing, please contact support@quantumnous.com
+*/
 import { LayoutDashboard } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { useAuthStore } from '@/stores/auth-store'
-import { api } from '@/lib/api'
+
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -13,6 +30,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
+import { api } from '@/lib/api'
+import { useAuthStore } from '@/stores/auth-store'
 
 type SidebarModuleConfig = {
   enabled: boolean
@@ -182,7 +201,7 @@ export function SidebarModulesCard() {
   }
 
   return (
-    <Card className='gap-0 overflow-hidden py-0'>
+    <Card data-card-hover='false' className='gap-0 overflow-hidden py-0'>
       <CardHeader className='border-b p-3 !pb-3 sm:p-5 sm:!pb-5'>
         <div className='flex items-center gap-3'>
           <div className='bg-muted flex h-8 w-8 shrink-0 items-center justify-center rounded-lg sm:h-9 sm:w-9'>
@@ -222,7 +241,7 @@ export function SidebarModulesCard() {
                 {section.modules.map((mod) => (
                   <div
                     key={mod.key}
-                    className={`flex min-h-16 items-center justify-between rounded-lg border p-3 transition-opacity ${
+                    className={`flex min-h-16 items-center justify-between rounded-lg border p-3 ${
                       sectionEnabled ? '' : 'opacity-50'
                     }`}
                   >

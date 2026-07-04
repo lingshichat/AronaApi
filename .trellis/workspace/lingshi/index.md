@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 7
-- **Last Active**: 2026-05-24
+- **Total Sessions**: 8
+- **Last Active**: 2026-07-01
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~259 | Active |
+| `journal-1.md` | ~292 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 8 | 2026-07-01 | Track upstream updates | `d7392a59e` | `codex/track-upstream-updates` |
 | 7 | 2026-05-24 | Embedded purchase and subscription redemption | `7b39b5b4` | `main` |
 | 6 | 2026-05-23 | Remove landing integration guide | `0463d142` | `main` |
 | 5 | 2026-05-14 | Merge upstream updates | `634288c4`, `ec11c8d2` | `main` |

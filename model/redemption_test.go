@@ -20,9 +20,8 @@ func setupRedemptionTestDB(t *testing.T) {
 
 	oldDB := DB
 	oldLogDB := LOG_DB
-	oldSQLite := common.UsingSQLite
-	oldMySQL := common.UsingMySQL
-	oldPostgreSQL := common.UsingPostgreSQL
+	oldMainDatabaseType := common.MainDatabaseType()
+	oldLogDatabaseType := common.LogDatabaseType()
 	oldRedisEnabled := common.RedisEnabled
 	oldGroupCol := commonGroupCol
 	oldKeyCol := commonKeyCol
@@ -33,9 +32,7 @@ func setupRedemptionTestDB(t *testing.T) {
 
 	DB = db
 	LOG_DB = db
-	common.UsingSQLite = true
-	common.UsingMySQL = false
-	common.UsingPostgreSQL = false
+	common.SetDatabaseTypes(common.DatabaseTypeSQLite, common.DatabaseTypeSQLite)
 	common.RedisEnabled = false
 	commonGroupCol = "`group`"
 	commonKeyCol = "`key`"
@@ -49,9 +46,7 @@ func setupRedemptionTestDB(t *testing.T) {
 	t.Cleanup(func() {
 		DB = oldDB
 		LOG_DB = oldLogDB
-		common.UsingSQLite = oldSQLite
-		common.UsingMySQL = oldMySQL
-		common.UsingPostgreSQL = oldPostgreSQL
+		common.SetDatabaseTypes(oldMainDatabaseType, oldLogDatabaseType)
 		common.RedisEnabled = oldRedisEnabled
 		commonGroupCol = oldGroupCol
 		commonKeyCol = oldKeyCol
