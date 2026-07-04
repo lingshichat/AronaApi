@@ -29,15 +29,17 @@ permissions:
   packages: write
 
 jobs:
-  build:
-    name: Build and push multi-arch image
+  prepare:
+    name: Prepare image metadata
     runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.image.outputs.image }}
+      version: ${{ steps.image.outputs.version }}
+      short_sha: ${{ steps.image.outputs.short_sha }}
+      push_latest: ${{ steps.image.outputs.push_latest }}
 
     steps:
-      - name: Check out
-        uses: actions/checkout@v4
-
-      - name: Prepare image metadata
+      - name: Prepare metadata
         id: image
         shell: bash
         env:
@@ -61,28 +63,63 @@ jobs:
             exit 1
           fi
 
-          echo "${version}" > VERSION
-
           {
             echo "image=${image}"
             echo "version=${version}"
-            echo "tags<<EOF"
-            echo "${image}:${version}"
-            echo "${image}:sha-${short_sha}"
-            if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
-              echo "${image}:main"
-            fi
-            if [[ "${PUSH_LATEST}" == "true" ]]; then
-              echo "${image}:latest"
-            fi
-            echo "EOF"
+            echo "short_sha=${short_sha}"
+            echo "push_latest=${PUSH_LATEST}"
           } >> "${GITHUB_OUTPUT}"
 
           echo "Image: ${image}"
           echo "Version: ${version}"
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+  build_single_arch:
+    name: Build and push ${{ matrix.arch }}
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            platform: linux/amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Write VERSION
+        shell: bash
+        run: echo "${{ needs.prepare.outputs.version }}" > VERSION
+
+      - name: Prepare arch tags
+        id: tags
+        shell: bash
+        env:
+          IMAGE: ${{ needs.prepare.outputs.image }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SHORT_SHA: ${{ needs.prepare.outputs.short_sha }}
+          PUSH_LATEST: ${{ needs.prepare.outputs.push_latest }}
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+
+          {
+            echo "value<<EOF"
+            echo "${IMAGE}:${VERSION}-${ARCH}"
+            echo "${IMAGE}:sha-${SHORT_SHA}-${ARCH}"
+            if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+              echo "${IMAGE}:main-${ARCH}"
+            fi
+            if [[ "${PUSH_LATEST}" == "true" ]]; then
+              echo "${IMAGE}:latest-${ARCH}"
+            fi
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -94,36 +131,108 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push ${{ matrix.arch }}
         id: build
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.platform }}
           push: true
-          tags: ${{ steps.image.outputs.tags }}
+          tags: ${{ steps.tags.outputs.value }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
-            org.opencontainers.image.version=${{ steps.image.outputs.version }}
+            org.opencontainers.image.version=${{ needs.prepare.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
           sbom: false
 
-      - name: Write summary
+      - name: Write arch summary
         shell: bash
         run: |
           {
-            echo "### AronaApi Docker image"
+            echo "### AronaApi Docker image (${{ matrix.arch }})"
             echo
-            echo "- Image: \`${{ steps.image.outputs.image }}\`"
-            echo "- Version: \`${{ steps.image.outputs.version }}\`"
             echo "- Digest: \`${{ steps.build.outputs.digest }}\`"
             echo
             echo "Tags:"
             echo '```'
-            echo "${{ steps.image.outputs.tags }}"
+            echo "${{ steps.tags.outputs.value }}"
+            echo '```'
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+  create_manifest:
+    name: Create multi-arch manifests
+    needs:
+      - prepare
+      - build_single_arch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create and push manifests
+        shell: bash
+        env:
+          IMAGE: ${{ needs.prepare.outputs.image }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SHORT_SHA: ${{ needs.prepare.outputs.short_sha }}
+          PUSH_LATEST: ${{ needs.prepare.outputs.push_latest }}
+        run: |
+          set -euo pipefail
+
+          create_manifest() {
+            local tag="$1"
+            docker buildx imagetools create \
+              -t "${IMAGE}:${tag}" \
+              "${IMAGE}:${tag}-amd64" \
+              "${IMAGE}:${tag}-arm64"
+          }
+
+          create_manifest "${VERSION}"
+          create_manifest "sha-${SHORT_SHA}"
+
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            create_manifest "main"
+          fi
+
+          if [[ "${PUSH_LATEST}" == "true" ]]; then
+            create_manifest "latest"
+          fi
+
+      - name: Write manifest summary
+        shell: bash
+        env:
+          IMAGE: ${{ needs.prepare.outputs.image }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SHORT_SHA: ${{ needs.prepare.outputs.short_sha }}
+          PUSH_LATEST: ${{ needs.prepare.outputs.push_latest }}
+        run: |
+          {
+            echo "### AronaApi multi-arch image"
+            echo
+            echo "- Image: \`${IMAGE}\`"
+            echo "- Version: \`${VERSION}\`"
+            echo
+            echo "Tags:"
+            echo '```'
+            echo "${IMAGE}:${VERSION}"
+            echo "${IMAGE}:sha-${SHORT_SHA}"
+            if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+              echo "${IMAGE}:main"
+            fi
+            if [[ "${PUSH_LATEST}" == "true" ]]; then
+              echo "${IMAGE}:latest"
+            fi
             echo '```'
           } >> "${GITHUB_STEP_SUMMARY}"
