@@ -36,7 +36,7 @@ API Key  : 控制台创建的密钥
 
 <CardGroup cols={1}>
   <Card title="Grok Build（推荐）" icon="terminal" href="/cn/clients/grok-build">
-    最贴近 Grok 4.5 原生体验。建议使用 `api_backend = "responses"`，并开启 `supports_backend_search` 以修复 web_search。
+    最贴近 Grok 4.5 原生体验。建议 `api_backend = "responses"`、开启 `supports_backend_search`，并务必用 `/privacy` 关闭数据训练。
   </Card>
   <Card title="Codex" icon="code" href="/cn/clients/codex">
     在 `~/.codex/config.toml` 增加 model_provider，把 model 指到 `grok-4.5`。

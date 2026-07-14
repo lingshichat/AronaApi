@@ -16,10 +16,55 @@ description: 把 Grok Build 指到 Arona API 的 grok-4.5，并启用 web_search
 | api_backend | `responses` |
 | supports_backend_search | `true` |
 | web_search 模型 | 同样指向 `grok-4.5`（单独 model 段） |
+| **数据训练 / 数据用于改进模型** | **关闭（必做）** |
+
+<Warning>
+  **务必关闭 Grok Build 的「数据训练 / 数据用于改进模型」开关。**  
+  走中转站时，对话仍可能经过 Grok 客户端的隐私与数据保留策略。配置模型前先用 `/privacy` 确认状态为 **不用于训练 / 不共享以改进模型**。详情见下方 [关闭数据训练（必做）](#关闭数据训练必做)。
+</Warning>
 
 <Tip>
   聊天正常但 `web_search` 报 `402 Payment Required` / `spending-limit` 时，通常是 **搜索走了独立模型且未开 backend search**。把对话模型和 `web_search` 都指到中转站的 `grok-4.5`，并设置 `supports_backend_search = true`。
 </Tip>
+
+## 0. 关闭数据训练（必做）
+
+使用中转站 **不代表** 可以跳过客户端隐私设置。请在 Grok Build 里明确关掉数据训练相关开关：
+
+1. 启动 Grok Build（TUI）。
+2. 输入 slash 命令：
+
+```text
+/privacy
+```
+
+3. 查看 **privacy / data-retention（隐私与数据保留）** 状态。
+4. 将 **数据训练 / 用于改进模型 / data sharing for training** 相关选项 **全部关闭（Off）**。
+5. 若界面提供切换，再执行一次 `/privacy` 确认已是关闭状态。
+
+也可以打开设置面板核对：
+
+```text
+/settings
+```
+
+在设置中找到 Privacy / Data controls（或同等命名），确认「Improve the model / 用你的数据训练」类开关为 **关闭**。
+
+### 建议一并关闭的客户端遥测（可选）
+
+编辑 `~/.grok/config.toml`：
+
+```toml
+[features]
+telemetry = false
+```
+
+这与「关闭数据训练」不是同一开关，但可减少匿名使用数据上报。
+
+<Note>
+  `/privacy` 管的是 **隐私与数据保留 / 是否用于训练**；`[features].telemetry` 管的是 **匿名使用遥测**。两边都建议按需关闭。  
+  若你仍登录了 xAI / X 账号，还可在 X：Settings → Privacy and safety → Grok 中关闭「Allow posts/interactions to be used for training」类选项（与 Grok Build 客户端开关互补）。
+</Note>
 
 ## 1. 准备 API Key
 
@@ -213,6 +258,15 @@ api_backend = "chat_completions"
 ### 4. 上下文很快被压缩
 
 把 `context_window` 调到与上游一致（例如 `500000`）。该值影响客户端压缩策略，不等于服务端硬限制。
+
+### 5. 如何确认数据训练已关闭？
+
+1. 在 TUI 执行 `/privacy`，确认 training / data-retention 为关闭  
+2. 再执行 `/settings`，核对 Privacy / Data controls  
+3. 可选：`config.toml` 中 `[features] telemetry = false`  
+4. 若曾登录 xAI/X，到 X 的 Grok 隐私设置再关一遍账号侧训练开关  
+
+**未关闭时不要把敏感代码 / 密钥贴进对话。**
 
 ## 相关文档
 
