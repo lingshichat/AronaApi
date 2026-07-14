@@ -1,29 +1,32 @@
 ---
-title: "Pricing"
-description: "Pricing and billing information"
+title: Pricing
+description: How to check Arona API billing and quotas
 ---
 
 # Pricing
 
-AronaApi uses a flexible pricing system based on token usage.
+Billing always follows the live console. Prices can differ by group, model, and plan.
 
-## Pricing Model
+## See current prices
 
-Pricing is calculated per 1K tokens and varies by model:
+1. Sign in to the [console](https://sub2api.lingshichat.top)
+2. Open pricing / models / subscription pages
+3. Use the displayed unit prices and quota rules
 
-| Model | Input (per 1K) | Output (per 1K) |
-|-------|---------------|----------------|
-| GPT-4o | $0.005 | $0.015 |
-| GPT-4o-mini | $0.00015 | $0.0006 |
-| Claude 3.5 Sonnet | $0.003 | $0.015 |
-| Gemini 1.5 Pro | $0.0035 | $0.0105 |
+## Common billing components
 
-## View Pricing
+- Input tokens
+- Output tokens
+- Cache hits (if any)
+- Image / video features (if enabled)
 
-Visit the [Pricing Page](https://api.lingshichat.top/pricing) for the complete, up-to-date model pricing list.
+## Tips
 
-## Billing
+- Pin model `grok-4.5` for coding agents to make cost easier to estimate
+- Split keys per project for accounting
+- Watch console usage and balance alerts
 
-- Usage is tracked in real-time
-- Quotas can be configured per user or group
-- Supports multiple currency displays
+## Related
+
+- [Models](/en/guides/models)
+- [Authentication](/en/authentication)

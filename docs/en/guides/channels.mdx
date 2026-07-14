@@ -1,36 +1,40 @@
 ---
-title: "Channels"
-description: "Manage API channels and providers"
+title: Channels and groups
+description: How keys, groups, and upstream channels relate
 ---
 
-# Channels
+# Channels and groups
 
-Channels represent connections to upstream AI providers.
+For end users, what matters is:
 
-## What are Channels?
+1. Your **API key**
+2. The **group** bound to that key
+3. The **models** the group exposes (for example `grok-4.5`)
 
-A channel is a configured connection to an upstream AI provider (OpenAI, Azure, Anthropic, etc.). Administrators can set up multiple channels for redundancy and load balancing.
+## Mental model
 
-## Channel Types
+```text
+Client  --API Key-->  Arona gateway  --group routing-->  upstream account pool
+```
 
-| Type | Description |
-|------|-------------|
-| OpenAI | Direct OpenAI API |
-| Azure | Azure OpenAI Service |
-| Anthropic | Claude API |
-| Google | Gemini API |
-| AWS Bedrock | Amazon Bedrock |
-| Custom | Custom OpenAI-compatible endpoints |
+You only need to:
 
-## Channel Configuration
+- Create a key in the console
+- Confirm the key can call `grok-4.5`
+- Set Base URL to `https://sub2api.lingshichat.top/v1`
 
-Each channel can be configured with:
-- **Base URL**: Provider endpoint
-- **API Key**: Authentication key
-- **Models**: Supported models
-- **Group**: User group assignment
-- **Priority**: Load balancing priority
+## Console checks
 
-## Load Balancing
+- Key enabled
+- Group includes Grok models
+- Balance / subscription OK
+- No rate-limit or risk blocks
 
-When multiple channels support the same model, AronaApi automatically distributes requests based on channel priority and availability.
+## Admins (brief)
+
+Admins configure upstream channels, pools, mappings, and load balancing. End users usually do not need those details.
+
+## Related
+
+- [Quickstart](/en/quickstart)
+- [Models](/en/guides/models)

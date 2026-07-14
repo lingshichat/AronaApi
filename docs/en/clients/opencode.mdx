@@ -1,0 +1,127 @@
+---
+title: OpenCode setup
+description: Use OpenCode with Arona API grok-4.5
+---
+
+# OpenCode setup (Grok 4.5)
+
+[OpenCode](https://opencode.ai) supports custom OpenAI-compatible providers. Point `baseURL` at the gateway and use `grok-4.5`.
+
+## Recommended settings
+
+| Item | Value |
+| --- | --- |
+| Base URL | `https://sub2api.lingshichat.top/v1` |
+| Provider ID | `arona` (customizable) |
+| Model | `arona/grok-4.5` |
+| Env var | `ARONA_API_KEY` |
+| npm package | `@ai-sdk/openai-compatible` |
+
+## 1. Set API key
+
+```powershell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+```
+
+```bash
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## 2. Edit OpenCode config
+
+Global config (recommended):
+
+```text
+# Windows
+%USERPROFILE%\.config\opencode\opencode.json
+
+# macOS / Linux
+~/.config/opencode/opencode.json
+```
+
+You can also place `opencode.json` in a project root (project keys override).
+
+### Recommended config
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "arona/grok-4.5",
+  "provider": {
+    "arona": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Arona API",
+      "options": {
+        "baseURL": "https://sub2api.lingshichat.top/v1",
+        "apiKey": "{env:ARONA_API_KEY}"
+      },
+      "models": {
+        "grok-4.5": {
+          "name": "Grok 4.5 (Arona)"
+        }
+      }
+    }
+  }
+}
+```
+
+Notes:
+
+- `model` is `providerID/modelID` → `arona/grok-4.5`
+- `options.baseURL` **must** include `/v1`
+- Use `{env:ARONA_API_KEY}` so secrets stay out of git
+
+### Option B: `/connect`
+
+1. Define `provider.arona` (`npm`, `baseURL`, `models`)
+2. Run `/connect` if your version supports custom providers
+3. `/models` → `arona/grok-4.5`
+
+**Config file + env var** is the most reliable path.
+
+## 3. Verify
+
+```bash
+opencode
+opencode run "Introduce yourself in one sentence"
+```
+
+```text
+/models
+```
+
+```bash
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer $ARONA_API_KEY"
+```
+
+## Notes
+
+- Include `/v1` in `baseURL`
+- Model IDs must match `GET /v1/models` for your key
+- Never commit plaintext keys; use `{env:...}`
+- Optional: `whitelist: ["grok-4.5"]` on the provider
+
+## FAQ
+
+### `/models` has no arona
+
+- Check JSON path/syntax
+- Confirm `npm` is `@ai-sdk/openai-compatible`
+- Restart OpenCode
+
+### 401 Unauthorized
+
+- `ARONA_API_KEY` exported in the current shell
+- Key complete and bound to the right group
+
+### Tools flaky
+
+Use Chat Completions compatibility; if tools fail, test plain chat or switch groups.
+
+## Related
+
+- [Client overview](/en/clients/overview)
+- [Pi Agent](/en/clients/pi-agent)
+- [Grok Build](/en/clients/grok-build)
+- [Authentication](/en/authentication)

@@ -1,58 +1,28 @@
 ---
-title: "Embeddings"
-description: "Create text embeddings"
+title: Embeddings
+description: POST /v1/embeddings
 ---
 
 # Embeddings
-
-Create vector embeddings from text using various embedding models.
-
-## Endpoint
 
 ```bash
 POST /v1/embeddings
 ```
 
-## Request
+<Note>
+  Availability depends on your key’s platform/group. Grok groups may not expose embeddings.
+</Note>
 
-```json
-{
-  "model": "text-embedding-3-small",
-  "input": "The quick brown fox jumps over the lazy dog"
-}
+## Example
+
+```bash
+curl https://sub2api.lingshichat.top/v1/embeddings \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "text-embedding-3-small",
+    "input": "hello world"
+  }'
 ```
 
-## Response
-
-```json
-{
-  "object": "list",
-  "data": [
-    {
-      "object": "embedding",
-      "embedding": [0.0023064255, -0.009327292, ...],
-      "index": 0
-    }
-  ],
-  "model": "text-embedding-3-small",
-  "usage": {
-    "prompt_tokens": 9,
-    "total_tokens": 9
-  }
-}
-```
-
-## Batch Input
-
-You can send multiple inputs in a single request:
-
-```json
-{
-  "model": "text-embedding-3-small",
-  "input": [
-    "First text to embed",
-    "Second text to embed",
-    "Third text to embed"
-  ]
-}
-```
+If you get unsupported / 404, the current group does not offer this capability.

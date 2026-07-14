@@ -1,0 +1,77 @@
+---
+title: Client overview
+description: Connect Grok Build, Codex, Claude Code, OpenCode, and Pi Agent to Arona API with Grok 4.5
+---
+
+# Client overview
+
+This section covers connecting **Grok 4.5** through the gateway for popular coding clients.
+
+## Shared settings
+
+Remember these three values:
+
+```text
+Base URL : https://sub2api.lingshichat.top/v1
+Model    : grok-4.5
+API Key  : key created in the console
+```
+
+<Note>
+  For Claude Code, `ANTHROPIC_BASE_URL` usually must **not** include `/v1`, because the SDK appends `/v1/messages`. See [Claude Code](/en/clients/claude-code).
+</Note>
+
+## Supported protocols
+
+For Grok groups, the gateway typically exposes:
+
+| Protocol | Path | Typical clients |
+| --- | --- | --- |
+| OpenAI Chat Completions | `POST /v1/chat/completions` | SDKs, OpenCode, Pi, many CLIs |
+| OpenAI Responses | `POST /v1/responses` | Grok Build, Codex, Pi (optional) |
+| Anthropic Messages | `POST /v1/messages` | Claude Code |
+| Model list | `GET /v1/models` | All |
+
+## Which guide should I read?
+
+<CardGroup cols={1}>
+  <Card title="Grok Build (recommended)" icon="terminal" href="/en/clients/grok-build">
+    Closest to native Grok 4.5. Use `api_backend = "responses"`, enable `supports_backend_search`, and turn off data training via `/privacy`.
+  </Card>
+  <Card title="Codex" icon="code" href="/en/clients/codex">
+    Add a model_provider in `~/.codex/config.toml` and point model to `grok-4.5`.
+  </Card>
+  <Card title="Claude Code" icon="robot" href="/en/clients/claude-code">
+    Route Messages traffic with env vars and select `grok-4.5`.
+  </Card>
+  <Card title="OpenCode" icon="laptop-code" href="/en/clients/opencode">
+    Add an OpenAI-compatible provider in `opencode.json`; model `arona/grok-4.5`.
+  </Card>
+  <Card title="Pi Agent" icon="microchip" href="/en/clients/pi-agent">
+    Add a custom provider in `~/.pi/agent/models.json` and select `grok-4.5`.
+  </Card>
+</CardGroup>
+
+## Pre-flight checks
+
+```bash
+# 1) Key works
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer $ARONA_API_KEY"
+
+# 2) Chat works
+curl https://sub2api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer $ARONA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"grok-4.5","messages":[{"role":"user","content":"ping"}]}'
+```
+
+Fix API issues first, then edit client configs.
+
+## Coverage
+
+- ✅ Grok 4.5
+- ✅ Grok Build / Codex / Claude Code / OpenCode / Pi Agent
+- ⏳ Other models and clients later
+
+If you use aliases (for example `grok-latest`), trust `GET /v1/models` for your key.

@@ -1,57 +1,79 @@
 ---
-title: "Authentication"
-description: "How to authenticate with AronaApi"
+title: Authentication
+description: How to authenticate to Arona API with an API key
 ---
 
 # Authentication
 
-AronaApi uses API keys for authentication. All API requests must include a valid API key.
+Arona API uses API key authentication. Every gateway request needs a valid key.
 
-## API Key Format
+## Auth method
 
-API keys are passed in the `Authorization` header using the Bearer scheme:
+Send:
 
 ```bash
 Authorization: Bearer YOUR_API_KEY
 ```
 
-## Getting an API Key
+## Get an API key
 
-1. Log in to the [console](https://api.lingshichat.top)
-2. Navigate to **API Keys** in the sidebar
-3. Click **Create Key** to generate a new key
-4. Copy the key and store it securely
+1. Sign in to the [console](https://sub2api.lingshichat.top)
+2. Open **API Keys**
+3. Create a key and store it offline
 
 <Warning>
-  Keep your API keys secure and never expose them in client-side code or public repositories.
+  Never put API keys in frontend pages, public repos, screenshots, or chat logs. Prefer environment variables.
 </Warning>
 
-## Usage Example
+## Recommended environment variables
+
+| Variable | Use |
+| --- | --- |
+| `ARONA_API_KEY` | Generic clients / scripts |
+| `XAI_API_KEY` | Some Grok-compatible clients |
+| `OPENAI_API_KEY` | OpenAI SDK / Codex-style clients |
+| `ANTHROPIC_AUTH_TOKEN` | Claude Code |
+
+PowerShell:
+
+```powershell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+```
+
+bash:
 
 ```bash
-curl https://api.lingshichat.top/v1/chat/completions \
-  -H "Authorization: Bearer sk-xxxxxxxxxxxxxxxx" \
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## Request example
+
+```bash
+curl https://sub2api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer $ARONA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4o",
+    "model": "grok-4.5",
     "messages": [{"role": "user", "content": "Hello"}]
   }'
 ```
 
-## Rate Limiting
+## Keys and groups
 
-API requests are subject to rate limiting based on your account tier:
+API keys are usually bound to one or more **groups**. A group controls:
 
-| Tier | Requests per Minute |
-|------|-------------------|
-| Free | 60 |
-| Standard | 600 |
-| Premium | 6,000 |
+- Available models (for example `grok-4.5`)
+- Upstream platform type (Grok / OpenAI / Claude, …)
+- Quota, concurrency, and billing rules
 
-Rate limit headers are included in all responses:
+If the model is unavailable or you get a permission error, check:
 
-```
-X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 45
-X-RateLimit-Reset: 1699999999
-```
+1. Key validity
+2. Whether the key’s group includes `grok-4.5`
+3. Account balance / subscription
+
+## Security tips
+
+- Use separate keys per client so you can revoke independently
+- Rotate keys periodically
+- Prefer `env_key` over pasting secrets into committed config files

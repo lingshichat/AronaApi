@@ -1,0 +1,175 @@
+---
+title: Pi Agent setup
+description: Use Pi coding agent with Arona API grok-4.5
+---
+
+# Pi Agent setup (Grok 4.5)
+
+[Pi](https://pi.dev) supports custom OpenAI-compatible providers via `~/.pi/agent/models.json`. Point `baseUrl` at the gateway to use `grok-4.5`.
+
+## Recommended settings
+
+| Item | Value |
+| --- | --- |
+| Base URL | `https://sub2api.lingshichat.top/v1` |
+| Provider ID | `arona` (customizable) |
+| Model ID | `grok-4.5` |
+| API type | `openai-completions` (most compatible) or `openai-responses` |
+| Env var | `ARONA_API_KEY` |
+| Config dir | `~/.pi/agent/` (`PI_CODING_AGENT_DIR` override) |
+
+## 1. Install and set key
+
+```bash
+# Example install (package name may change — follow official Pi docs)
+npm install -g @mariozechner/pi-coding-agent
+# or: curl -fsSL https://pi.dev/install.sh | sh
+```
+
+```powershell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+```
+
+```bash
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## 2. Edit `~/.pi/agent/models.json`
+
+Windows:
+
+```text
+C:\Users\<you>\.pi\agent\models.json
+```
+
+macOS / Linux:
+
+```text
+~/.pi/agent/models.json
+```
+
+### Recommended (Chat Completions)
+
+```json
+{
+  "providers": {
+    "arona": {
+      "baseUrl": "https://sub2api.lingshichat.top/v1",
+      "api": "openai-completions",
+      "apiKey": "$ARONA_API_KEY",
+      "models": [
+        {
+          "id": "grok-4.5",
+          "name": "Grok 4.5 (Arona)",
+          "reasoning": true,
+          "input": ["text"],
+          "contextWindow": 500000,
+          "maxTokens": 65536
+        }
+      ]
+    }
+  }
+}
+```
+
+### Option B: Responses API
+
+```json
+{
+  "providers": {
+    "arona": {
+      "baseUrl": "https://sub2api.lingshichat.top/v1",
+      "api": "openai-responses",
+      "apiKey": "$ARONA_API_KEY",
+      "models": [
+        {
+          "id": "grok-4.5",
+          "name": "Grok 4.5 (Arona Responses)",
+          "reasoning": true,
+          "contextWindow": 500000
+        }
+      ]
+    }
+  }
+}
+```
+
+If anything breaks, fall back to **`openai-completions`**.
+
+### Option C: `auth.json`
+
+```text
+~/.pi/agent/auth.json
+```
+
+```json
+{
+  "arona": {
+    "type": "api_key",
+    "key": "$ARONA_API_KEY"
+  }
+}
+```
+
+Or `/login` and paste a key. `apiKey` supports `$ENV`, `${ENV}`, and `!command` forms (see Pi Providers docs).
+
+## 3. Launch and pick model
+
+```bash
+pi
+```
+
+```text
+/model
+```
+
+```bash
+pi --provider arona --model grok-4.5
+```
+
+`models.json` reloads when you open `/model`.
+
+```bash
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer $ARONA_API_KEY"
+```
+
+## Notes
+
+- `baseUrl` **must** include `/v1`
+- Auth is required: `apiKey` / `auth.json` / `--api-key`
+- If the server dislikes `developer` role:
+
+```json
+"compat": {
+  "supportsDeveloperRole": false,
+  "supportsReasoningEffort": false
+}
+```
+
+- Override config dir with `PI_CODING_AGENT_DIR`
+
+## FAQ
+
+### No arona in `/model`
+
+- Validate JSON path/syntax
+- Ensure `baseUrl`, `api`, and `models[].id`
+- Re-open `/model` to reload
+
+### Model listed but unusable / missing key
+
+- Export `ARONA_API_KEY` or set `apiKey` / `auth.json` / `--api-key`
+- Do not commit secrets
+
+### 401 / 404
+
+- 401: bad or missing key
+- 404: missing `/v1` on `baseUrl` or wrong path
+
+## Related
+
+- [Client overview](/en/clients/overview)
+- [OpenCode](/en/clients/opencode)
+- [Codex](/en/clients/codex)
+- [Authentication](/en/authentication)

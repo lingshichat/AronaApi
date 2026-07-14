@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Arona API",
-  "description": "Arona API 中转站使用文档 — 面向 Grok 4.5 与主流 AI 编程客户端",
+  "description": "Arona API gateway docs for Grok 4.5 and popular AI coding clients",
   "colors": {
     "primary": "#6366f1",
     "light": "#818cf8",
@@ -14,12 +14,6 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "控制台",
-        "href": "https://sub2api.lingshichat.top"
-      }
-    ],
     "primary": {
       "type": "button",
       "label": "打开控制台",
@@ -68,6 +62,49 @@
               "cn/api/models",
               "cn/api/embeddings",
               "cn/api/images"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "en",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "en/index",
+              "en/quickstart",
+              "en/authentication"
+            ]
+          },
+          {
+            "group": "Clients (Grok 4.5)",
+            "pages": [
+              "en/clients/overview",
+              "en/clients/grok-build",
+              "en/clients/codex",
+              "en/clients/claude-code",
+              "en/clients/opencode",
+              "en/clients/pi-agent"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "en/guides/models",
+              "en/guides/channels",
+              "en/guides/pricing",
+              "en/guides/mcp"
+            ]
+          },
+          {
+            "group": "API reference",
+            "pages": [
+              "en/api/overview",
+              "en/api/chat-completions",
+              "en/api/models",
+              "en/api/embeddings",
+              "en/api/images"
             ]
           }
         ]

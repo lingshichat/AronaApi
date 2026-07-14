@@ -1,42 +1,60 @@
 ---
-title: "Model Support"
-description: "Supported AI models and providers"
+title: Models
+description: Docs focus on grok-4.5 and how to list models for your key
 ---
 
-# Model Support
+# Models
 
-AronaApi supports 40+ AI models from various providers.
+## Recommended
 
-## Available Providers
+| Model ID | Notes | Suggested clients |
+| --- | --- | --- |
+| `grok-4.5` | Primary chat / coding model | Grok Build, Codex, Claude Code, OpenCode, Pi |
 
-<CardGroup cols={2}>
-  <Card title="OpenAI" icon="openai">
-    GPT-4o, GPT-4o-mini, GPT-4, GPT-3.5-Turbo, DALL-E
-  </Card>
-  <Card title="Anthropic" icon="bot">
-    Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku
-  </Card>
-  <Card title="Google" icon="google">
-    Gemini 1.5 Pro, Gemini 1.5 Flash
-  </Card>
-  <Card title="Azure" icon="microsoft">
-    GPT-4, GPT-3.5-Turbo via Azure OpenAI
-  </Card>
-</CardGroup>
+Always trust the model list returned for **your** key.
 
-## Model Routing
-
-Models are automatically routed to the correct provider based on the model ID. Simply use the model name in your API request:
+## List models
 
 ```bash
-curl https://api.lingshichat.top/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_KEY" \
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "grok-4.5",
+      "object": "model",
+      "owned_by": "xai"
+    }
+  ]
+}
+```
+
+## Models and groups
+
+- The API key **group** decides which models you see
+- The same name may map to different upstream pools
+- On `model_not_found`, check the group first
+
+## Call example
+
+```bash
+curl https://sub2api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
   -d '{
-    "model": "claude-3-5-sonnet-20240620",
+    "model": "grok-4.5",
     "messages": [{"role": "user", "content": "Hello"}]
   }'
 ```
 
-## Custom Models
+## Client guides
 
-Administrators can configure custom model mappings in the console to redirect model requests to specific channels.
+- [Grok Build](/en/clients/grok-build)
+- [Codex](/en/clients/codex)
+- [Claude Code](/en/clients/claude-code)
+- [OpenCode](/en/clients/opencode)
+- [Pi Agent](/en/clients/pi-agent)

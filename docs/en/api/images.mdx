@@ -1,54 +1,29 @@
 ---
-title: "Images"
-description: "Generate and edit images"
+title: Images
+description: Image generation (depends on group support)
 ---
 
 # Images
-
-Generate and edit images using AI models.
-
-## Generate Image
 
 ```bash
 POST /v1/images/generations
 ```
 
-### Request
+<Note>
+  Image capability depends on upstream and group configuration. Unsupported groups return an error.
+</Note>
 
-```json
-{
-  "model": "dall-e-3",
-  "prompt": "A serene mountain landscape at sunset",
-  "size": "1024x1024",
-  "quality": "standard",
-  "n": 1
-}
+## Example
+
+```bash
+curl https://sub2api.lingshichat.top/v1/images/generations \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "YOUR_IMAGE_MODEL",
+    "prompt": "a calm mountain lake at sunrise",
+    "size": "1024x1024"
+  }'
 ```
 
-### Response
-
-```json
-{
-  "created": 1677721600,
-  "data": [
-    {
-      "url": "https://.../generated-image.png",
-      "revised_prompt": "A serene mountain landscape at sunset with golden light"
-    }
-  ]
-}
-```
-
-## Available Sizes
-
-| Size | Description |
-|------|-------------|
-| `1024x1024` | Square |
-| `1792x1024` | Landscape |
-| `1024x1792` | Portrait |
-
-## Supported Models
-
-- `dall-e-3`
-- `dall-e-2`
-- Various Midjourney models (via Midjourney Proxy)
+Use model IDs from `GET /v1/models` and the console.

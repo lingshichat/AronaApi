@@ -1,67 +1,39 @@
 ---
-title: "Model Context Protocol"
-description: "Use AronaApi through MCP"
+title: Docs MCP
+description: Search Arona API docs via MCP
 ---
 
-# Model Context Protocol (MCP)
+# Docs MCP
 
-AronaApi supports the [Model Context Protocol](https://modelcontextprotocol.io), enabling AI assistants to discover and interact with your API through standardized tools.
+The Mintlify site can expose an MCP endpoint so Cursor / Claude / VS Code can search these docs.
 
-## What is MCP?
+## Endpoint
 
-The Model Context Protocol is an open standard that enables AI systems to interact with external tools, data sources, and services through a unified interface.
-
-## MCP Server Endpoint
-
-```
+```text
 https://apidocs.lingshichat.top/mcp
 ```
 
-## Supported Clients
+## Client examples
 
-<Tabs>
-  <Tab title="Claude Code">
-    ```bash
-    claude mcp add arona-api https://apidocs.lingshichat.top/mcp
-    ```
-  </Tab>
-  <Tab title="Cursor">
-    Add to your Cursor MCP settings:
-    ```json
-    {
-      "mcpServers": {
-        "arona-api": {
-          "url": "https://apidocs.lingshichat.top/mcp"
-        }
-      }
+### Cursor
+
+```json
+{
+  "mcpServers": {
+    "arona-docs": {
+      "url": "https://apidocs.lingshichat.top/mcp"
     }
-    ```
-  </Tab>
-  <Tab title="VS Code">
-    Install the MCP extension and add the server URL.
-  </Tab>
-</Tabs>
+  }
+}
+```
 
-## Available Tools
+### Claude Code
 
-The MCP server provides tools for:
+```bash
+claude mcp add arona-docs https://apidocs.lingshichat.top/mcp
+```
 
-- **Search Documentation**: Query the AronaApi documentation
-- **Query Filesystem**: Browse available API endpoints and models
+## Notes
 
-## Authentication
-
-The MCP server supports both public and authenticated access:
-
-- **Public**: `/mcp` - Basic documentation access
-- **Authenticated**: `/authed/mcp` - Full API access with user credentials
-
-For authenticated access, configure OAuth client credentials in the dashboard.
-
-## Rate Limits
-
-| Scope | Limit | Description |
-|-------|-------|-------------|
-| Per user (IP) | 5,000 req/hr | Configuration query limit |
-| Search per domain | 10,000 req/hr | Total search tool calls |
-| Filesystem per domain | 10,000 req/hr | Total filesystem calls |
+- Docs MCP searches **this help site**
+- It is **not** the model inference gateway; call `grok-4.5` via `https://sub2api.lingshichat.top/v1`

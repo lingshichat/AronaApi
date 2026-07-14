@@ -1,82 +1,51 @@
 ---
-title: "Chat Completions"
-description: "Chat completions API reference"
+title: Chat completions
+description: POST /v1/chat/completions
 ---
 
-# Chat Completions
-
-Create a chat completion using various AI models.
-
-## Endpoint
+# Chat completions
 
 ```bash
 POST /v1/chat/completions
 ```
 
-## Request Body
+## Example
+
+```bash
+curl https://sub2api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "grok-4.5",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant"},
+      {"role": "user", "content": "Hello"}
+    ],
+    "temperature": 0.7,
+    "stream": false
+  }'
+```
+
+## Common parameters
+
+| Param | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `model` | string | yes | Prefer `grok-4.5` |
+| `messages` | array | yes | Chat messages |
+| `temperature` | number | no | Sampling temperature |
+| `max_tokens` | integer | no | Max output tokens |
+| `stream` | boolean | no | SSE streaming |
+
+## Streaming
 
 ```json
 {
-  "model": "gpt-4o",
-  "messages": [
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Hello!"}
-  ],
-  "temperature": 0.7,
-  "max_tokens": 150,
-  "stream": false
+  "model": "grok-4.5",
+  "stream": true,
+  "messages": [{"role": "user", "content": "Hello"}]
 }
 ```
 
-### Parameters
+## Related
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `model` | string | Yes | Model ID to use |
-| `messages` | array | Yes | List of messages |
-| `temperature` | number | No | Sampling temperature (0-2) |
-| `max_tokens` | integer | No | Maximum tokens to generate |
-| `stream` | boolean | No | Enable streaming |
-| `top_p` | number | No | Nucleus sampling parameter |
-| `frequency_penalty` | number | No | Frequency penalty (-2 to 2) |
-| `presence_penalty` | number | No | Presence penalty (-2 to 2) |
-
-## Response
-
-```json
-{
-  "id": "chatcmpl-123",
-  "object": "chat.completion",
-  "created": 1677652288,
-  "model": "gpt-4o",
-  "choices": [
-    {
-      "index": 0,
-      "message": {
-        "role": "assistant",
-        "content": "Hello! How can I assist you today?"
-      },
-      "finish_reason": "stop"
-    }
-  ],
-  "usage": {
-    "prompt_tokens": 19,
-    "completion_tokens": 9,
-    "total_tokens": 28
-  }
-}
-```
-
-## Streaming Response
-
-When `stream: true`, the response uses Server-Sent Events:
-
-```
-data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4o","choices":[{"index":0,"delta":{"role":"assistant"},"finish_reason":null}]}
-
-data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":"Hello"},"finish_reason":null}]}
-
-data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1677652288,"model":"gpt-4o","choices":[{"index":0,"delta":{"content":"!"},"finish_reason":null}]}
-
-data: [DONE]
-```
+For Grok Build, prefer the [Responses path](/en/clients/grok-build) (`api_backend = "responses"`).

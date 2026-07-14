@@ -1,0 +1,105 @@
+---
+title: Codex setup
+description: Use OpenAI Codex CLI with Arona API grok-4.5
+---
+
+# Codex setup (Grok 4.5)
+
+Route OpenAI Codex CLI through the gateway with `grok-4.5`.
+
+## Recommended settings
+
+| Item | Value |
+| --- | --- |
+| provider base_url | `https://sub2api.lingshichat.top/v1` |
+| model | `grok-4.5` |
+| wire_api | `responses` (preferred) or `chat_completions` |
+| env var | `ARONA_API_KEY` |
+
+## 1. Set API key
+
+```powershell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+```
+
+```bash
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## 2. Edit `~/.codex/config.toml`
+
+Windows:
+
+```text
+C:\Users\<you>\.codex\config.toml
+```
+
+```toml
+model = "grok-4.5"
+model_provider = "arona"
+
+[model_providers.arona]
+name = "Arona API"
+base_url = "https://sub2api.lingshichat.top/v1"
+wire_api = "responses"
+env_key = "ARONA_API_KEY"
+```
+
+### Fallback: Chat Completions
+
+```toml
+[model_providers.arona]
+name = "Arona API"
+base_url = "https://sub2api.lingshichat.top/v1"
+wire_api = "chat_completions"
+env_key = "ARONA_API_KEY"
+```
+
+## 3. Verify
+
+```bash
+codex
+# or
+codex exec "Introduce yourself in one sentence"
+```
+
+```bash
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer $ARONA_API_KEY"
+```
+
+## Notes
+
+- `base_url` must include `/v1`
+- The env var named by `env_key` must be visible in the shell that launches Codex
+- Model ID must exist in the key’s group; check `GET /v1/models`
+- If an official OpenAI provider is also configured, ensure `model_provider = "arona"`
+
+## Minimal working snippet
+
+```toml
+model = "grok-4.5"
+model_provider = "arona"
+model_reasoning_effort = "high"
+
+[model_providers.arona]
+name = "Arona API"
+base_url = "https://sub2api.lingshichat.top/v1"
+wire_api = "responses"
+env_key = "ARONA_API_KEY"
+```
+
+## FAQ
+
+| Issue | Fix |
+| --- | --- |
+| Still hits OpenAI | Confirm `model_provider = "arona"` |
+| 401 | Export `ARONA_API_KEY` successfully |
+| model not found | Use `grok-4.5` or inspect `/v1/models` |
+| Stream breaks | Try `wire_api = "chat_completions"` |
+
+## Related
+
+- [Grok Build](/en/clients/grok-build)
+- [Claude Code](/en/clients/claude-code)
+- [Quickstart](/en/quickstart)

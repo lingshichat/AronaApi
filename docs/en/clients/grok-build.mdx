@@ -1,0 +1,258 @@
+---
+title: Grok Build setup
+description: Point Grok Build at Arona API grok-4.5 and enable web_search
+---
+
+# Grok Build setup (Grok 4.5)
+
+How to run [Grok Build](https://grok.com) CLI/TUI against the gateway with `grok-4.5`.
+
+## Recommended settings
+
+| Item | Value |
+| --- | --- |
+| Base URL | `https://sub2api.lingshichat.top/v1` |
+| model | `grok-4.5` |
+| api_backend | `responses` |
+| supports_backend_search | `true` |
+| web_search model | Also `grok-4.5` (separate model section) |
+| **Data training / improve the model** | **Off (required)** |
+
+<Warning>
+  **Turn off Grok Build data training / “improve the model” data sharing.**  
+  Using a relay does not skip client privacy settings. Before configuring models, run `/privacy` and confirm training / data sharing is **off**. See [Disable data training](#0-disable-data-training-required).
+</Warning>
+
+<Tip>
+  If chat works but `web_search` returns `402 Payment Required` / `spending-limit`, search is often using a separate model without backend search. Point both chat and `web_search` models at gateway `grok-4.5` and set `supports_backend_search = true`.
+</Tip>
+
+## 0. Disable data training (required)
+
+Using the relay does **not** mean you can skip client privacy settings.
+
+1. Start Grok Build (TUI).
+2. Run:
+
+```text
+/privacy
+```
+
+3. Review **privacy / data-retention** status.
+4. Turn **off** options related to training / improve-the-model / data sharing for training.
+5. Run `/privacy` again to confirm.
+
+You can also open settings:
+
+```text
+/settings
+```
+
+Find Privacy / Data controls (or similar) and disable “Improve the model” style toggles.
+
+### Optional: disable client telemetry
+
+In `~/.grok/config.toml`:
+
+```toml
+[features]
+telemetry = false
+```
+
+This is separate from data-training toggles; both are worth reviewing.
+
+<Note>
+  `/privacy` controls privacy / retention / training participation; `[features].telemetry` controls anonymous usage telemetry.  
+  If you still use an xAI / X account, also disable Grok training options under X → Settings → Privacy and safety → Grok.
+</Note>
+
+## 1. Prepare an API key
+
+1. Create a key in the [console](https://sub2api.lingshichat.top)
+2. Prefer an environment variable:
+
+```powershell
+# Windows PowerShell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+[System.Environment]::SetEnvironmentVariable("ARONA_API_KEY", "sk-xxxxxxxx", "User")
+```
+
+```bash
+# macOS / Linux
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## 2. Edit `~/.grok/config.toml`
+
+Windows:
+
+```text
+C:\Users\<you>\.grok\config.toml
+```
+
+macOS / Linux:
+
+```text
+~/.grok/config.toml
+```
+
+### Recommended full config
+
+```toml
+[models]
+default = "arona-grok45"
+web_search = "arona-web-search"
+# default_reasoning_effort = "high"
+
+[model.arona-grok45]
+model = "grok-4.5"
+name = "Arona Grok 4.5"
+description = "via sub2api.lingshichat.top"
+base_url = "https://sub2api.lingshichat.top/v1"
+env_key = "ARONA_API_KEY"
+api_backend = "responses"
+context_window = 500000
+supports_backend_search = true
+
+[model.arona-web-search]
+model = "grok-4.5"
+name = "Arona Grok 4.5 Web Search"
+base_url = "https://sub2api.lingshichat.top/v1"
+env_key = "ARONA_API_KEY"
+api_backend = "responses"
+context_window = 500000
+supports_backend_search = true
+```
+
+### Option B: override built-in `grok-4.5`
+
+```toml
+[models]
+default = "grok-4.5"
+web_search = "grok-4.5"
+
+[model.grok-4.5]
+base_url = "https://sub2api.lingshichat.top/v1"
+env_key = "ARONA_API_KEY"
+api_backend = "responses"
+context_window = 500000
+supports_backend_search = true
+```
+
+<Note>
+  When overriding a built-in model, only set fields you change. Still set `supports_backend_search = true` for web_search.
+</Note>
+
+### Option C: shared endpoint base
+
+```toml
+[endpoints]
+models_base_url = "https://sub2api.lingshichat.top/v1"
+
+[models]
+default = "grok-4.5"
+web_search = "grok-4.5"
+
+[model.grok-4.5]
+env_key = "ARONA_API_KEY"
+api_backend = "responses"
+supports_backend_search = true
+context_window = 500000
+```
+
+With `models_base_url`, Grok can list models via API key auth and usually does not need `grok login`.
+
+## 3. Launch and switch models
+
+```bash
+grok models
+grok -m arona-grok45
+# in session:
+# /model arona-grok45
+```
+
+## 4. Verify
+
+```bash
+grok -p "Introduce yourself in one sentence" -m arona-grok45
+```
+
+```bash
+curl https://sub2api.lingshichat.top/v1/responses \
+  -H "Authorization: Bearer $ARONA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "grok-4.5",
+    "input": "ping"
+  }'
+```
+
+### web_search check
+
+Ask in Grok Build:
+
+```text
+Use web_search to find 3 public news headlines from today.
+```
+
+- Success: search summaries returned
+- 402 / spending-limit: check `web_search` model section and `supports_backend_search`
+
+## Field reference
+
+| Field | Meaning |
+| --- | --- |
+| `model` | Upstream model ID (`grok-4.5`) |
+| `base_url` | OpenAI-compatible root; include `/v1` |
+| `env_key` | Read key from env instead of plaintext config |
+| `api_backend` | `responses` / `chat_completions` / `messages` |
+| `supports_backend_search` | Required for server-side web_search |
+| `context_window` | Client compaction estimate |
+
+## Optional: Chat Completions backend
+
+```toml
+api_backend = "chat_completions"
+```
+
+Fine for basic chat; prefer responses + `supports_backend_search` for web_search.
+
+## FAQ
+
+### Model list missing arona-grok45
+
+- Validate TOML syntax
+- Restart terminal / Grok Build
+- Run `grok models`
+
+### 401 Unauthorized
+
+- Env var visible in the **current** shell
+- Full key copied
+- Key not written to the wrong field
+
+### Chat works, web_search fails
+
+1. `[models].web_search` points at your relay model
+2. That section’s `base_url` is the gateway
+3. `supports_backend_search = true`
+4. Both chat and search use a working `grok-4.5`
+
+### Context compresses too aggressively
+
+Raise `context_window` (for example `500000`). This is a client estimate, not a hard server limit.
+
+### Confirm data training is off
+
+1. `/privacy` → training / retention off  
+2. `/settings` Privacy / Data controls  
+3. Optional `[features] telemetry = false`  
+4. Account-side Grok training toggles on X if logged in  
+
+**Do not paste secrets while training options are still on.**
+
+## Related
+
+- [Client overview](/en/clients/overview)
+- [Codex](/en/clients/codex)
+- [Authentication](/en/authentication)

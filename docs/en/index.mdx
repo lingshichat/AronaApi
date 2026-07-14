@@ -1,57 +1,84 @@
 ---
-title: "Introduction"
-description: "AronaApi - Unified AI API Gateway"
+title: Introduction
+description: Arona API — unified AI gateway with first-class Grok 4.5 support
 ---
 
-# AronaApi
+# Arona API
 
-AronaApi is a unified AI API gateway that aggregates 40+ upstream AI providers behind a single OpenAI-compatible API endpoint.
+Arona API is a unified AI API gateway. It aggregates upstream models behind OpenAI- and Claude-compatible endpoints so you can plug in Grok Build, Codex, Claude Code, OpenCode, Pi Agent, and more with one base URL.
 
-## What is AronaApi?
+## Site info
 
-AronaApi provides a unified interface for accessing multiple AI models from different providers including OpenAI, Claude, Gemini, Azure, AWS Bedrock, and more.
+| Item | Value |
+| --- | --- |
+| Console | [https://sub2api.lingshichat.top](https://sub2api.lingshichat.top) |
+| API Base URL | `https://sub2api.lingshichat.top/v1` |
+| Recommended model | `grok-4.5` |
+| Docs | [https://apidocs.lingshichat.top/en](https://apidocs.lingshichat.top/en) |
+| Contact | QQ group `1091297190` |
 
-## Key Features
+## What this docs set focuses on
+
+These docs prioritize **Grok 4.5** setup for popular coding clients:
 
 <CardGroup cols={2}>
-  <Card title="Multi-Provider Support" icon="cloud">
-    Access 40+ AI providers through a single API endpoint
+  <Card title="Grok Build" icon="terminal" href="/en/clients/grok-build">
+    Recommended first. Supports Responses and backend web_search.
   </Card>
-  <Card title="OpenAI Compatible" icon="code">
-    Drop-in replacement for OpenAI API with full compatibility
+  <Card title="Codex" icon="code" href="/en/clients/codex">
+    Point a model_provider at the gateway using Responses or Chat Completions.
   </Card>
-  <Card title="User Management" icon="users">
-    Built-in user management with quotas and rate limiting
+  <Card title="Claude Code" icon="robot" href="/en/clients/claude-code">
+    Use ANTHROPIC_BASE_URL for the Messages-compatible path.
   </Card>
-  <Card title="Billing & Analytics" icon="chart-bar">
-    Comprehensive usage tracking and billing management
+  <Card title="OpenCode" icon="laptop-code" href="/en/clients/opencode">
+    OpenAI-compatible provider; set model to `arona/grok-4.5`.
+  </Card>
+  <Card title="Pi Agent" icon="microchip" href="/en/clients/pi-agent">
+    Custom provider in `models.json`, select `grok-4.5`.
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/en/quickstart">
+    Register, create a key, and complete the first request.
   </Card>
 </CardGroup>
 
-## Quick Start
+## Capabilities
 
-Get up and running in minutes:
+- **OpenAI-compatible**: `/v1/chat/completions`, `/v1/responses`, `/v1/models`
+- **Claude-compatible**: `/v1/messages`
+- **Grok platform features**: chat, images, video (depends on group / upstream)
+- **Keys and groups**: create API keys in the console and bind model groups
+
+## Get started in three minutes
 
 <Steps>
-  <Step title="Get API Key">
-    Sign up at [console](https://api.lingshichat.top) and generate an API key
+  <Step title="Register and create an API key">
+    Open the [console](https://sub2api.lingshichat.top), sign in, and create an API key.
   </Step>
-  <Step title="Configure Base URL">
-    Point your client to the AronaApi base URL
+  <Step title="Confirm Base URL and model">
+    Use `https://sub2api.lingshichat.top/v1` and model `grok-4.5`.
   </Step>
-  <Step title="Start Using">
-    Use any OpenAI-compatible client with your API key
+  <Step title="Configure your client">
+    Follow [Client overview](/en/clients/overview) for Grok Build / Codex / Claude Code / OpenCode / Pi.
   </Step>
 </Steps>
 
-## API Endpoint
+## Minimal request
 
 ```bash
-https://api.lingshichat.top/v1/chat/completions
+curl https://sub2api.lingshichat.top/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "grok-4.5",
+    "messages": [
+      {"role": "user", "content": "Hello, introduce yourself in one sentence"}
+    ]
+  }'
 ```
 
-Replace your standard OpenAI base URL with AronaApi's URL and start using immediately.
+## Next
 
-## Model Context Protocol (MCP)
-
-AronaApi supports the [Model Context Protocol](/guides/mcp), enabling AI assistants to interact with your API through standardized tools.
+- [Quickstart](/en/quickstart)
+- [Authentication](/en/authentication)
+- [Grok Build setup](/en/clients/grok-build)

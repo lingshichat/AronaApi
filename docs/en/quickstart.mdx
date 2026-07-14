@@ -1,41 +1,85 @@
 ---
-title: "Quickstart"
-description: "Get started with AronaApi in minutes"
+title: Quickstart
+description: Connect Arona API to your client and complete the first call in minutes
 ---
 
 # Quickstart
 
-This guide will help you get started with AronaApi in just a few minutes.
+This guide covers: register → create a key → verify the API → configure a client.
 
 ## Prerequisites
 
-- An AronaApi account
-- An API key from the [console](https://api.lingshichat.top)
+- An [Arona API console](https://sub2api.lingshichat.top) account
+- A working API key (create on the keys page)
+- A client: Grok Build / Codex / Claude Code / OpenCode / Pi Agent
 
-## Using cURL
+## 1. Get an API key
+
+1. Sign in at [https://sub2api.lingshichat.top](https://sub2api.lingshichat.top)
+2. Open **API Keys**
+3. Create a key and store it safely
+
+<Warning>
+  Treat API keys as secrets. Do not commit them to public repos or share them with untrusted parties.
+</Warning>
+
+## 2. Connection info
+
+| Setting | Value |
+| --- | --- |
+| Console | `https://sub2api.lingshichat.top` |
+| API Base URL | `https://sub2api.lingshichat.top/v1` |
+| Recommended model | `grok-4.5` |
+| Auth header | `Authorization: Bearer <YOUR_API_KEY>` |
+
+## 3. Verify with cURL
+
+### List models
+
+```bash
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
 
 ### Chat Completions
 
 ```bash
-curl https://api.lingshichat.top/v1/chat/completions \
+curl https://sub2api.lingshichat.top/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
-    "model": "gpt-4o",
+    "model": "grok-4.5",
     "messages": [
-      {"role": "user", "content": "Hello, how are you?"}
+      {"role": "user", "content": "ping"}
     ]
   }'
 ```
 
-### List Available Models
+### Responses API (recommended for Grok Build)
 
 ```bash
-curl https://api.lingshichat.top/v1/models \
-  -H "Authorization: Bearer YOUR_API_KEY"
+curl https://sub2api.lingshichat.top/v1/responses \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "grok-4.5",
+    "input": "ping"
+  }'
 ```
 
-## Using OpenAI SDK
+If you get normal JSON or a stream, the key and group are usable.
+
+## 4. Configure a client
+
+| Client | Docs |
+| --- | --- |
+| Grok Build (recommended) | [Grok Build](/en/clients/grok-build) |
+| OpenAI Codex CLI | [Codex](/en/clients/codex) |
+| Claude Code | [Claude Code](/en/clients/claude-code) |
+| OpenCode | [OpenCode](/en/clients/opencode) |
+| Pi Agent | [Pi Agent](/en/clients/pi-agent) |
+
+## 5. OpenAI SDK examples
 
 ### Python
 
@@ -43,18 +87,15 @@ curl https://api.lingshichat.top/v1/models \
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://api.lingshichat.top/v1",
-    api_key="YOUR_API_KEY"
+    base_url="https://sub2api.lingshichat.top/v1",
+    api_key="YOUR_API_KEY",
 )
 
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "user", "content": "Hello, how are you?"}
-    ]
+resp = client.chat.completions.create(
+    model="grok-4.5",
+    messages=[{"role": "user", "content": "Hello"}],
 )
-
-print(response.choices[0].message.content)
+print(resp.choices[0].message.content)
 ```
 
 ### Node.js
@@ -63,22 +104,29 @@ print(response.choices[0].message.content)
 import OpenAI from 'openai';
 
 const client = new OpenAI({
-  baseURL: 'https://api.lingshichat.top/v1',
-  apiKey: 'YOUR_API_KEY'
+  baseURL: 'https://sub2api.lingshichat.top/v1',
+  apiKey: 'YOUR_API_KEY',
 });
 
-const response = await client.chat.completions.create({
-  model: 'gpt-4o',
-  messages: [
-    { role: 'user', content: 'Hello, how are you?' }
-  ]
+const resp = await client.chat.completions.create({
+  model: 'grok-4.5',
+  messages: [{ role: 'user', content: 'Hello' }],
 });
 
-console.log(response.choices[0].message.content);
+console.log(resp.choices[0].message.content);
 ```
 
-## Next Steps
+## Troubleshooting
 
-- Learn about [Authentication](/authentication)
-- Explore the [API Reference](/api/overview)
-- Set up [MCP integration](/guides/mcp)
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| `401` | Bad key or missing Bearer | Check `Authorization` |
+| `403` / group error | Key not bound to a usable group | Check key group in console |
+| `model_not_found` | Wrong model or group lacks it | Use `grok-4.5` or `GET /v1/models` |
+| Timeout / connect fail | Network or wrong host | Use `sub2api.lingshichat.top` |
+
+## Next
+
+- [Authentication](/en/authentication)
+- [Client overview](/en/clients/overview)
+- [API overview](/en/api/overview)

@@ -1,0 +1,137 @@
+---
+title: Claude Code setup
+description: Point Claude Code at Arona API grok-4.5 via ANTHROPIC_BASE_URL
+---
+
+# Claude Code setup (Grok 4.5)
+
+Claude Code speaks Anthropic Messages. The gateway exposes `POST /v1/messages` so you can route traffic to your Grok group.
+
+## Recommended settings
+
+| Item | Value |
+| --- | --- |
+| `ANTHROPIC_BASE_URL` | `https://sub2api.lingshichat.top` (**no** `/v1`) |
+| `ANTHROPIC_AUTH_TOKEN` | Your Arona API key |
+| Model | `grok-4.5` |
+
+<Warning>
+  Claude Code appends `/v1/messages` to the base URL.  
+  Use `https://sub2api.lingshichat.top`, not `.../v1`.  
+  Including `/v1` often produces `/v1/v1/messages` and 404.
+</Warning>
+
+## 1. Environment variables (fastest)
+
+### Windows PowerShell
+
+```powershell
+$env:ANTHROPIC_BASE_URL = "https://sub2api.lingshichat.top"
+$env:ANTHROPIC_AUTH_TOKEN = "sk-xxxxxxxx"
+$env:ANTHROPIC_API_KEY = ""
+```
+
+### macOS / Linux
+
+```bash
+export ANTHROPIC_BASE_URL="https://sub2api.lingshichat.top"
+export ANTHROPIC_AUTH_TOKEN="sk-xxxxxxxx"
+```
+
+Then:
+
+```bash
+claude
+```
+
+```text
+/model grok-4.5
+```
+
+Or, if supported:
+
+```bash
+claude --model grok-4.5
+```
+
+## 2. `~/.claude/settings.json`
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://sub2api.lingshichat.top",
+    "ANTHROPIC_AUTH_TOKEN": "sk-xxxxxxxx"
+  }
+}
+```
+
+<Tip>
+  Prefer storing only `ANTHROPIC_BASE_URL` in settings and injecting the token from the environment.
+</Tip>
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://sub2api.lingshichat.top"
+  }
+}
+```
+
+## 3. Verify
+
+```bash
+curl https://sub2api.lingshichat.top/v1/messages \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $ANTHROPIC_AUTH_TOKEN" \
+  -H "Authorization: Bearer $ANTHROPIC_AUTH_TOKEN" \
+  -H "anthropic-version: 2023-06-01" \
+  -d '{
+    "model": "grok-4.5",
+    "max_tokens": 128,
+    "messages": [
+      {"role": "user", "content": "ping"}
+    ]
+  }'
+```
+
+Some clients use `x-api-key`, others `Authorization`. Try both if one fails.
+
+In Claude Code:
+
+```text
+Reply with only: ok
+```
+
+## Pitfalls
+
+1. **Group must serve `grok-4.5`**  
+2. **Use gateway model IDs**, not Claude official names (unless you intend a Claude group)  
+3. **No extra path on base URL**  
+   Correct: `https://sub2api.lingshichat.top`  
+   Wrong: `.../v1` or `.../claude`
+
+## vs Grok Build
+
+| Item | Grok Build | Claude Code |
+| --- | --- | --- |
+| Protocol | Responses / Chat Completions | Anthropic Messages |
+| Base URL | includes `/v1` | **no** `/v1` |
+| Config | `~/.grok/config.toml` | env / `~/.claude/settings.json` |
+| web_search | needs `supports_backend_search` | depends on Claude Code tooling |
+
+Prefer **Grok Build** for Grok 4.5 coding agents when you can; use Claude Code when your workflow already depends on it.
+
+## FAQ
+
+| Issue | Fix |
+| --- | --- |
+| 404 | Remove accidental `/v1` on base URL |
+| 401 | Check `ANTHROPIC_AUTH_TOKEN` |
+| Model missing | Use `grok-4.5` and verify group |
+| Still hits Anthropic | Ensure env vars are visible; restart shell |
+
+## Related
+
+- [Grok Build](/en/clients/grok-build)
+- [Codex](/en/clients/codex)
+- [Authentication](/en/authentication)
