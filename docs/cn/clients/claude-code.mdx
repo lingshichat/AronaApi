@@ -1,0 +1,153 @@
+---
+title: Claude Code 配置
+description: 通过 ANTHROPIC_BASE_URL 让 Claude Code 使用 Arona API 的 grok-4.5
+---
+
+# Claude Code 配置（Grok 4.5）
+
+Claude Code 默认走 Anthropic Messages 协议。中转站提供 `POST /v1/messages`，可把请求转到你的 Grok 分组。
+
+## 推荐参数
+
+| 项 | 值 |
+| --- | --- |
+| `ANTHROPIC_BASE_URL` | `https://sub2api.lingshichat.top`（**不要**加 `/v1`） |
+| `ANTHROPIC_AUTH_TOKEN` | 你的 Arona API Key |
+| 模型 | `grok-4.5` |
+
+<Warning>
+  Claude Code 的 SDK 会在 Base URL 后拼接 `/v1/messages`。  
+  因此这里应写 `https://sub2api.lingshichat.top`，而不是 `.../v1`。  
+  若写成带 `/v1` 的地址，容易变成 `/v1/v1/messages` 导致 404。
+</Warning>
+
+## 1. 环境变量方式（最快）
+
+### Windows PowerShell
+
+```powershell
+$env:ANTHROPIC_BASE_URL = "https://sub2api.lingshichat.top"
+$env:ANTHROPIC_AUTH_TOKEN = "sk-xxxxxxxx"
+# 可选：禁用官方账号相关交互
+$env:ANTHROPIC_API_KEY = ""
+```
+
+### macOS / Linux
+
+```bash
+export ANTHROPIC_BASE_URL="https://sub2api.lingshichat.top"
+export ANTHROPIC_AUTH_TOKEN="sk-xxxxxxxx"
+```
+
+然后启动：
+
+```bash
+claude
+```
+
+在会话中确认模型：
+
+```text
+/model grok-4.5
+```
+
+不同 Claude Code 版本的模型切换命令可能略有差异；若支持启动参数，也可：
+
+```bash
+claude --model grok-4.5
+```
+
+## 2. 写入 `~/.claude/settings.json`
+
+适合长期使用。示例：
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://sub2api.lingshichat.top",
+    "ANTHROPIC_AUTH_TOKEN": "sk-xxxxxxxx"
+  }
+}
+```
+
+<Tip>
+  更稳妥的做法是 settings 里只写 `ANTHROPIC_BASE_URL`，Token 继续用环境变量注入，避免密钥落盘。
+</Tip>
+
+更推荐：
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://sub2api.lingshichat.top"
+  }
+}
+```
+
+再在 shell profile / 系统环境变量里设置 `ANTHROPIC_AUTH_TOKEN`。
+
+## 3. 验证
+
+### 直接打 Messages 接口
+
+```bash
+curl https://sub2api.lingshichat.top/v1/messages \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $ANTHROPIC_AUTH_TOKEN" \
+  -H "Authorization: Bearer $ANTHROPIC_AUTH_TOKEN" \
+  -H "anthropic-version: 2023-06-01" \
+  -d '{
+    "model": "grok-4.5",
+    "max_tokens": 128,
+    "messages": [
+      {"role": "user", "content": "ping"}
+    ]
+  }'
+```
+
+> 不同客户端可能使用 `x-api-key` 或 `Authorization`。中转站侧通常兼容 Bearer；若一种失败可换另一种。
+
+### 在 Claude Code 内
+
+```text
+请只回复：ok
+```
+
+能正常返回即可。
+
+## 关键点
+
+1. **分组平台必须能服务 `grok-4.5`**  
+   Key 绑到错误分组时，Messages 可能路由到非 Grok 上游。
+2. **模型名以网关为准**  
+   写 `grok-4.5`，不要写 Claude 官方模型名（除非你本来就想用 Claude 分组）。
+3. **Base URL 不要多余路径**  
+   正确：`https://sub2api.lingshichat.top`  
+   错误：`https://sub2api.lingshichat.top/v1`  
+   错误：`https://sub2api.lingshichat.top/claude`
+
+## 与 Grok Build 的差异
+
+| 项目 | Grok Build | Claude Code |
+| --- | --- | --- |
+| 主协议 | Responses / Chat Completions | Anthropic Messages |
+| Base URL | 含 `/v1` | **不含** `/v1` |
+| 配置文件 | `~/.grok/config.toml` | 环境变量 / `~/.claude/settings.json` |
+| web_search | 需 `supports_backend_search` | 取决于 Claude Code 工具实现，不走 Grok Build 同套配置 |
+
+若你主要用 Grok 4.5 做编程代理，**优先推荐 Grok Build**；Claude Code 适合已有工作流依赖该工具链的场景。
+
+## 常见问题
+
+| 问题 | 处理 |
+| --- | --- |
+| 404 not found | 检查是否误加了 `/v1` |
+| 401 | 检查 `ANTHROPIC_AUTH_TOKEN` |
+| 模型不存在 | 改为 `grok-4.5`，并确认分组 |
+| 仍然命中官方 Anthropic | 确认环境变量对当前进程可见，重启终端后再开 `claude` |
+
+## 相关文档
+
+- [Grok Build 配置](/cn/clients/grok-build)
+- [Codex 配置](/cn/clients/codex)
+- [身份验证](/cn/authentication)

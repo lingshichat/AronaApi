@@ -1,0 +1,71 @@
+---
+title: 客户端配置总览
+description: 使用 Arona API 的 Grok 4.5 接入 Grok Build、Codex、Claude Code
+---
+
+# 客户端配置总览
+
+本节只围绕 **Grok 4.5** 讲解主流编程客户端如何对接中转站。
+
+## 统一参数
+
+无论哪个客户端，先记住这 3 个值：
+
+```text
+Base URL : https://sub2api.lingshichat.top/v1
+Model    : grok-4.5
+API Key  : 控制台创建的密钥
+```
+
+<Note>
+  Claude Code 的 `ANTHROPIC_BASE_URL` 一般 **不要** 带 `/v1`，因为 SDK 会自己拼 `/v1/messages`。详见 [Claude Code 配置](/cn/clients/claude-code)。
+</Note>
+
+## 支持的协议
+
+中转站（sub2api）对 Grok 分组主要提供：
+
+| 协议 | 路径 | 典型客户端 |
+| --- | --- | --- |
+| OpenAI Chat Completions | `POST /v1/chat/completions` | 通用 SDK、部分 CLI |
+| OpenAI Responses | `POST /v1/responses` | Grok Build、Codex |
+| Anthropic Messages | `POST /v1/messages` | Claude Code |
+| 模型列表 | `GET /v1/models` | 全部 |
+
+## 选择哪篇文档？
+
+<CardGroup cols={1}>
+  <Card title="Grok Build（推荐）" icon="terminal" href="/cn/clients/grok-build">
+    最贴近 Grok 4.5 原生体验。建议使用 `api_backend = "responses"`，并开启 `supports_backend_search` 以修复 web_search。
+  </Card>
+  <Card title="Codex" icon="code" href="/cn/clients/codex">
+    在 `~/.codex/config.toml` 增加 model_provider，把 model 指到 `grok-4.5`。
+  </Card>
+  <Card title="Claude Code" icon="robot" href="/cn/clients/claude-code">
+    通过环境变量把 Messages 请求转到中转站，模型选 `grok-4.5`。
+  </Card>
+</CardGroup>
+
+## 配置前自检
+
+```bash
+# 1) Key 是否可用
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer $ARONA_API_KEY"
+
+# 2) 对话是否可用
+curl https://sub2api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer $ARONA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"grok-4.5","messages":[{"role":"user","content":"ping"}]}'
+```
+
+两项都成功后，再改客户端配置，能少踩很多坑。
+
+## 当前文档范围
+
+- ✅ Grok 4.5
+- ✅ Grok Build / Codex / Claude Code
+- ⏳ 其他模型与客户端后续再补
+
+如果你有额外模型别名（例如 `grok-latest`），以控制台 `GET /v1/models` 返回结果为准。

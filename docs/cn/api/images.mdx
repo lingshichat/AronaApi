@@ -1,54 +1,29 @@
 ---
-title: "图片"
-description: "生成和编辑图片"
+title: 图片
+description: 图片生成接口（视分组支持情况）
 ---
 
 # 图片
-
-使用 AI 模型生成和编辑图片。
-
-## 生成图片
 
 ```bash
 POST /v1/images/generations
 ```
 
-### 请求
+<Note>
+  图片能力取决于上游与分组配置。未开通时会返回不支持。
+</Note>
 
-```json
-{
-  "model": "dall-e-3",
-  "prompt": "日落时分的宁静山景",
-  "size": "1024x1024",
-  "quality": "standard",
-  "n": 1
-}
+## 请求示例
+
+```bash
+curl https://sub2api.lingshichat.top/v1/images/generations \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "YOUR_IMAGE_MODEL",
+    "prompt": "a calm mountain lake at sunrise",
+    "size": "1024x1024"
+  }'
 ```
 
-### 响应
-
-```json
-{
-  "created": 1677721600,
-  "data": [
-    {
-      "url": "https://.../generated-image.png",
-      "revised_prompt": "日落时分的宁静山景，金色光芒"
-    }
-  ]
-}
-```
-
-## 可用尺寸
-
-| 尺寸 | 说明 |
-|------|------|
-| `1024x1024` | 正方形 |
-| `1792x1024` | 横屏 |
-| `1024x1792` | 竖屏 |
-
-## 支持的模型
-
-- `dall-e-3`
-- `dall-e-2`
-- 各种 Midjourney 模型（通过 Midjourney Proxy）
+模型 ID 以 `GET /v1/models` 与控制台为准。

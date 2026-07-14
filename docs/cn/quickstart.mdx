@@ -1,41 +1,85 @@
 ---
-title: "快速开始"
-description: "几分钟内开始使用 AronaApi"
+title: 快速开始
+description: 几分钟内把 Arona API 接到客户端并完成第一次调用
 ---
 
 # 快速开始
 
-本指南将帮助你在几分钟内开始使用 AronaApi。
+本指南帮助你完成：注册 → 创建 Key → 验证接口 → 配置客户端。
 
 ## 前置条件
 
-- 一个 AronaApi 账号
-- 从 [控制台](https://api.lingshichat.top) 获取的 API Key
+- 一个 [Arona API 控制台](https://sub2api.lingshichat.top) 账号
+- 可用的 API Key（密钥页创建）
+- 想要接入的客户端：Grok Build / Codex / Claude Code
 
-## 使用 cURL
+## 1. 获取 API Key
 
-### 对话补全
+1. 登录 [https://sub2api.lingshichat.top](https://sub2api.lingshichat.top)
+2. 进入 **API Keys / 密钥** 页面
+3. 创建新密钥并复制保存
+
+<Warning>
+  API Key 只显示一次或有限次，请勿提交到公开仓库或发给不信任的第三方。
+</Warning>
+
+## 2. 确认连接信息
+
+| 配置项 | 值 |
+| --- | --- |
+| 控制台 | `https://sub2api.lingshichat.top` |
+| API Base URL | `https://sub2api.lingshichat.top/v1` |
+| 推荐模型 | `grok-4.5` |
+| 鉴权头 | `Authorization: Bearer <YOUR_API_KEY>` |
+
+## 3. 用 cURL 验证
+
+### 列出模型
 
 ```bash
-curl https://api.lingshichat.top/v1/chat/completions \
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+### Chat Completions
+
+```bash
+curl https://sub2api.lingshichat.top/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
-    "model": "gpt-4o",
+    "model": "grok-4.5",
     "messages": [
-      {"role": "user", "content": "你好"}
+      {"role": "user", "content": "ping"}
     ]
   }'
 ```
 
-### 列出可用模型
+### Responses API（Grok Build 推荐）
 
 ```bash
-curl https://api.lingshichat.top/v1/models \
-  -H "Authorization: Bearer YOUR_API_KEY"
+curl https://sub2api.lingshichat.top/v1/responses \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "grok-4.5",
+    "input": "ping"
+  }'
 ```
 
-## 使用 OpenAI SDK
+若返回正常 JSON / 流式数据，说明 Key 与分组可用。
+
+## 4. 配置客户端
+
+按你实际使用的工具继续：
+
+| 客户端 | 文档 |
+| --- | --- |
+| Grok Build（推荐） | [Grok Build 配置](/cn/clients/grok-build) |
+| OpenAI Codex CLI | [Codex 配置](/cn/clients/codex) |
+| Claude Code | [Claude Code 配置](/cn/clients/claude-code) |
+
+## 5. OpenAI SDK 示例
 
 ### Python
 
@@ -43,18 +87,15 @@ curl https://api.lingshichat.top/v1/models \
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://api.lingshichat.top/v1",
-    api_key="YOUR_API_KEY"
+    base_url="https://sub2api.lingshichat.top/v1",
+    api_key="YOUR_API_KEY",
 )
 
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "user", "content": "你好"}
-    ]
+resp = client.chat.completions.create(
+    model="grok-4.5",
+    messages=[{"role": "user", "content": "你好"}],
 )
-
-print(response.choices[0].message.content)
+print(resp.choices[0].message.content)
 ```
 
 ### Node.js
@@ -63,22 +104,29 @@ print(response.choices[0].message.content)
 import OpenAI from 'openai';
 
 const client = new OpenAI({
-  baseURL: 'https://api.lingshichat.top/v1',
-  apiKey: 'YOUR_API_KEY'
+  baseURL: 'https://sub2api.lingshichat.top/v1',
+  apiKey: 'YOUR_API_KEY',
 });
 
-const response = await client.chat.completions.create({
-  model: 'gpt-4o',
-  messages: [
-    { role: 'user', content: '你好' }
-  ]
+const resp = await client.chat.completions.create({
+  model: 'grok-4.5',
+  messages: [{ role: 'user', content: '你好' }],
 });
 
-console.log(response.choices[0].message.content);
+console.log(resp.choices[0].message.content);
 ```
+
+## 常见失败排查
+
+| 现象 | 可能原因 | 处理 |
+| --- | --- | --- |
+| `401` | Key 错误或未带 Bearer | 检查 `Authorization` 头 |
+| `403` / 分组错误 | Key 未绑定可用分组 | 在控制台检查密钥分组 |
+| `model_not_found` | 模型名不对或分组无该模型 | 使用 `grok-4.5`，或先 `GET /v1/models` |
+| 超时 / 连接失败 | 网络或域名写错 | 确认使用 `sub2api.lingshichat.top` |
 
 ## 下一步
 
-- 了解[身份验证](/cn/authentication)
-- 浏览 [API 文档](/cn/api/overview)
-- 配置 [MCP 集成](/cn/guides/mcp)
+- [身份验证](/cn/authentication)
+- [客户端配置总览](/cn/clients/overview)
+- [API 概览](/cn/api/overview)

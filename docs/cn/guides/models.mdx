@@ -1,42 +1,60 @@
 ---
-title: "模型支持"
-description: "支持的 AI 模型和提供商"
+title: 模型支持
+description: 当前文档聚焦 grok-4.5，并说明如何查询实际可用模型
 ---
 
 # 模型支持
 
-AronaApi 支持来自多个提供商的 40+ AI 模型。
+## 当前推荐
 
-## 可用提供商
+| 模型 ID | 说明 | 建议客户端 |
+| --- | --- | --- |
+| `grok-4.5` | 主推对话 / 编程模型 | Grok Build、Codex、Claude Code |
 
-<CardGroup cols={2}>
-  <Card title="OpenAI" icon="openai">
-    GPT-4o, GPT-4o-mini, GPT-4, GPT-3.5-Turbo, DALL-E
-  </Card>
-  <Card title="Anthropic" icon="bot">
-    Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku
-  </Card>
-  <Card title="Google" icon="google">
-    Gemini 1.5 Pro, Gemini 1.5 Flash
-  </Card>
-  <Card title="Azure" icon="microsoft">
-    通过 Azure OpenAI 使用 GPT-4, GPT-3.5-Turbo
-  </Card>
-</CardGroup>
+文档后续会补充其他模型；**请始终以你账号实际返回的模型列表为准**。
 
-## 模型路由
-
-模型根据模型 ID 自动路由到正确的提供商。只需在 API 请求中使用模型名称：
+## 查询你的可用模型
 
 ```bash
-curl https://api.lingshichat.top/v1/chat/completions \
-  -H "Authorization: Bearer YOUR_KEY" \
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+返回示例（结构示意）：
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "grok-4.5",
+      "object": "model",
+      "owned_by": "xai"
+    }
+  ]
+}
+```
+
+## 模型与分组
+
+- API Key 绑定的 **分组** 决定能看到哪些模型
+- 同一模型名可能映射到不同上游账号池
+- 若 `model_not_found`，先检查分组，而不是只改客户端
+
+## 调用示例
+
+```bash
+curl https://sub2api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
   -d '{
-    "model": "claude-3-5-sonnet-20240620",
+    "model": "grok-4.5",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
 
-## 自定义模型
+## 客户端文档
 
-管理员可以在控制台中配置自定义模型映射，将模型请求重定向到特定渠道。
+- [Grok Build](/cn/clients/grok-build)
+- [Codex](/cn/clients/codex)
+- [Claude Code](/cn/clients/claude-code)

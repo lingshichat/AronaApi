@@ -1,0 +1,221 @@
+---
+title: Grok Build 配置
+description: 把 Grok Build 指到 Arona API 的 grok-4.5，并启用 web_search
+---
+
+# Grok Build 配置（Grok 4.5）
+
+本文说明如何让 [Grok Build](https://grok.com) CLI/TUI 通过中转站使用 `grok-4.5`。
+
+## 推荐结论
+
+| 项 | 推荐值 |
+| --- | --- |
+| Base URL | `https://sub2api.lingshichat.top/v1` |
+| model | `grok-4.5` |
+| api_backend | `responses` |
+| supports_backend_search | `true` |
+| web_search 模型 | 同样指向 `grok-4.5`（单独 model 段） |
+
+<Tip>
+  聊天正常但 `web_search` 报 `402 Payment Required` / `spending-limit` 时，通常是 **搜索走了独立模型且未开 backend search**。把对话模型和 `web_search` 都指到中转站的 `grok-4.5`，并设置 `supports_backend_search = true`。
+</Tip>
+
+## 1. 准备 API Key
+
+1. 打开 [控制台](https://sub2api.lingshichat.top) 创建 API Key
+2. 用环境变量保存（推荐）：
+
+```powershell
+# Windows PowerShell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+# 可选：写入用户环境变量，新开终端生效
+[System.Environment]::SetEnvironmentVariable("ARONA_API_KEY", "sk-xxxxxxxx", "User")
+```
+
+```bash
+# macOS / Linux
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## 2. 编辑 `~/.grok/config.toml`
+
+Windows 路径：
+
+```text
+C:\Users\<你的用户名>\.grok\config.toml
+```
+
+macOS / Linux：
+
+```text
+~/.grok/config.toml
+```
+
+### 推荐完整配置
+
+```toml
+# 默认模型与 web_search 都走中转站 grok-4.5
+[models]
+default = "arona-grok45"
+web_search = "arona-web-search"
+# 可选：默认思考强度
+# default_reasoning_effort = "high"
+
+[model.arona-grok45]
+model = "grok-4.5"
+name = "Arona Grok 4.5"
+description = "via sub2api.lingshichat.top"
+base_url = "https://sub2api.lingshichat.top/v1"
+env_key = "ARONA_API_KEY"
+api_backend = "responses"
+context_window = 500000
+supports_backend_search = true
+
+[model.arona-web-search]
+model = "grok-4.5"
+name = "Arona Grok 4.5 Web Search"
+base_url = "https://sub2api.lingshichat.top/v1"
+env_key = "ARONA_API_KEY"
+api_backend = "responses"
+context_window = 500000
+supports_backend_search = true
+```
+
+### 方案 B：覆盖内置 `grok-4.5` 段
+
+如果你更想直接用模型名 `grok-4.5`：
+
+```toml
+[models]
+default = "grok-4.5"
+web_search = "grok-4.5"
+
+[model.grok-4.5]
+base_url = "https://sub2api.lingshichat.top/v1"
+env_key = "ARONA_API_KEY"
+api_backend = "responses"
+context_window = 500000
+supports_backend_search = true
+```
+
+<Note>
+  覆盖内置模型时，只需写你要改的字段；其余继承 Grok 默认。但 **web_search 仍建议显式写 `supports_backend_search = true`**。
+</Note>
+
+### 方案 C：用 endpoints 统一改出口
+
+```toml
+[endpoints]
+models_base_url = "https://sub2api.lingshichat.top/v1"
+
+[models]
+default = "grok-4.5"
+web_search = "grok-4.5"
+
+[model.grok-4.5]
+env_key = "ARONA_API_KEY"
+api_backend = "responses"
+supports_backend_search = true
+context_window = 500000
+```
+
+设置 `models_base_url` 后，Grok 会用 API Key 鉴权拉取 `/v1/models`，通常不再依赖 `grok login`。
+
+## 3. 启动并切换模型
+
+```bash
+# 查看模型列表
+grok models
+
+# 直接指定模型启动
+grok -m arona-grok45
+
+# 会话内切换
+/model arona-grok45
+```
+
+## 4. 验证
+
+### 命令行
+
+```bash
+grok -p "用一句话介绍你自己" -m arona-grok45
+```
+
+### 手动 curl（对照）
+
+```bash
+curl https://sub2api.lingshichat.top/v1/responses \
+  -H "Authorization: Bearer $ARONA_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "grok-4.5",
+    "input": "ping"
+  }'
+```
+
+### web_search 自检
+
+在 Grok Build 里要求模型：
+
+```text
+请用 web_search 搜索今天的公开新闻标题，给我 3 条。
+```
+
+- 成功：返回检索摘要
+- 失败且 402 / spending-limit：检查 `web_search` 模型段与 `supports_backend_search`
+
+## 字段说明
+
+| 字段 | 含义 |
+| --- | --- |
+| `model` | 发给上游的模型 ID，这里用 `grok-4.5` |
+| `base_url` | OpenAI 兼容根路径，需含 `/v1` |
+| `env_key` | 从环境变量读 API Key，避免明文写进配置 |
+| `api_backend` | `responses` / `chat_completions` / `messages` |
+| `supports_backend_search` | 允许服务端 backend 搜索；web_search 需要 |
+| `context_window` | 触发自动压缩的上下文窗口估计值 |
+
+## 可选：Chat Completions 后端
+
+若 Responses 路径异常，可临时改用：
+
+```toml
+api_backend = "chat_completions"
+```
+
+多数基础对话可用；**web_search 仍建议 responses + supports_backend_search**。
+
+## 常见问题
+
+### 1. 模型列表里没有 arona-grok45
+
+- 确认 `config.toml` 语法正确（TOML 段名、引号）
+- 重新打开终端 / 重启 Grok Build
+- 运行 `grok models` 查看是否加载到自定义模型
+
+### 2. 401 Unauthorized
+
+- 环境变量是否在 **当前终端** 生效
+- Key 是否复制完整
+- 是否误把 Key 写进了错误字段
+
+### 3. 能聊天但不能 web_search
+
+按下面清单逐项核对：
+
+1. `[models].web_search` 是否指向自定义中转模型
+2. 该模型段 `base_url` 是否为中转站
+3. 是否 `supports_backend_search = true`
+4. 对话模型与搜索模型是否都指向可用的 `grok-4.5`
+
+### 4. 上下文很快被压缩
+
+把 `context_window` 调到与上游一致（例如 `500000`）。该值影响客户端压缩策略，不等于服务端硬限制。
+
+## 相关文档
+
+- [客户端配置总览](/cn/clients/overview)
+- [Codex 配置](/cn/clients/codex)
+- [身份验证](/cn/authentication)

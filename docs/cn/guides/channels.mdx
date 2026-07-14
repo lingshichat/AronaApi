@@ -1,36 +1,40 @@
 ---
-title: "渠道"
-description: "管理 API 渠道和提供商"
+title: 渠道与分组
+description: 理解中转站的分组、密钥与上游渠道关系
 ---
 
-# 渠道
+# 渠道与分组
 
-渠道代表与上游 AI 提供商的连接。
+对普通用户来说，最重要的不是“渠道”本身，而是：
 
-## 什么是渠道？
+1. 你的 **API Key**
+2. Key 绑定的 **分组**
+3. 分组开放的 **模型列表**（例如 `grok-4.5`）
 
-渠道是配置好的与上游 AI 提供商（OpenAI、Azure、Anthropic 等）的连接。管理员可以设置多个渠道以实现冗余和负载均衡。
+## 用户侧怎么理解
 
-## 渠道类型
+```text
+客户端  --API Key-->  Arona 中转站  --分组路由-->  上游账号池
+```
 
-| 类型 | 说明 |
-|------|------|
-| OpenAI | 直连 OpenAI API |
-| Azure | Azure OpenAI 服务 |
-| Anthropic | Claude API |
-| Google | Gemini API |
-| AWS Bedrock | Amazon Bedrock |
-| 自定义 | 自定义兼容 OpenAI 的端点 |
+你只需要：
 
-## 渠道配置
+- 在控制台创建 Key
+- 确认 Key 能调用 `grok-4.5`
+- 把 Base URL 指到 `https://sub2api.lingshichat.top/v1`
 
-每个渠道可以配置：
-- **Base URL**：提供商端点
-- **API Key**：认证密钥
-- **模型**：支持的模型
-- **分组**：用户分组分配
-- **优先级**：负载均衡优先级
+## 控制台里建议检查的项
 
-## 负载均衡
+- 密钥是否启用
+- 分组是否包含 Grok 模型
+- 余额 / 订阅是否可用
+- 是否触发风控或限流
 
-当多个渠道支持同一模型时，AronaApi 根据渠道优先级和可用性自动分配请求。
+## 管理员侧（简述）
+
+管理员可配置上游渠道、账号池、模型映射与负载均衡。普通接入用户通常无需处理这些细节。
+
+## 相关
+
+- [快速开始](/cn/quickstart)
+- [模型支持](/cn/guides/models)

@@ -1,57 +1,78 @@
 ---
-title: "介绍"
-description: "AronaApi - 统一 AI API 网关"
+title: 介绍
+description: Arona API - 统一 AI API 中转站，优先支持 Grok 4.5
 ---
 
-# AronaApi
+# Arona API
 
-AronaApi 是一个统一的 AI API 网关，将 40+ 上游 AI 提供商聚合在单个兼容 OpenAI 的 API 端点之后。
+Arona API 是一个统一的 AI API 中转站，把上游模型能力聚合成 OpenAI / Claude 兼容接口，方便在 Grok Build、Codex、Claude Code 等客户端里一键接入。
 
-## AronaApi 是什么？
+## 站点信息
 
-AronaApi 提供了一个统一的接口，用于访问来自不同提供商的多种 AI 模型，包括 OpenAI、Claude、Gemini、Azure、AWS Bedrock 等。
+| 项目 | 地址 |
+| --- | --- |
+| 控制台 | [https://sub2api.lingshichat.top](https://sub2api.lingshichat.top) |
+| API Base URL | `https://sub2api.lingshichat.top/v1` |
+| 推荐模型 | `grok-4.5` |
+| 文档 | [https://apidocs.lingshichat.top/cn](https://apidocs.lingshichat.top/cn) |
+| 联系 | QQ 群 `1091297190` |
 
-## 核心功能
+## 这次更新聚焦什么？
+
+当前文档优先覆盖 **Grok 4.5** 在主流编程客户端中的配置：
 
 <CardGroup cols={2}>
-  <Card title="多提供商支持" icon="cloud">
-    通过单个 API 端点访问 40+ AI 提供商
+  <Card title="Grok Build" icon="terminal" href="/cn/clients/grok-build">
+    推荐优先配置。支持 Responses 协议与 backend web_search。
   </Card>
-  <Card title="兼容 OpenAI" icon="code">
-    完全兼容 OpenAI API，可直接替换使用
+  <Card title="Codex" icon="code" href="/cn/clients/codex">
+    通过 model_provider 指向中转站，使用 Responses 或 Chat Completions。
   </Card>
-  <Card title="用户管理" icon="users">
-    内置用户管理，支持配额和速率限制
+  <Card title="Claude Code" icon="robot" href="/cn/clients/claude-code">
+    通过 ANTHROPIC_BASE_URL 接入兼容 Messages 协议。
   </Card>
-  <Card title="计费与分析" icon="chart-bar">
-    全面的使用量跟踪和计费管理
+  <Card title="快速开始" icon="rocket" href="/cn/quickstart">
+    注册、创建 Key、跑通第一次请求。
   </Card>
 </CardGroup>
 
-## 快速开始
+## 核心能力
 
-几分钟内即可开始使用：
+- **OpenAI 兼容**：`/v1/chat/completions`、`/v1/responses`、`/v1/models`
+- **Claude 兼容**：`/v1/messages`
+- **Grok 平台能力**：对话、图片、视频（视分组/上游开通情况）
+- **密钥与分组**：控制台创建 API Key，绑定可用模型分组
+
+## 三分钟上手
 
 <Steps>
-  <Step title="获取 API Key">
-    在 [控制台](https://api.lingshichat.top) 注册账号并生成 API Key
+  <Step title="注册并创建 API Key">
+    打开 [控制台](https://sub2api.lingshichat.top) 注册登录，在密钥页面创建 API Key。
   </Step>
-  <Step title="配置 Base URL">
-    将客户端指向 AronaApi 的 Base URL
+  <Step title="确认 Base URL 与模型">
+    Base URL 使用 `https://sub2api.lingshichat.top/v1`，模型使用 `grok-4.5`。
   </Step>
-  <Step title="开始使用">
-    使用任意兼容 OpenAI 的客户端配合你的 API Key
+  <Step title="配置你的客户端">
+    按 [客户端配置总览](/cn/clients/overview) 选择 Grok Build / Codex / Claude Code。
   </Step>
 </Steps>
 
-## API 端点
+## 最小请求示例
 
 ```bash
-https://api.lingshichat.top/v1/chat/completions
+curl https://sub2api.lingshichat.top/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "grok-4.5",
+    "messages": [
+      {"role": "user", "content": "你好，用一句话介绍你自己"}
+    ]
+  }'
 ```
 
-将标准 OpenAI Base URL 替换为 AronaApi 的 URL，即可立即使用。
+## 下一步
 
-## Model Context Protocol (MCP)
-
-AronaApi 支持 [Model Context Protocol](/cn/guides/mcp)，让 AI 助手可以通过标准化工具与你的 API 交互。
+- [快速开始](/cn/quickstart)
+- [身份验证](/cn/authentication)
+- [Grok Build 配置](/cn/clients/grok-build)

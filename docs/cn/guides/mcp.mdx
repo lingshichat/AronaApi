@@ -1,67 +1,39 @@
 ---
-title: "Model Context Protocol"
-description: "通过 MCP 使用 AronaApi"
+title: 文档 MCP
+description: 通过 MCP 检索 Arona API 文档
 ---
 
-# Model Context Protocol (MCP)
+# 文档 MCP
 
-AronaApi 支持 [Model Context Protocol](https://modelcontextprotocol.io)，让 AI 助手可以通过标准化工具发现并与你的 API 交互。
+Mintlify 文档站可提供 MCP 入口，方便在 Cursor / Claude / VS Code 中检索本文档。
 
-## MCP 是什么？
+## 端点
 
-Model Context Protocol 是一个开放标准，让 AI 系统可以通过统一接口与外部工具、数据源和服务交互。
-
-## MCP 服务器端点
-
-```
+```text
 https://apidocs.lingshichat.top/mcp
 ```
 
-## 支持的客户端
+## 客户端示例
 
-<Tabs>
-  <Tab title="Claude Code">
-    ```bash
-    claude mcp add arona-api https://apidocs.lingshichat.top/mcp
-    ```
-  </Tab>
-  <Tab title="Cursor">
-    添加到你的 Cursor MCP 设置：
-    ```json
-    {
-      "mcpServers": {
-        "arona-api": {
-          "url": "https://apidocs.lingshichat.top/mcp"
-        }
-      }
+### Cursor
+
+```json
+{
+  "mcpServers": {
+    "arona-docs": {
+      "url": "https://apidocs.lingshichat.top/mcp"
     }
-    ```
-  </Tab>
-  <Tab title="VS Code">
-    安装 MCP 扩展并添加服务器 URL。
-  </Tab>
-</Tabs>
+  }
+}
+```
 
-## 可用工具
+### Claude Code
 
-MCP 服务器提供以下工具：
+```bash
+claude mcp add arona-docs https://apidocs.lingshichat.top/mcp
+```
 
-- **搜索文档**：查询 AronaApi 文档
-- **查询文件系统**：浏览可用 API 端点和模型
+## 说明
 
-## 身份验证
-
-MCP 服务器支持公开和已认证访问：
-
-- **公开**：`/mcp` - 基础文档访问
-- **已认证**：`/authed/mcp` - 使用用户凭据的完整 API 访问
-
-对于已认证访问，请在控制台中配置 OAuth 客户端凭据。
-
-## 速率限制
-
-| 范围 | 限制 | 说明 |
-|-------|-------|-------------|
-| 每用户 (IP) | 5,000 req/hr | 配置查询限制 |
-| 每域名搜索 | 10,000 req/hr | 搜索工具总调用次数 |
-| 每域名文件系统 | 10,000 req/hr | 文件系统总调用次数 |
+- 文档 MCP 用于检索 **本帮助站内容**
+- 它 **不是** 模型推理网关；调用 `grok-4.5` 仍走 `https://sub2api.lingshichat.top/v1`

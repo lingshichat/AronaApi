@@ -1,13 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 28" fill="none">
-  <text x="0" y="21" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="18" font-weight="600" letter-spacing="-0.5">
-    <tspan fill="#e2e8f0">Arona</tspan>
-    <tspan fill="url(#gradient-dark)" font-weight="700">Api</tspan>
-  </text>
-  <defs>
-    <linearGradient id="gradient-dark" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#a78bfa"/>
-      <stop offset="50%" stop-color="#c4b5fd"/>
-      <stop offset="100%" stop-color="#ddd6fe"/>
-    </linearGradient>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 40" fill="none">
+  <rect x="0" y="4" width="32" height="32" rx="8" fill="#818cf8"/>
+  <text x="16" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#0b1020" font-family="Inter, system-ui, sans-serif">A</text>
+  <text x="44" y="27" font-size="18" font-weight="700" fill="#f9fafb" font-family="Inter, system-ui, sans-serif">Arona API</text>
 </svg>

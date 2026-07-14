@@ -1,0 +1,111 @@
+---
+title: Codex 配置
+description: 使用 OpenAI Codex CLI 通过 Arona API 调用 grok-4.5
+---
+
+# Codex 配置（Grok 4.5）
+
+让 OpenAI Codex CLI 走中转站的 `grok-4.5`。
+
+## 推荐参数
+
+| 项 | 值 |
+| --- | --- |
+| provider base_url | `https://sub2api.lingshichat.top/v1` |
+| model | `grok-4.5` |
+| wire_api | `responses`（推荐）或 `chat_completions` |
+| 环境变量 | `ARONA_API_KEY` |
+
+## 1. 设置 API Key
+
+```powershell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+```
+
+```bash
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## 2. 编辑 `~/.codex/config.toml`
+
+Windows：
+
+```text
+C:\Users\<你的用户名>\.codex\config.toml
+```
+
+增加 provider，并切换默认模型：
+
+```toml
+model = "grok-4.5"
+model_provider = "arona"
+
+[model_providers.arona]
+name = "Arona API"
+base_url = "https://sub2api.lingshichat.top/v1"
+wire_api = "responses"
+env_key = "ARONA_API_KEY"
+```
+
+### 兼容写法：Chat Completions
+
+若当前 Codex 版本对 Responses 支持异常：
+
+```toml
+[model_providers.arona]
+name = "Arona API"
+base_url = "https://sub2api.lingshichat.top/v1"
+wire_api = "chat_completions"
+env_key = "ARONA_API_KEY"
+```
+
+## 3. 启动验证
+
+```bash
+codex
+# 或
+codex exec "用一句话介绍你自己"
+```
+
+也可先手动验证 provider：
+
+```bash
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer $ARONA_API_KEY"
+```
+
+## 注意事项
+
+- Codex 的 `base_url` 需要包含 `/v1`
+- `env_key` 对应的环境变量必须在启动 Codex 的终端里可见
+- 模型名必须是你 Key 所属分组里真实存在的 ID；不确定时先看 `GET /v1/models`
+- 若你同时配置了官方 OpenAI provider，确认 `model_provider = "arona"` 已生效
+
+## 最小可运行示例（完整片段）
+
+```toml
+model = "grok-4.5"
+model_provider = "arona"
+model_reasoning_effort = "high"
+
+[model_providers.arona]
+name = "Arona API"
+base_url = "https://sub2api.lingshichat.top/v1"
+wire_api = "responses"
+env_key = "ARONA_API_KEY"
+```
+
+## 常见问题
+
+| 问题 | 处理 |
+| --- | --- |
+| 仍走官方 OpenAI | 检查 `model_provider` 是否写成 `arona` |
+| 401 | 检查 `ARONA_API_KEY` 是否导出成功 |
+| model not found | 换 `grok-4.5` 或查看 `/v1/models` |
+| 流式中断 | 先改 `wire_api = "chat_completions"` 对比 |
+
+## 相关文档
+
+- [Grok Build 配置](/cn/clients/grok-build)
+- [Claude Code 配置](/cn/clients/claude-code)
+- [快速开始](/cn/quickstart)

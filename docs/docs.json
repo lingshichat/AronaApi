@@ -1,65 +1,89 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
-  "name": "AronaApi",
+  "theme": "mint",
+  "name": "Arona API",
+  "description": "Arona API 中转站使用文档 — 面向 Grok 4.5 与主流 AI 编程客户端",
   "colors": {
-    "primary": "#8b5cf6",
-    "light": "#a78bfa",
-    "dark": "#7c3aed"
+    "primary": "#6366f1",
+    "light": "#818cf8",
+    "dark": "#4f46e5"
   },
+  "favicon": "/favicon.svg",
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg",
-    "href": "https://api.lingshichat.top"
+    "dark": "/logo/dark.svg"
   },
   "navbar": {
+    "links": [
+      {
+        "label": "控制台",
+        "href": "https://sub2api.lingshichat.top"
+      }
+    ],
     "primary": {
       "type": "button",
-      "label": "控制台",
-      "href": "https://api.lingshichat.top"
+      "label": "打开控制台",
+      "href": "https://sub2api.lingshichat.top"
     }
   },
   "navigation": {
-    "groups": [
+    "languages": [
       {
-        "group": "快速开始",
-        "pages": [
-          "cn/index",
-          "cn/quickstart",
-          "cn/authentication"
-        ]
-      },
-      {
-        "group": "API 文档",
-        "pages": [
-          "cn/api/overview",
-          "cn/api/chat-completions",
-          "cn/api/models",
-          "cn/api/embeddings",
-          "cn/api/images"
-        ]
-      },
-      {
-        "group": "功能",
-        "pages": [
-          "cn/guides/models",
-          "cn/guides/pricing",
-          "cn/guides/channels"
-        ]
-      },
-      {
-        "group": "集成",
-        "pages": [
-          "cn/guides/mcp"
+        "language": "cn",
+        "default": true,
+        "groups": [
+          {
+            "group": "开始使用",
+            "pages": [
+              "cn/index",
+              "cn/quickstart",
+              "cn/authentication"
+            ]
+          },
+          {
+            "group": "客户端配置（Grok 4.5）",
+            "pages": [
+              "cn/clients/overview",
+              "cn/clients/grok-build",
+              "cn/clients/codex",
+              "cn/clients/claude-code"
+            ]
+          },
+          {
+            "group": "使用指南",
+            "pages": [
+              "cn/guides/models",
+              "cn/guides/channels",
+              "cn/guides/pricing",
+              "cn/guides/mcp"
+            ]
+          },
+          {
+            "group": "API 参考",
+            "pages": [
+              "cn/api/overview",
+              "cn/api/chat-completions",
+              "cn/api/models",
+              "cn/api/embeddings",
+              "cn/api/images"
+            ]
+          }
         ]
       }
     ]
   },
-  "feedback": {
-    "thumbsRating": true,
-    "suggestEdit": true
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
-  "search": {
-    "prompt": "搜索文档..."
+  "footer": {
+    "socials": {}
   }
 }

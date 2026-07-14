@@ -1,15 +1,15 @@
 ---
-title: "身份验证"
-description: "如何对 AronaApi 进行身份验证"
+title: 身份验证
+description: 如何使用 API Key 访问 Arona API
 ---
 
 # 身份验证
 
-AronaApi 使用 API Key 进行身份验证。所有 API 请求都必须包含有效的 API Key。
+Arona API 使用 API Key 鉴权。所有网关请求都必须携带有效密钥。
 
-## API Key 格式
+## 鉴权方式
 
-API Key 通过 `Authorization` 头部以 Bearer 方式传递：
+在 HTTP 请求头中加入：
 
 ```bash
 Authorization: Bearer YOUR_API_KEY
@@ -17,41 +17,63 @@ Authorization: Bearer YOUR_API_KEY
 
 ## 获取 API Key
 
-1. 登录 [控制台](https://api.lingshichat.top)
-2. 在侧边栏中导航到 **API Key**
-3. 点击 **创建 Key** 生成新 Key
-4. 复制 Key 并妥善保存
+1. 登录 [控制台](https://sub2api.lingshichat.top)
+2. 打开 **API Keys / 密钥**
+3. 点击创建，复制密钥并离线保存
 
 <Warning>
-  请妥善保管你的 API Key，切勿在客户端代码或公开仓库中暴露。
+  不要把 API Key 写进前端页面、公开仓库、截图或聊天记录。推荐使用环境变量。
 </Warning>
 
-## 使用示例
+## 推荐的环境变量
+
+| 变量名 | 用途 |
+| --- | --- |
+| `ARONA_API_KEY` | 通用客户端 / 脚本 |
+| `XAI_API_KEY` | 部分 Grok 兼容客户端会读取 |
+| `OPENAI_API_KEY` | OpenAI SDK / Codex 常见读取名 |
+| `ANTHROPIC_AUTH_TOKEN` | Claude Code 常用 |
+
+PowerShell 示例：
+
+```powershell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+```
+
+bash 示例：
 
 ```bash
-curl https://api.lingshichat.top/v1/chat/completions \
-  -H "Authorization: Bearer sk-xxxxxxxxxxxxxxxx" \
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## 请求示例
+
+```bash
+curl https://sub2api.lingshichat.top/v1/chat/completions \
+  -H "Authorization: Bearer $ARONA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4o",
+    "model": "grok-4.5",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
 
-## 速率限制
+## 密钥与分组
 
-API 请求根据账号等级受到速率限制：
+API Key 通常绑定一个或多个 **分组**。分组决定：
 
-| 等级 | 每分钟请求数 |
-|------|-------------|
-| 免费 | 60 |
-| 标准 | 600 |
-| 高级 | 6,000 |
+- 可访问的模型（例如 `grok-4.5`）
+- 上游平台类型（Grok / OpenAI / Claude 等）
+- 配额、并发与计费策略
 
-所有响应都包含速率限制头部：
+如果请求返回模型不可用或权限错误，优先检查：
 
-```
-X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 45
-X-RateLimit-Reset: 1699999999
-```
+1. Key 是否有效
+2. Key 所属分组是否包含 `grok-4.5`
+3. 账户余额 / 订阅是否可用
+
+## 安全建议
+
+- 为不同客户端创建不同 Key，方便吊销
+- 定期轮换密钥
+- 不要把 Key 写进 `config.toml` 后直接提交 Git；优先 `env_key`
