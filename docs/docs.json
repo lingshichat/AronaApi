@@ -46,7 +46,9 @@
               "cn/clients/overview",
               "cn/clients/grok-build",
               "cn/clients/codex",
-              "cn/clients/claude-code"
+              "cn/clients/claude-code",
+              "cn/clients/opencode",
+              "cn/clients/pi-agent"
             ]
           },
           {

@@ -1,0 +1,134 @@
+---
+title: OpenCode 配置
+description: 使用 OpenCode 通过 Arona API 调用 grok-4.5
+---
+
+# OpenCode 配置（Grok 4.5）
+
+[OpenCode](https://opencode.ai) 支持自定义 OpenAI 兼容 Provider。把 `baseURL` 指到中转站即可使用 `grok-4.5`。
+
+## 推荐参数
+
+| 项 | 值 |
+| --- | --- |
+| Base URL | `https://sub2api.lingshichat.top/v1` |
+| Provider ID | `arona`（可自定义） |
+| Model 选择 | `arona/grok-4.5` |
+| 环境变量 | `ARONA_API_KEY` |
+| npm 包 | `@ai-sdk/openai-compatible` |
+
+## 1. 设置 API Key
+
+```powershell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+```
+
+```bash
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## 2. 编辑 OpenCode 配置
+
+全局配置路径（推荐）：
+
+```text
+# Windows
+%USERPROFILE%\.config\opencode\opencode.json
+
+# macOS / Linux
+~/.config/opencode/opencode.json
+```
+
+也可在项目根目录放 `opencode.json`（项目配置会覆盖同名项）。
+
+### 推荐配置
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "arona/grok-4.5",
+  "provider": {
+    "arona": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Arona API",
+      "options": {
+        "baseURL": "https://sub2api.lingshichat.top/v1",
+        "apiKey": "{env:ARONA_API_KEY}"
+      },
+      "models": {
+        "grok-4.5": {
+          "name": "Grok 4.5 (Arona)"
+        }
+      }
+    }
+  }
+}
+```
+
+说明：
+
+- `model` 格式为 `providerID/modelID`，这里是 `arona/grok-4.5`
+- `options.baseURL` **必须带** `/v1`
+- `apiKey` 用 `{env:ARONA_API_KEY}` 从环境变量读取，避免明文写进仓库
+
+### 方案 B：用 `/connect` 存 Key
+
+1. 先写好 `provider.arona`（至少含 `npm`、`baseURL`、`models`）
+2. 启动 OpenCode 后执行 `/connect`，选择你的自定义 provider（若列表里没有，可继续用配置里的 `apiKey`）
+3. `/models` 选择 `arona/grok-4.5`
+
+不同版本对自定义 provider 的 `/connect` 支持略有差异；**配置文件 + 环境变量**最稳。
+
+## 3. 启动验证
+
+```bash
+opencode
+# 或非交互
+opencode run "用一句话介绍你自己"
+```
+
+会话内：
+
+```text
+/models
+```
+
+选中 `arona/grok-4.5`。
+
+也可先 curl 自检：
+
+```bash
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer $ARONA_API_KEY"
+```
+
+## 注意事项
+
+- `baseURL` 需要包含 `/v1`（OpenCode 按 OpenAI 兼容根路径拼接）
+- 模型 ID 必须与控制台 `GET /v1/models` 返回一致；别名以控制台为准
+- 项目级 `opencode.json` 若提交到 Git，**不要**写明文 Key，用 `{env:...}`
+- 若只想暴露中转模型，可给 provider 加 `whitelist: ["grok-4.5"]`
+
+## 常见问题
+
+### 1. `/models` 里没有 arona
+
+- 确认配置文件路径与 JSON 语法
+- 确认 `provider.arona.npm` 为 `@ai-sdk/openai-compatible`
+- 重启 OpenCode 后再 `/models`
+
+### 2. 401 Unauthorized
+
+- 当前 shell 是否已 `export` / `$env:` 设置 `ARONA_API_KEY`
+- Key 是否完整、是否绑对分组
+
+### 3. 能连上但工具调用异常
+
+中转站走 Chat Completions 兼容路径即可；若上游对 tool calling 支持不全，换分组或降级测试简单对话。
+
+## 相关文档
+
+- [客户端配置总览](/cn/clients/overview)
+- [Pi Agent 配置](/cn/clients/pi-agent)
+- [Grok Build 配置](/cn/clients/grok-build)
+- [身份验证](/cn/authentication)

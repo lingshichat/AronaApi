@@ -5,7 +5,7 @@ description: Arona API - 统一 AI API 中转站，优先支持 Grok 4.5
 
 # Arona API
 
-Arona API 是一个统一的 AI API 中转站，把上游模型能力聚合成 OpenAI / Claude 兼容接口，方便在 Grok Build、Codex、Claude Code 等客户端里一键接入。
+Arona API 是一个统一的 AI API 中转站，把上游模型能力聚合成 OpenAI / Claude 兼容接口，方便在 Grok Build、Codex、Claude Code、OpenCode、Pi Agent 等客户端里一键接入。
 
 ## 站点信息
 
@@ -30,6 +30,12 @@ Arona API 是一个统一的 AI API 中转站，把上游模型能力聚合成 O
   </Card>
   <Card title="Claude Code" icon="robot" href="/cn/clients/claude-code">
     通过 ANTHROPIC_BASE_URL 接入兼容 Messages 协议。
+  </Card>
+  <Card title="OpenCode" icon="laptop-code" href="/cn/clients/opencode">
+    OpenAI 兼容 provider，配置 `arona/grok-4.5`。
+  </Card>
+  <Card title="Pi Agent" icon="microchip" href="/cn/clients/pi-agent">
+    `models.json` 自定义 provider，选 `grok-4.5`。
   </Card>
   <Card title="快速开始" icon="rocket" href="/cn/quickstart">
     注册、创建 Key、跑通第一次请求。

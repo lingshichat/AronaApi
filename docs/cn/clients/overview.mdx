@@ -1,6 +1,6 @@
 ---
 title: 客户端配置总览
-description: 使用 Arona API 的 Grok 4.5 接入 Grok Build、Codex、Claude Code
+description: 使用 Arona API 的 Grok 4.5 接入 Grok Build、Codex、Claude Code、OpenCode、Pi Agent
 ---
 
 # 客户端配置总览
@@ -27,8 +27,8 @@ API Key  : 控制台创建的密钥
 
 | 协议 | 路径 | 典型客户端 |
 | --- | --- | --- |
-| OpenAI Chat Completions | `POST /v1/chat/completions` | 通用 SDK、部分 CLI |
-| OpenAI Responses | `POST /v1/responses` | Grok Build、Codex |
+| OpenAI Chat Completions | `POST /v1/chat/completions` | 通用 SDK、OpenCode、Pi、部分 CLI |
+| OpenAI Responses | `POST /v1/responses` | Grok Build、Codex、Pi（可选） |
 | Anthropic Messages | `POST /v1/messages` | Claude Code |
 | 模型列表 | `GET /v1/models` | 全部 |
 
@@ -43,6 +43,12 @@ API Key  : 控制台创建的密钥
   </Card>
   <Card title="Claude Code" icon="robot" href="/cn/clients/claude-code">
     通过环境变量把 Messages 请求转到中转站，模型选 `grok-4.5`。
+  </Card>
+  <Card title="OpenCode" icon="laptop-code" href="/cn/clients/opencode">
+    在 `opencode.json` 增加 OpenAI 兼容 provider，`model` 用 `arona/grok-4.5`。
+  </Card>
+  <Card title="Pi Agent" icon="microchip" href="/cn/clients/pi-agent">
+    在 `~/.pi/agent/models.json` 增加自定义 provider，选 `grok-4.5`。
   </Card>
 </CardGroup>
 
@@ -65,7 +71,7 @@ curl https://sub2api.lingshichat.top/v1/chat/completions \
 ## 当前文档范围
 
 - ✅ Grok 4.5
-- ✅ Grok Build / Codex / Claude Code
+- ✅ Grok Build / Codex / Claude Code / OpenCode / Pi Agent
 - ⏳ 其他模型与客户端后续再补
 
 如果你有额外模型别名（例如 `grok-latest`），以控制台 `GET /v1/models` 返回结果为准。

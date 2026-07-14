@@ -1,0 +1,191 @@
+---
+title: Pi Agent 配置
+description: 使用 Pi coding agent 通过 Arona API 调用 grok-4.5
+---
+
+# Pi Agent 配置（Grok 4.5）
+
+[Pi](https://pi.dev)（coding agent）支持通过 `~/.pi/agent/models.json` 添加自定义 OpenAI 兼容 Provider。把 `baseUrl` 指到中转站即可使用 `grok-4.5`。
+
+## 推荐参数
+
+| 项 | 值 |
+| --- | --- |
+| Base URL | `https://sub2api.lingshichat.top/v1` |
+| Provider ID | `arona`（可自定义） |
+| Model ID | `grok-4.5` |
+| API 类型 | `openai-completions`（兼容性最好）或 `openai-responses` |
+| 环境变量 | `ARONA_API_KEY` |
+| 配置目录 | `~/.pi/agent/`（可用 `PI_CODING_AGENT_DIR` 覆盖） |
+
+## 1. 安装与准备 Key
+
+安装（以官方文档为准）：
+
+```bash
+# 示例：全局安装 pi coding agent（包名可能随版本变化）
+npm install -g @mariozechner/pi-coding-agent
+# 或官方安装脚本
+# curl -fsSL https://pi.dev/install.sh | sh
+```
+
+设置 Key：
+
+```powershell
+$env:ARONA_API_KEY = "sk-xxxxxxxx"
+```
+
+```bash
+export ARONA_API_KEY="sk-xxxxxxxx"
+```
+
+## 2. 编辑 `~/.pi/agent/models.json`
+
+Windows 路径：
+
+```text
+C:\Users\<你的用户名>\.pi\agent\models.json
+```
+
+macOS / Linux：
+
+```text
+~/.pi/agent/models.json
+```
+
+### 推荐配置（Chat Completions）
+
+```json
+{
+  "providers": {
+    "arona": {
+      "baseUrl": "https://sub2api.lingshichat.top/v1",
+      "api": "openai-completions",
+      "apiKey": "$ARONA_API_KEY",
+      "models": [
+        {
+          "id": "grok-4.5",
+          "name": "Grok 4.5 (Arona)",
+          "reasoning": true,
+          "input": ["text"],
+          "contextWindow": 500000,
+          "maxTokens": 65536
+        }
+      ]
+    }
+  }
+}
+```
+
+### 方案 B：Responses API
+
+若你希望走 OpenAI Responses 路径：
+
+```json
+{
+  "providers": {
+    "arona": {
+      "baseUrl": "https://sub2api.lingshichat.top/v1",
+      "api": "openai-responses",
+      "apiKey": "$ARONA_API_KEY",
+      "models": [
+        {
+          "id": "grok-4.5",
+          "name": "Grok 4.5 (Arona Responses)",
+          "reasoning": true,
+          "contextWindow": 500000
+        }
+      ]
+    }
+  }
+}
+```
+
+兼容性以当前 Pi 版本与中转站支持为准；**出问题先退回 `openai-completions`**。
+
+### 方案 C：Key 写进 `auth.json`
+
+也可不用 `models.json` 里的 `apiKey`，改存：
+
+```text
+~/.pi/agent/auth.json
+```
+
+```json
+{
+  "arona": {
+    "type": "api_key",
+    "key": "$ARONA_API_KEY"
+  }
+}
+```
+
+或在会话里 `/login` 后选择对应 provider 粘贴 Key。  
+`apiKey` 支持 `$ENV`、`${ENV}`、以及 `!command` 命令取值（详见 Pi 官方 Providers 文档）。
+
+## 3. 启动并选择模型
+
+```bash
+pi
+```
+
+会话内：
+
+```text
+/model
+```
+
+选中 `arona` 下的 `grok-4.5`。也可：
+
+```bash
+pi --provider arona --model grok-4.5
+```
+
+`models.json` 在打开 `/model` 时会重新加载，改配置后一般**不必重启**整个进程。
+
+### 自检
+
+```bash
+curl https://sub2api.lingshichat.top/v1/models \
+  -H "Authorization: Bearer $ARONA_API_KEY"
+```
+
+## 注意事项
+
+- `baseUrl` **需要带** `/v1`
+- 自定义 provider 必须有鉴权：`apiKey` / `auth.json` / `--api-key` 三选一，否则模型可能加载了但在 `/model` 里不可用
+- 若本地/代理对 `developer` 角色不兼容，可在 provider 上加：
+
+```json
+"compat": {
+  "supportsDeveloperRole": false,
+  "supportsReasoningEffort": false
+}
+```
+
+- 配置目录可用环境变量覆盖：`PI_CODING_AGENT_DIR`
+
+## 常见问题
+
+### 1. `/model` 列表没有 arona
+
+- 确认 `models.json` 路径与 JSON 语法
+- 确认 `providers.arona.baseUrl` / `api` / `models[].id` 齐全
+- 再打开一次 `/model` 触发重载
+
+### 2. 模型显示了但不可用 / 提示缺 Key
+
+- 设置 `ARONA_API_KEY` 环境变量，或 `apiKey` / `auth.json` / `--api-key`
+- Key 不要用明文写进可提交的仓库
+
+### 3. 401 / 404
+
+- 401：Key 错误或未传到请求
+- 404：`baseUrl` 少了 `/v1`，或路径被拼错
+
+## 相关文档
+
+- [客户端配置总览](/cn/clients/overview)
+- [OpenCode 配置](/cn/clients/opencode)
+- [Codex 配置](/cn/clients/codex)
+- [身份验证](/cn/authentication)
