@@ -13,6 +13,19 @@ description: Docs focus on grok-4.5 and how to list models for your key
 
 Always trust the model list returned for **your** key.
 
+## Grok 4.5 context (important)
+
+| Item | Value |
+| --- | --- |
+| Hard max | ~**500k** tokens |
+| **Quality soft limit** | ~**200k** tokens |
+| Client setting | `context_window` / `contextWindow` = **`200000`** |
+
+<Warning>
+  **Grok 4.5 accepts ~500k context, but quality drops past ~200k.**  
+  Keep coding agents in a **≤200k** working set and let the client compact earlier. Do not run forever-long sessions just to fill the 500k window. See [Grok Build · Context](/en/clients/grok-build#context-window-important).
+</Warning>
+
 ## List models
 
 ```bash

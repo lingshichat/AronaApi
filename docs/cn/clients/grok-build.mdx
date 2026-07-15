@@ -16,7 +16,15 @@ description: 把 Grok Build 指到 Arona API 的 grok-4.5，并启用 web_search
 | api_backend | `responses` |
 | supports_backend_search | `true` |
 | web_search 模型 | 同样指向 `grok-4.5`（单独 model 段） |
+| **context_window（实用）** | **`200000`（约 200k）** |
+| context_window（硬上限） | 模型可到 `500000`（约 500k），但不建议日常拉满 |
 | **数据训练 / 数据用于改进模型** | **关闭（必做）** |
+
+<Warning>
+  **Grok 4.5 上下文：上限 500k，但超过约 200k 会明显降智。**  
+  模型技术上可接受约 **500k** tokens 的上下文，但有效推理质量在 **约 200k 之后会明显下降**（答非所问、漏改文件、工具调用变差等）。  
+  编程代理场景请把客户端 `context_window` 设为 **`200000`**，让自动压缩在质量拐点前触发；不要为了「用满 500k」而长期挂超长会话。
+</Warning>
 
 <Warning>
   **务必关闭 Grok Build 的「数据训练 / 数据用于改进模型」开关。**  
@@ -114,7 +122,8 @@ description = "via sub2api.lingshichat.top"
 base_url = "https://sub2api.lingshichat.top/v1"
 env_key = "ARONA_API_KEY"
 api_backend = "responses"
-context_window = 500000
+# 实用窗口：约 200k。模型硬上限约 500k，但超 200k 易降智
+context_window = 200000
 supports_backend_search = true
 
 [model.arona-web-search]
@@ -123,7 +132,7 @@ name = "Arona Grok 4.5 Web Search"
 base_url = "https://sub2api.lingshichat.top/v1"
 env_key = "ARONA_API_KEY"
 api_backend = "responses"
-context_window = 500000
+context_window = 200000
 supports_backend_search = true
 ```
 
@@ -140,7 +149,7 @@ web_search = "grok-4.5"
 base_url = "https://sub2api.lingshichat.top/v1"
 env_key = "ARONA_API_KEY"
 api_backend = "responses"
-context_window = 500000
+context_window = 200000
 supports_backend_search = true
 ```
 
@@ -162,7 +171,7 @@ web_search = "grok-4.5"
 env_key = "ARONA_API_KEY"
 api_backend = "responses"
 supports_backend_search = true
-context_window = 500000
+context_window = 200000
 ```
 
 设置 `models_base_url` 后，Grok 会用 API Key 鉴权拉取 `/v1/models`，通常不再依赖 `grok login`。
@@ -220,7 +229,22 @@ curl https://sub2api.lingshichat.top/v1/responses \
 | `env_key` | 从环境变量读 API Key，避免明文写进配置 |
 | `api_backend` | `responses` / `chat_completions` / `messages` |
 | `supports_backend_search` | 允许服务端 backend 搜索；web_search 需要 |
-| `context_window` | 触发自动压缩的上下文窗口估计值 |
+| `context_window` | 触发自动压缩的上下文估计值。**推荐 `200000`**（质量拐点）；模型硬上限约 `500000`，但超过约 200k 会降智 |
+
+## 上下文配置（务必读）
+
+| 档位 | tokens | 建议 |
+| --- | --- | --- |
+| **推荐工作区** | **≤ ~200k** | 日常编程代理保持在此区间，质量最稳 |
+| 硬上限 | ~500k | 模型可接收，但 **超过约 200k 会明显降智** |
+| 客户端 `context_window` | 推荐写 `200000` | 让自动压缩在降智前触发，而不是拖到 500k |
+
+实践建议：
+
+1. 配置里写 **`context_window = 200000`**，不要默认写成 `500000`「占满规格」。
+2. 长任务中途开新会话 / 手动压缩，避免对话无限堆叠。
+3. 不要一次性塞入整个巨型 monorepo；按任务范围缩小 `@` / 文件上下文。
+4. 仅当你 **明确需要** 超长窗口且能接受质量下滑时，才临时调高到 `500000`。
 
 ## 可选：Chat Completions 后端
 
@@ -255,9 +279,12 @@ api_backend = "chat_completions"
 3. 是否 `supports_backend_search = true`
 4. 对话模型与搜索模型是否都指向可用的 `grok-4.5`
 
-### 4. 上下文很快被压缩
+### 4. 上下文很快被压缩 / 上下文很长后开始降智
 
-把 `context_window` 调到与上游一致（例如 `500000`）。该值影响客户端压缩策略，不等于服务端硬限制。
+- **降智优先**：把 `context_window` 设为 **`200000`**，让客户端在约 200k 附近压缩，而不是拖到 500k。
+- Grok 4.5 **硬上限约 500k**，但 **超过约 200k 质量会明显下降**；`context_window` 只影响客户端压缩策略，不是「越大越聪明」。
+- 若你误把窗口设成 `500000` 且会话已经很长：开新会话、删掉无关历史、缩小挂载的文件范围。
+- 仅在极少数需要硬塞超长材料的场景才临时用 `500000`，用完改回 `200000`。
 
 ### 5. 如何确认数据训练已关闭？
 

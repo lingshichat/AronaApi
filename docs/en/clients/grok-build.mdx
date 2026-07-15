@@ -16,7 +16,15 @@ How to run [Grok Build](https://grok.com) CLI/TUI against the gateway with `grok
 | api_backend | `responses` |
 | supports_backend_search | `true` |
 | web_search model | Also `grok-4.5` (separate model section) |
+| **context_window (practical)** | **`200000` (~200k)** |
+| context_window (hard max) | Model accepts up to `500000` (~500k); do **not** run there day-to-day |
 | **Data training / improve the model** | **Off (required)** |
+
+<Warning>
+  **Grok 4.5 context: 500k max, but quality drops past ~200k.**  
+  The model can accept about **500k** tokens, but reasoning quality **degrades clearly after ~200k** (worse answers, missed edits, flaky tool use).  
+  For coding agents, set client `context_window` to **`200000`** so auto-compaction runs before that cliff. Do not keep multi-hour sessions just to “use the full 500k”.
+</Warning>
 
 <Warning>
   **Turn off Grok Build data training / “improve the model” data sharing.**  
@@ -111,7 +119,8 @@ description = "via sub2api.lingshichat.top"
 base_url = "https://sub2api.lingshichat.top/v1"
 env_key = "ARONA_API_KEY"
 api_backend = "responses"
-context_window = 500000
+# Practical window ~200k. Hard max ~500k, but quality drops past ~200k
+context_window = 200000
 supports_backend_search = true
 
 [model.arona-web-search]
@@ -120,7 +129,7 @@ name = "Arona Grok 4.5 Web Search"
 base_url = "https://sub2api.lingshichat.top/v1"
 env_key = "ARONA_API_KEY"
 api_backend = "responses"
-context_window = 500000
+context_window = 200000
 supports_backend_search = true
 ```
 
@@ -135,7 +144,7 @@ web_search = "grok-4.5"
 base_url = "https://sub2api.lingshichat.top/v1"
 env_key = "ARONA_API_KEY"
 api_backend = "responses"
-context_window = 500000
+context_window = 200000
 supports_backend_search = true
 ```
 
@@ -157,7 +166,7 @@ web_search = "grok-4.5"
 env_key = "ARONA_API_KEY"
 api_backend = "responses"
 supports_backend_search = true
-context_window = 500000
+context_window = 200000
 ```
 
 With `models_base_url`, Grok can list models via API key auth and usually does not need `grok login`.
@@ -207,7 +216,22 @@ Use web_search to find 3 public news headlines from today.
 | `env_key` | Read key from env instead of plaintext config |
 | `api_backend` | `responses` / `chat_completions` / `messages` |
 | `supports_backend_search` | Required for server-side web_search |
-| `context_window` | Client compaction estimate |
+| `context_window` | Client compaction estimate. **Prefer `200000`** (quality cliff); hard max ~`500000`, but quality drops past ~200k |
+
+## Context window (important)
+
+| Tier | Tokens | Guidance |
+| --- | --- | --- |
+| **Recommended working set** | **≤ ~200k** | Keep coding agents here for stable quality |
+| Hard max | ~500k | Accepted by the model, but **quality degrades past ~200k** |
+| Client `context_window` | Prefer `200000` | Triggers compaction before the quality cliff |
+
+Practice:
+
+1. Set **`context_window = 200000`** — do not default to `500000` just because the spec allows it.
+2. Start a new session / compact mid-task instead of stacking endless history.
+3. Avoid dumping entire monorepos; scope files to the task.
+4. Only raise to `500000` temporarily when you truly need the hard window and accept lower quality.
 
 ## Optional: Chat Completions backend
 
@@ -238,9 +262,12 @@ Fine for basic chat; prefer responses + `supports_backend_search` for web_search
 3. `supports_backend_search = true`
 4. Both chat and search use a working `grok-4.5`
 
-### Context compresses too aggressively
+### Context compresses too soon / quality drops on long sessions
 
-Raise `context_window` (for example `500000`). This is a client estimate, not a hard server limit.
+- **Prefer quality**: set `context_window` to **`200000`** so the client compacts near ~200k instead of waiting for 500k.
+- Grok 4.5 **hard max is ~500k**, but **quality drops past ~200k**. Larger `context_window` is not “smarter”.
+- If you already set `500000` and the session is huge: new session, drop unrelated history, shrink attached files.
+- Only use `500000` temporarily for rare ultra-long dumps, then set it back to `200000`.
 
 ### Confirm data training is off
 

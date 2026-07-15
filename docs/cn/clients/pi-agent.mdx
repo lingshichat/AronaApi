@@ -15,8 +15,13 @@ description: 使用 Pi coding agent 通过 Arona API 调用 grok-4.5
 | Provider ID | `arona`（可自定义） |
 | Model ID | `grok-4.5` |
 | API 类型 | `openai-completions`（兼容性最好）或 `openai-responses` |
+| **contextWindow** | **`200000`（推荐）**；硬上限约 500k，但超 200k 易降智 |
 | 环境变量 | `ARONA_API_KEY` |
 | 配置目录 | `~/.pi/agent/`（可用 `PI_CODING_AGENT_DIR` 覆盖） |
+
+<Warning>
+  **Grok 4.5：硬上限约 500k，实用请 ≤ 约 200k。** 超过约 200k 会明显降智。`contextWindow` 请写 **`200000`**，不要默认填 `500000`。
+</Warning>
 
 ## 1. 安装与准备 Key
 
@@ -68,7 +73,7 @@ macOS / Linux：
           "name": "Grok 4.5 (Arona)",
           "reasoning": true,
           "input": ["text"],
-          "contextWindow": 500000,
+          "contextWindow": 200000,
           "maxTokens": 65536
         }
       ]
@@ -93,7 +98,7 @@ macOS / Linux：
           "id": "grok-4.5",
           "name": "Grok 4.5 (Arona Responses)",
           "reasoning": true,
-          "contextWindow": 500000
+          "contextWindow": 200000
         }
       ]
     }

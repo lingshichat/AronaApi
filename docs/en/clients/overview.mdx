@@ -15,7 +15,13 @@ Remember these three values:
 Base URL : https://sub2api.lingshichat.top/v1
 Model    : grok-4.5
 API Key  : key created in the console
+Context  : hard max ~500k; keep practical ≤ ~200k (quality drops past 200k)
 ```
+
+<Warning>
+  **Grok 4.5 supports ~500k context, but quality drops past ~200k.**  
+  Prefer `context_window` / `contextWindow` = **`200000`**, not a default of `500000`. See [Grok Build · Context](/en/clients/grok-build#context-window-important) and [Models](/en/guides/models#grok-45-context-important).
+</Warning>
 
 <Note>
   For Claude Code, `ANTHROPIC_BASE_URL` usually must **not** include `/v1`, because the SDK appends `/v1/messages`. See [Claude Code](/en/clients/claude-code).

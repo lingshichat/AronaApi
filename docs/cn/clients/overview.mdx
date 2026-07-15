@@ -15,7 +15,13 @@ description: 使用 Arona API 的 Grok 4.5 接入 Grok Build、Codex、Claude Co
 Base URL : https://sub2api.lingshichat.top/v1
 Model    : grok-4.5
 API Key  : 控制台创建的密钥
+上下文   : 硬上限 ~500k；实用请 ≤ ~200k（超 200k 易降智）
 ```
+
+<Warning>
+  **Grok 4.5 支持约 500k 上下文，但超过约 200k 会降智。**  
+  客户端 `context_window` / `contextWindow` 建议写 **`200000`**，而不是默认 `500000`。详见 [Grok Build · 上下文](/cn/clients/grok-build#上下文配置务必读) 与 [模型支持](/cn/guides/models#grok-45-上下文重要)。
+</Warning>
 
 <Note>
   Claude Code 的 `ANTHROPIC_BASE_URL` 一般 **不要** 带 `/v1`，因为 SDK 会自己拼 `/v1/messages`。详见 [Claude Code 配置](/cn/clients/claude-code)。
